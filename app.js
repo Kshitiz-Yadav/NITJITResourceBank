@@ -17,7 +17,7 @@ app.get("/home", (req,res)=>{
     res.render("index.hbs")
 })
 app.get("/curriculum", (req,res)=>{
-    res.render("curriculum.hbs")
+    res.render("curriculum")
 })
 app.get("/feedback", (req,res)=>{
     res.render("feedback.hbs")

@@ -12,7 +12,7 @@
         <a href="https://www.nitj.ac.in/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
             <h2 class="m-0 text-primary"><img style="max-width: 100%; height:auto" src="img/unnamed.png" alt="NITJ LOGO"></h2>
             <span class="m-0 text-primary text-head" style="padding-left: 2vw;">
-                डा बी आर अम्बेडकर राष्ट्रीय प्रौद्योगिकी संस्थान, जालंधर<br />
+                डा बी आर अम्बेडकर राष्ट्रीय प्रौद्योगिकी संस्थान, जालंधर<br/>
                  Dr B R Ambedkar National Institute of Technology, Jalandhar</span>
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -20,9 +20,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="/home" class="nav-item nav-link active">Home</a>
                 <div class="nav-item dropdown">
-                    <a href="/curriculum" id="curriculam_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Curriculam</a>
+                    <a id="curriculam_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Curriculum</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="#1" class="dropdown-item">Semester 3</a>
                         <a href="#2" class="dropdown-item">Semester 4</a>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="/placements" id="placements_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Placements</a>
+                    <a id="placements_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Placements</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="#1" class="dropdown-item">Interview Experiences</a>
                         <a href="#2" class="dropdown-item">Interview Questions</a>
@@ -44,8 +44,9 @@
                         <a href="#5" class="dropdown-item">Others</a>
                     </div>
                 </div>
-                <a href="contact.html" class="nav-item nav-link">Feedback</a>
+                <a href="/feedback" class="nav-item nav-link">Feedback</a>
                 <span class="nav-item nav-link">Hi, {{user}}</span>
+                {{!-- <span class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Hi, Kshitiz</span> --}}
             </div>
         </div>
     </nav>

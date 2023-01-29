@@ -10,8 +10,8 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <a href="https://www.nitj.ac.in/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary"><img src="img/unnamed.png" alt="NITJ LOGO"></h2>
-            <span class="m-0 text-primary" style= "font-size: smaller;">
+            <h2 class="m-0 text-primary"><img style="max-width: 100%; height:auto" src="img/unnamed.png" alt="NITJ LOGO"></h2>
+            <span class="m-0 text-primary text-head" style="padding-left: 2vw;">
                 डा बी आर अम्बेडकर राष्ट्रीय प्रौद्योगिकी संस्थान, जालंधर<br />
                  Dr B R Ambedkar National Institute of Technology, Jalandhar</span>
         </a>
@@ -21,9 +21,8 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="index.html" class="nav-item nav-link active">Home</a>
-                <a href="about.html" class="nav-item nav-link">About</a>
                 <div class="nav-item dropdown">
-                    <a href="#" id="curriculam_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Curriculam</a>
+                    <a href="/curriculum" id="curriculam_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Curriculam</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="#1" class="dropdown-item">Semester 3</a>
                         <a href="#2" class="dropdown-item">Semester 4</a>
@@ -36,7 +35,7 @@
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="#" id="placements_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Placements</a>
+                    <a href="/placements" id="placements_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Placements</a>
                     <div class="dropdown-menu fade-down m-0">
                         <a href="#1" class="dropdown-item">Interview Experiences</a>
                         <a href="#2" class="dropdown-item">Interview Questions</a>
@@ -45,7 +44,8 @@
                         <a href="#5" class="dropdown-item">Others</a>
                     </div>
                 </div>
-                <a href="contact.html" class="nav-item nav-link">Contact</a>
+                <a href="contact.html" class="nav-item nav-link">Feedback</a>
+                <span class="nav-item nav-link">Hi, {{user}}</span>
             </div>
         </div>
     </nav>

@@ -59,6 +59,11 @@
     height: 32px;
 }
 
+.btn-faculty-wide {
+    width: 106px;
+    height: 32px;
+}
+
 .btn-lg-square {
     width: 48px;
     height: 48px;
@@ -109,11 +114,16 @@
     .navbar-light .navbar-nav {
         border-top: 1px solid #EEEEEE;
     }
+
+    .text-head {
+        font-size: 2.5vw;
+    }
+
 }
 
 .navbar-light .navbar-brand,
 .navbar-light a.btn {
-    height: 75px;
+    height: 113px;
 }
 
 .navbar-light .navbar-nav .nav-link {
@@ -147,6 +157,10 @@
         visibility: visible;
         transition: .5s;
         opacity: 1;
+    }
+
+    .text-head {
+        font-size: 1.25vw;
     }
 }
 
@@ -293,6 +307,10 @@
     transform: scale(1.1);
 }
 
+.team-contact{
+    padding-top: 1.5vh;
+    display: none;
+}
 
 /*** Testimonial ***/
 .testimonial-carousel::before {

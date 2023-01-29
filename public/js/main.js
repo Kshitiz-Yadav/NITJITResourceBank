@@ -107,3 +107,14 @@
     
 })(jQuery);
 
+// Showing / hiding faculty contact details
+function show_contact(element_id1,element_id2){
+    if(document.getElementById(element_id1).style.display == "block"){
+        document.getElementById(element_id1).style.display = "none";
+        document.getElementById(element_id2).style.display = "none";
+    }
+    else{
+        document.getElementById(element_id1).style.display = "block";
+        document.getElementById(element_id2).style.display = "block";
+    }
+}

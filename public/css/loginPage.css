@@ -6,6 +6,14 @@
 	box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+
+.heading {
+	justify-content: center;
+	text-align: center;
+	align-items: center;
+	color: #06BBCC;
+	padding-bottom: 5vh;
+}
 body 
 {
 	display: flex;
@@ -21,7 +29,7 @@ body
 	position: relative;
 	width: 330px;
 	height: 360px;
-	background: #4fb3c5;
+	background: #06BBCC;
 	border-radius: 8px;
 	overflow: hidden;
 }
@@ -76,7 +84,7 @@ form
 }
 h2 
 {
-	color: #29ca8e;
+	color: #06BBCC;
 	font-weight: 500;
 	text-align: center;
 	letter-spacing: 0.1em;
@@ -116,7 +124,7 @@ h2
 .inputBox input:valid ~ span,
 .inputBox input:focus ~ span 
 {
-	color: #29ca8e;
+	color: #06BBCC;
 	transform: translateX(0px) translateY(-34px);
 	font-size: 0.75em;
 }
@@ -127,7 +135,7 @@ h2
 	bottom: 0;
 	width: 100%;
 	height: 2px;
-	background: #29ca8e;
+	background: #06BBCC;
 	border-radius: 4px;
 	overflow: hidden;
 	transition: 0.5s;
@@ -154,7 +162,7 @@ h2
 .links a:hover, 
 .links a:nth-child(2)
 {
-	color: #29ca8e;
+	color: #06BBCC;
 }
 button
 {
@@ -162,7 +170,7 @@ button
 	outline: none;
 	align-self: center;
 	padding: 11px 25px;
-	background: #29ca8e;
+	background: #06BBCC;
 	cursor: pointer;
 	border-radius: 4px;
 	font-weight: 600;

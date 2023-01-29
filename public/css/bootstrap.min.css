@@ -645,10 +645,6 @@ progress {
     margin-left: auto
 }
 
-.container-xxl{
-    height: 100vh;
-}
-
 @media (min-width: 576px) {
 
     .container,

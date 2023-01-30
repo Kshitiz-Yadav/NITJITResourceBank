@@ -33,7 +33,8 @@
 
 <body>
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
@@ -72,40 +73,46 @@
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <h5>Get In Touch</h5>
-                    <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
+                    <p class="mb-4" style="text-align: justify;">Thank you for visiting our study resoure bank website.
+                        We value your feedback and would appreciate your thoughts on how we can improve our site to
+                        better meet your needs. Please share any suggestions or concerns you may have. Your input is
+                        important to us.</p>
                     <div class="d-flex align-items-center mb-3">
-                        <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary" style="width: 50px; height: 50px;">
-                            <i class="fa fa-map-marker-alt text-white"></i>
-                        </div>
+                        <a href="https://wa.me/+01234567890" target="_blank">
+                            <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary"
+                                style="width: 50px; height: 50px;">
+                                <i class="fa fa-map-marker-alt text-white"></i>
+                            </div>
+                        </a>
                         <div class="ms-3">
-                            <h5 class="text-primary">Office</h5>
-                            <p class="mb-0">123 Street, New York, USA</p>
+                            <h5 class="text-primary">Whatsapp</h5>
+                            <p class="mb-0">+012 345 67890</p>
                         </div>
                     </div>
                     <div class="d-flex align-items-center mb-3">
-                        <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary" style="width: 50px; height: 50px;">
-                            <i class="fa fa-phone-alt text-white"></i>
-                        </div>
+                        <a href="tel:01234567890">
+                            <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary"
+                                style="width: 50px; height: 50px;">
+                                <i class="fa fa-phone-alt text-white"></i>
+                            </div>
+                        </a>
                         <div class="ms-3">
                             <h5 class="text-primary">Mobile</h5>
                             <p class="mb-0">+012 345 67890</p>
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
-                        <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary" style="width: 50px; height: 50px;">
-                            <i class="fa fa-envelope-open text-white"></i>
-                        </div>
+                        <a href="mailto:info@example.com">
+                            <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary"
+                                style="width: 50px; height: 50px;">
+                                <i class="fa fa-envelope-open text-white"></i>
+                            </div>
+                        </a>
                         <div class="ms-3">
                             <h5 class="text-primary">Email</h5>
                             <p class="mb-0">info@example.com</p>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <iframe class="position-relative rounded w-100 h-100"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
-                        frameborder="0" style="min-height: 300px; border:0;" allowfullscreen="" aria-hidden="false"
-                        tabindex="0"></iframe>
                 </div>
                 <div class="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
                     <form>
@@ -130,7 +137,8 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-floating">
-                                    <textarea class="form-control" placeholder="Leave a message here" id="message" style="height: 150px"></textarea>
+                                    <textarea class="form-control" placeholder="Leave a message here" id="message"
+                                        style="height: 150px"></textarea>
                                     <label for="message">Message</label>
                                 </div>
                             </div>
@@ -162,7 +170,7 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
     <script>
-        window.onload = function(){
+        window.onload = function () {
             document.getElementById("home_menu").classList.remove("active");
             document.getElementById("curriculam_dropdown").classList.remove("active");
             document.getElementById("placements_dropdown").classList.remove("active");

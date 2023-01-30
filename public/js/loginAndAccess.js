@@ -71,7 +71,7 @@ function setPassword(mail){
         localStorage.setItem(mail, passInput.value)
         if(userType){
             console.log('Successfully Signed in as Student')
-            window.location.href = "../views/index.hbs"
+            window.location.href = "/home"
         }
         else{
             console.log('Successfully Signed in as Teacher')

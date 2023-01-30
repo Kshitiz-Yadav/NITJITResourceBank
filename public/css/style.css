@@ -454,6 +454,9 @@
 
 
 /* image focused on click (for timetable) */
+.zoom_in_cursor {
+    cursor:zoom-in;
+}
 .modal {
     display: none; 
     position: fixed;
@@ -461,6 +464,7 @@
     padding-top: 100px; 
     left: 0;
     top: 0;
+    cursor:zoom-out;
     width: 100%; 
     overflow: hidden; 
     background-color: rgb(0,0,0); 

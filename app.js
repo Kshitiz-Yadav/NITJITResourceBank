@@ -14,14 +14,20 @@ app.get("", (req,res)=>{
     res.render("loginPage")
 })
 app.get("/home", (req,res)=>{
-    res.render("index.hbs")
+    res.render("index")
 })
 app.get("/curriculum", (req,res)=>{
     res.render("curriculum")
 })
 app.get("/semester", (req,res)=>{
-    res.render("semester.hbs")
+    res.render("semester")
 })
+// app.get("/curriculum/semester/subject", (req,res)=>{
+//     res.render("subject.hbs")
+// })
+// app.get("/semester", (req,res)=>{
+//     res.render("semester.hbs")
+// })
 app.get("/subject", (req,res)=>{
     res.render("subject.hbs")
 })

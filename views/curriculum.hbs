@@ -110,7 +110,8 @@
             </div>
             <br>
             <div class="row g-4">
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s" >
+                    {{!-- <a href="/curriculum/semester?semester=semester-4" style=""> --}}
                     <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('semester-4')">
                         <div class="p-4">
                             <h5 class="mb-3">Semester 4</h5>
@@ -118,6 +119,7 @@
                             <p>DMDWC / FLAT / ECO</p>
                         </div>
                     </div>
+                    {{!-- </a> --}}
                 </div>
                 <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
                     <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('semester-6')">
@@ -176,6 +178,7 @@
 
         function redirectToSemester(semester) {
             // Redirect to Semester.html and pass the semester value as a URL parameter
+            // window.location.href = 'curriculum/semester?semester=' + semester;
             window.location.href = 'semester?semester=' + semester;
     }
     </script>

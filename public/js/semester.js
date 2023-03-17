@@ -112,7 +112,7 @@ function go_to_sem (semester_no) {
         subjectDiv.className = "row g-4 justify-content-lg-center";
         subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
         document.getElementById("subjects").appendChild(subjectDiv);
-		document.getElementById("subjects").appendChild(document.createElement("br"))
+		document.getElementById("subjects").appendChild(document.createElement("br"));
     }
 
     // loop through the subjectsList and append the "Subjects" div for each subject

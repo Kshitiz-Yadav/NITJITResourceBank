@@ -24,14 +24,14 @@
                 <div class="nav-item dropdown">
                     <a id="curriculam_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Curriculum</a>
                     <div class="dropdown-menu fade-down m-0">
-                        <a href="#1" class="dropdown-item">Semester 3</a>
-                        <a href="#2" class="dropdown-item">Semester 4</a>
-                        <a href="#3" class="dropdown-item">Semester 5</a>
-                        <a href="#4" class="dropdown-item">Semester 6</a>
-                        <a href="#5" class="dropdown-item">Semester 7</a>
-                        <a href="#5" class="dropdown-item">Semester 8</a>
-                        <a href="#5" class="dropdown-item">Open Electives</a>
-                        <a href="#5" class="dropdown-item">Departmental Electives</a>
+                        <a href="#1" class="dropdown-item" onclick="redirectToSemester('semester-3')">Semester 3</a>
+                        <a href="#2" class="dropdown-item" onclick="redirectToSemester('semester-4')">Semester 4</a>
+                        <a href="#3" class="dropdown-item" onclick="redirectToSemester('semester-5')">Semester 5</a>
+                        <a href="#4" class="dropdown-item" onclick="redirectToSemester('semester-6')">Semester 6</a>
+                        <a href="#5" class="dropdown-item" onclick="redirectToSemester('semester-7')">Semester 7</a>
+                        <a href="#5" class="dropdown-item" onclick="redirectToSemester('semester-8')">Semester 8</a>
+                        <a href="#5" class="dropdown-item" onclick="redirectToSemester('open-electives')">Open Electives</a>
+                        <a href="#5" class="dropdown-item" onclick="redirectToSemester('departmental-electives')">Departmental Electives</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
@@ -51,5 +51,11 @@
         </div>
     </nav>
     <!-- Navbar End -->
+    <script>
+        function redirectToSemester(semester) {
+            // Redirect to Semester.html and pass the semester value as a URL parameter
+            window.location.href = 'semester?semester=' + semester;
+    }
+    </script>
 </body>
 </html>

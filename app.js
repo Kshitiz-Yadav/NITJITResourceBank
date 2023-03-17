@@ -19,6 +19,12 @@ app.get("/home", (req,res)=>{
 app.get("/curriculum", (req,res)=>{
     res.render("curriculum")
 })
+app.get("/semester", (req,res)=>{
+    res.render("semester.hbs")
+})
+app.get("/subject", (req,res)=>{
+    res.render("subject.hbs")
+})
 app.get("/feedback", (req,res)=>{
     res.render("feedback.hbs")
 })

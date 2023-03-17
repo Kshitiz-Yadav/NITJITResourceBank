@@ -70,9 +70,9 @@
                 <h6 class="section-title bg-white text-center text-primary px-3">Semesters</h6>
                 <h1 class="mb-5">All Semesters</h1>
             </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="service-item text-center pt-3">
+            <div class="row g-4 ">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
+                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('semester-3')">
                         <div class="p-4">
                             <h5 class="mb-3">Semester 3</h5>
                             <p>OOPS / DS / DCN /</p>
@@ -80,8 +80,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
+                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('semester-5')">
                         <div class="p-4">
                             <h5 class="mb-3">Semester 5</h5>
                             <p>SE / CG / DM /</p>
@@ -89,8 +89,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
-                    <div class="service-item text-center pt-3">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.7s">
+                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('semester-7')">
                         <div class="p-4">
                             <h5 class="mb-3">Semester 7</h5>
                             <p>Software Testing /</p>
@@ -98,8 +98,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
-                    <div class="service-item text-center pt-3">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.7s">
+                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('departmental-electives')">
                         <div class="p-4">
                             <h5 class="mb-3">Departmental Electives</h5>
                             <p>Data Analytics /</p>
@@ -110,17 +110,19 @@
             </div>
             <br>
             <div class="row g-4">
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="service-item text-center pt-3">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s" >
+                    {{!-- <a href="/curriculum/semester?semester=semester-4" style=""> --}}
+                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('semester-4')">
                         <div class="p-4">
                             <h5 class="mb-3">Semester 4</h5>
                             <p>IDAA / OS / JAVA /</p>
                             <p>DMDWC / FLAT / ECO</p>
                         </div>
                     </div>
+                    {{!-- </a> --}}
                 </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="service-item text-center pt-3">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
+                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('semester-6')">
                         <div class="p-4">
                             <h5 class="mb-3">Semester 6</h5>
                             <p>ML / Mobile App Dev /</p>
@@ -128,8 +130,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
+                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('semester-8')">
                         <div class="p-4">
                             <h5 class="mb-3">Semester 8</h5>
                             <p>System Programming</p>
@@ -137,8 +139,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
+                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('open-electives')">
                         <div class="p-4">
                             <h5 class="mb-3">Open Electives</h5>
                             <p>BT / ME / IPE / ICE / ME / EE</p>
@@ -173,6 +175,12 @@
             document.getElementById("placements_dropdown").classList.remove("active");
             document.getElementById("feedback_menu").classList.remove("active");
         }
+
+        function redirectToSemester(semester) {
+            // Redirect to Semester.html and pass the semester value as a URL parameter
+            // window.location.href = 'curriculum/semester?semester=' + semester;
+            window.location.href = 'semester?semester=' + semester;
+    }
     </script>
 </body>
 </html>

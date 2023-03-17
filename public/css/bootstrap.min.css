@@ -12539,3 +12539,9 @@ fieldset:disabled .btn {
         display: none !important
     }
 }
+
+
+/* cursors */
+.click_cursor {
+    cursor:pointer;
+}

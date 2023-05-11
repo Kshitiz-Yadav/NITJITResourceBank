@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>SignIn / SignUp - IT Resource Bank</title>
+	<link rel="stylesheet" href="css/loginPage.css">
+</head>
+<body>
+	<h1 class="heading">INFORMATION TECHNOLOGY <br> RESOURCE BANK</h1>
+	<div class="box">
+		<form id="loginForm" autocomplete="on">
+			<h2>Sign in</h2>
+			<input id="problem" value="{{problem}}" hidden />
+			<div id="inputBox1" class="inputBox">
+				<input id="receiversMail" name="mail" type="email" value="{{username}}" required="required"/>
+				<span id="uname">Username</span>
+				<i></i>
+			</div>
+			<p class="error_msg" id="error_box_user"></p>
+			<div id="inputBox1" class="inputBox">
+				<input id="receiversPass" name="pass" type="password" required="required"/>
+				<span id="uname">Password</span>
+				<i></i>
+			</div>
+			<p class="error_msg" id="error_box_pass"></p>
+			<button id="next">Next</button>
+		</form>
+	</div>
+	<script src="js/login.js"></script>
+	
+</body>
+</html>

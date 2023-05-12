@@ -1,7 +1,7 @@
 // Define the arrays for each semester
 var semester3 = {
     name: "Semester 3",
-    subjects: ["ITPC-201: Object Oriented Programming Concepts", "ITPC-203: Data Structures", "ITPC-205: Data Communication and Networking", "ITPC-207: Fundamentals of Database Management Systems", "ITPC-209: Computer System Architecture", "MACI-203: Numerical Methods"],
+    subjects: ["ITPC-201: Object Oriented Programming Concepts", "ITPC-203: Data Structures", "ITPC-205: Data Communication and Networking", "ITPC-207: Fundamentals of Database Management Systems", "ITPC-209 Computer System Architecture", "MACI-203: Numerical Methods"],
     labs: ["ITPC-221: Object Oriented Programming Concepts Lab", "ITPC-223: Data Structures Lab ", "ITPC-225: Data Communication and Networking Lab", "ITPC-227: Fundamentals of Database Management Systems Lab"]
   };
 
@@ -50,15 +50,10 @@ var dept_elec = {
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const semester_no = urlParams.get('semester');
-function redirectToSubject(subject) {
-	// Redirect to Semester.html and pass the semester value as a URL parameter
-	// window.location.href = 'curriculum/semester?semester=' + semester;
-	window.location.href = 'subject?subject='+subject;
-};
-function go_to_sem (semester_no) {
-	// Get the value of the semester variable
-	var semester = semester_no;
+const subject_name = urlParams.get('subject');
+function go_to_sub(subject_name) {
+	// Get the value of the subject variable
+	var semester = subject_name;
 	// Get the appropriate array based on the semester value
 	var subjectsArray = [];
 	var labsArray = [];
@@ -108,27 +103,26 @@ function go_to_sem (semester_no) {
 			return;
 	}
 	
-    document.getElementById("semester_name").innerHTML=sem_name;
 	
-    // loop through the subjectsList and append the "Subjects" div for each subject
-    for (var i = 0; i < subjectsArray.length; i++) {
-        var subject = subjectsArray[i];
-        var subjectDiv = document.createElement("div");
-        subjectDiv.className = "row g-4 justify-content-lg-center";
-        subjectDiv.innerHTML = `<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left click_cursor pt-3" onclick="redirectToSubject('${subject}')"><div class="p-1"><h5 class="mb-3 ms-5">${subject}</h5></div></div></div>`;
-        document.getElementById("subjects").appendChild(subjectDiv);
-		document.getElementById("subjects").appendChild(document.createElement("br"));
-    }
+    // // loop through the subjectsList and append the "Subjects" div for each subject
+    // for (var i = 0; i < subjectsArray.length; i++) {
+    //     var subject = subjectsArray[i];
+    //     var subjectDiv = document.createElement("div");
+    //     subjectDiv.className = "row g-4 justify-content-lg-center";
+    //     subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
+    //     document.getElementById("subjects").appendChild(subjectDiv);
+	// 	document.getElementById("subjects").appendChild(document.createElement("br"));
+    // }
 
-    // loop through the subjectsList and append the "Subjects" div for each subject
-    for (var i = 0; i < labsArray.length; i++) {
-        var subject = labsArray[i];
-        var subjectDiv = document.createElement("div");
-        subjectDiv.className = "row g-4 justify-content-lg-center";
-        subjectDiv.innerHTML = `<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left click_cursor pt-3" onclick="redirectToSubject('${subject}')"><div class="p-1"><h5 class="mb-3 ms-5">${subject}</h5></div></div></div>`;
-        document.getElementById("lab_subjects").appendChild(subjectDiv);
-		document.getElementById("lab_subjects").appendChild(document.createElement("br"))
-    }
+    // // loop through the subjectsList and append the "Lab Subjects" div for each subject
+    // for (var i = 0; i < labsArray.length; i++) {
+    //     var subject = labsArray[i];
+    //     var subjectDiv = document.createElement("div");
+    //     subjectDiv.className = "row g-4 justify-content-lg-center";
+    //     subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
+    //     document.getElementById("lab_subjects").appendChild(subjectDiv);
+	// 	document.getElementById("lab_subjects").appendChild(document.createElement("br"))
+    // }
 };
-
-go_to_sem(semester_no);
+document.getElementById("subject_name").innerHTML= `${subject_name}`;
+// go_to_sub(subject_name);

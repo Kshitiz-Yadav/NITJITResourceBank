@@ -4,3 +4,4 @@
 #secrets
 .env
 private_key.json
+/src/db

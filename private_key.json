@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "it-resource-bank",
+  "private_key_id": "05f4284b5836234cead537b0c2730a11dffbeaf7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDEUj+TBrIcEmXn\nUWdAJDvCHrWLMFvVzjFWNwDJ4XEtNCfQ4yGfmS5Q/AqYL/cB+QKOYJazPdHF4KNC\nVvukCfT25LthLoMYB7zY6hJTRVTiAf5XA4zwozm2onKnFOjuMHhP4K9WioJqaEYM\nhsrFVahnvgKA7UixnACN+ikiSpQnzY2q6fx1fulFxySQVogWEcz/FSqchjHXECGl\nJvCEc7Plvcutf0j9Z1axPV5miSpmvXmL59kbUnNfmes72CchlQsDmA0wVAQuzkIR\ncfJ7+XwmMi07hEoYoMY9Jg4QJTnII9BFxFso1DbahtsAOTK0d/kaVJBd1w9O1iCy\noCM3rVgNAgMBAAECggEAAdMF1jbstsgQ/FpMTFNJ3t7sLvPvFoiI+tUeA8I9i/79\nE7rYmCQTQxtkec+QSwtmU65gGCBN77nLqpUmV3rkNNshRqDpBPMldRqPuwhc5pDA\nLUzSJXZO1fyidh0CoRwAMjXTS0mUNqrrY7ho7/aAzx375fjOgSAC/U7CzRfGUqxZ\nJLgMdrf52K4jO1cb/4euAdCC8AhpdmlYJS/175++nJj6aAJJQz6lBu1GKhZCX8bG\ntt2KkU1D9spdlnkZ8yzxUEjxOEWVkMvniSIhFNvaqIaUZk5NAldHRY0tBoCULVq2\nLpZBcbpv92YCYmg6gJMKFolUd0tI/22aSPf0/xLTHQKBgQDvemOEa9OX1LSOZQyv\nAMIlyK2rndN0u78pjf2umT0giJiEkgXnimMVELexcdtHeM8A4eLsig6it4N/JVNM\nZBGa6SfujHpaIt4MfSkE4W3EtM7yRL+vm6CIvqDokaDIzKhNj8yf3BSLcXduPOR8\n7/6f9j+d255ZaeLn8O+jIv7SXwKBgQDR3aIizV9qYzUX3B389y44B4a0/iGBfVd1\n+bD7eQJaDQduNNM5SrNuySuuEKpUaXRcOu+5WW1RrxhdcXKZ42QgI5QO/yaooCDU\n4VoSmbtrnkQnrOkK4BXXav7PCPuJz8/HGquiFbssh8G/0ckwLOqROi9t1SMmQFYg\njk266yQlEwKBgQDrMCyKQYdFxr0oV29Uc484olSFhfPE4hoEipGIprBUwjHfiLVJ\nxyw15PwyxZnQIIJT4IQHQDLNdSMsfJDJJkHv/GmeKtKCsVmXtFfTlj1CgTv4zLHg\nmhvYEDdhEJxyeCQWQFJ68R4wMFhVqHHRjbVojeO+eZCTSZ1xorsGYXkXSwKBgAyx\nlyj7uxW4QnHbAoVWfhkte1xfMq+eYTfljmrnetjviM+FqnEAr7G3wUiaAXNxnXQm\nrHFNk2spaBPe1MuyEVBQVphBnpj8dn/p0YTmf4uW2xB7SO07eJa7BgaHyI8hXrPw\nTQlUvymGXJW5nq2nSdjW6B+AkMuzgIIfmVwA9QK5AoGBALxfp5d7lNXD38uNsWrz\n7vdMfB+KYO4XFBpIWjskpezsrR1ABrRIkCRnUDaPCpJqs6ETgbuBq+3QLkkXNLC9\n3L8DloVEm+HJFmcdCoQEHvGvluQjH/drGBRsRueiLFOEYWkgRvpwhcedbsUQWpmT\n9dMiKFghewAqtoPh6EvpITnA\n-----END PRIVATE KEY-----\n",
+  "client_email": "it-resource-bank-693@it-resource-bank.iam.gserviceaccount.com",
+  "client_id": "111139693096431940655",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/it-resource-bank-693%40it-resource-bank.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

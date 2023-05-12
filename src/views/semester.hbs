@@ -54,6 +54,10 @@
     </div>
     <!-- Header End -->
 
+    <form id="semesterForm" hidden>
+        <input id="semNum" value="{{semNum}}" hidden>
+    </form>
+
     <!-- Service Start -->
     <div class="container-xxl py-5">
         <div id="subjects" class="container">
@@ -79,6 +83,10 @@
     </div>
     <!-- Service End -->
 
+    <form id="subjectForm" method="post" hidden>
+        <input type="text" name="subName" id="subName" hidden>
+    </form>
+
     {{>footer}}
 
     <!-- Back to Top -->
@@ -101,12 +109,6 @@
             document.getElementById("curriculam_dropdown").classList.add("active");
             document.getElementById("placements_dropdown").classList.remove("active");
             document.getElementById("feedback_menu").classList.remove("active");
-        }
-
-        function redirectToSubject(subject) {
-            // Redirect to Semester.html and pass the semester value as a URL parameter
-            // window.location.href = 'curriculum/semester?semester=' + semester;
-            window.location.href = 'subject?subject=' + subject;
         }
     </script>
 </body>

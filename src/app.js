@@ -163,6 +163,24 @@ app.post("/feedback", async(req, res)=>{
     res.status(201).render("feedback")
 })
 
+app.post("/semester", (req, res)=>{
+    try{
+        res.status(201).render("semester", {semNum: req.body.semNum})
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
+app.post("/subject", (req, res)=>{
+    try{
+        res.status(201).render("subject", {subName: req.body.subName})
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
 app.listen(PORT, ()=>{
     console.log("Listening to port " + PORT); 
 })

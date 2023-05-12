@@ -48,13 +48,16 @@ var dept_elec = {
 	labs: []
 };
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const semester_no = urlParams.get('semester');
+const semester_no = document.getElementById("semNum").value
+
 function redirectToSubject(subject) {
 	// Redirect to Semester.html and pass the semester value as a URL parameter
 	// window.location.href = 'curriculum/semester?semester=' + semester;
-	window.location.href = 'subject?subject='+subject;
+	// window.location.href = 'subject?subject='+subject;
+	document.getElementById("subName").value = subject
+	let form = document.getElementById("subjectForm")
+	form.setAttribute("action", "/subject")
+	form.submit()
 };
 function go_to_sem (semester_no) {
 	// Get the value of the semester variable

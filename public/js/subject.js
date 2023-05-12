@@ -48,9 +48,12 @@ var dept_elec = {
 	labs: []
 };
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const subject_name = urlParams.get('subject');
+// const queryString = window.location.search;
+// const urlParams = new URLSearchParams(queryString);
+// const subject_name = urlParams.get('subject');
+const subject_name = document.getElementById("subName").value
+
+
 function go_to_sub(subject_name) {
 	// Get the value of the subject variable
 	var semester = subject_name;

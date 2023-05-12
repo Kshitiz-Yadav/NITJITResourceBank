@@ -48,11 +48,16 @@
             </div>
         </div>
     </nav>
+    <form id="semesterFormH" method="post" hidden>
+        <input type="text" name="semNum" id="semNumH" hidden>
+    </form>
     <!-- Navbar End -->
     <script>
         function redirectToSemester(semester) {
-            // Redirect to Semester.html and pass the semester value as a URL parameter
-            window.location.href = 'semester?semester=' + semester;
+            document.getElementById("semNumH").value = semester
+            let form = document.getElementById("semesterFormH")
+            form.setAttribute("action", "/semester")
+            form.submit()
         }
     </script>
 </body>

@@ -69,6 +69,13 @@
                 <h1 class="mb-5">Pratical</h1>
             </div>
         </div>
+        <br>
+        <div id="pyqs" class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">PYQs</h6>
+                <h1 class="mb-5">Previous Year Question Papers</h1>
+            </div>
+        </div>
     </div>
     <!-- Service End -->
 
@@ -94,6 +101,12 @@
             document.getElementById("curriculam_dropdown").classList.add("active");
             document.getElementById("placements_dropdown").classList.remove("active");
             document.getElementById("feedback_menu").classList.remove("active");
+        }
+
+        function redirectToSubject(subject) {
+            // Redirect to Semester.html and pass the semester value as a URL parameter
+            // window.location.href = 'curriculum/semester?semester=' + semester;
+            window.location.href = 'subject?subject=' + subject;
         }
     </script>
 </body>

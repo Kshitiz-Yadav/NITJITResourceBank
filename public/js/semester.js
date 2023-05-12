@@ -1,7 +1,7 @@
 // Define the arrays for each semester
 var semester3 = {
     name: "Semester 3",
-    subjects: ["ITPC-201: Object Oriented Programming Concepts", "ITPC-203: Data Structures", "ITPC-205: Data Communication and Networking", "ITPC-207: Fundamentals of Database Management Systems", "ITPC-209 Computer System Architecture", "MACI-203: Numerical Methods"],
+    subjects: ["ITPC-201: Object Oriented Programming Concepts", "ITPC-203: Data Structures", "ITPC-205: Data Communication and Networking", "ITPC-207: Fundamentals of Database Management Systems", "ITPC-209: Computer System Architecture", "MACI-203: Numerical Methods"],
     labs: ["ITPC-221: Object Oriented Programming Concepts Lab", "ITPC-223: Data Structures Lab ", "ITPC-225: Data Communication and Networking Lab", "ITPC-227: Fundamentals of Database Management Systems Lab"]
   };
 
@@ -51,6 +51,11 @@ var dept_elec = {
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const semester_no = urlParams.get('semester');
+function redirectToSubject(subject) {
+	// Redirect to Semester.html and pass the semester value as a URL parameter
+	// window.location.href = 'curriculum/semester?semester=' + semester;
+	window.location.href = 'subject?subject='+subject;
+};
 function go_to_sem (semester_no) {
 	// Get the value of the semester variable
 	var semester = semester_no;
@@ -58,42 +63,42 @@ function go_to_sem (semester_no) {
 	var subjectsArray = [];
 	var labsArray = [];
 	switch (semester) {
-		case 'semester-3':
+		case 'sem_3':
             sem_name = semester3.name
 			subjectsArray = semester3.subjects;
 			labsArray = semester3.labs;
 			break;
-		case 'semester-4':
+		case 'sem_4':
             sem_name = semester4.name
 			subjectsArray = semester4.subjects;
 			labsArray = semester4.labs;
 			break;
-        case 'semester-5':
+        case 'sem_5':
             sem_name = semester5.name
 			subjectsArray = semester5.subjects;
 			labsArray = semester5.labs;
 			break;
-		case 'semester-6':
+		case 'sem_6':
             sem_name = semester6.name
 			subjectsArray = semester6.subjects;
 			labsArray = semester6.labs;
 			break;
-		case 'semester-7':
+		case 'sem_7':
             sem_name = semester7.name
 			subjectsArray = semester7.subjects;
 			labsArray = semester7.labs;
 			break;
-		case 'semester-8':
+		case 'sem_8':
             sem_name = semester8.name
 			subjectsArray = semester8.subjects;
 			labsArray = semester8.labs;
 			break;
-		case 'open-electives':
+		case 'open_electives':
             sem_name = open_elec.name
 			subjectsArray = open_elec.subjects;
 			labsArray = open_elec.labs;
 			break;
-		case 'departmental-electives':
+		case 'departmental_electives':
             sem_name = dept_elec.name
 			subjectsArray = dept_elec.subjects;
 			labsArray = dept_elec.labs;
@@ -110,7 +115,7 @@ function go_to_sem (semester_no) {
         var subject = subjectsArray[i];
         var subjectDiv = document.createElement("div");
         subjectDiv.className = "row g-4 justify-content-lg-center";
-        subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
+        subjectDiv.innerHTML = `<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left click_cursor pt-3" onclick="redirectToSubject('${subject}')"><div class="p-1"><h5 class="mb-3 ms-5">${subject}</h5></div></div></div>`;
         document.getElementById("subjects").appendChild(subjectDiv);
 		document.getElementById("subjects").appendChild(document.createElement("br"));
     }
@@ -120,7 +125,7 @@ function go_to_sem (semester_no) {
         var subject = labsArray[i];
         var subjectDiv = document.createElement("div");
         subjectDiv.className = "row g-4 justify-content-lg-center";
-        subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
+        subjectDiv.innerHTML = `<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left click_cursor pt-3" onclick="redirectToSubject('${subject}')"><div class="p-1"><h5 class="mb-3 ms-5">${subject}</h5></div></div></div>`;
         document.getElementById("lab_subjects").appendChild(subjectDiv);
 		document.getElementById("lab_subjects").appendChild(document.createElement("br"))
     }

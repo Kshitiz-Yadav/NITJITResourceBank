@@ -1,5 +1,10 @@
 const path = require("path")
 const hbs = require("hbs")
+var {google} = require("googleapis");
+var {drive} = google.drive("v3");
+var key = require("../private_key.json");
+var fs = require("fs");
+require('dotenv').config()
 const express = require("express");
 const bcrypt = require("bcryptjs")
 // const nodeMail = require("nodemailer");
@@ -15,6 +20,15 @@ app.set('view engine', "hbs");
 const partialPath = "../partials"
 hbs.registerPartials(partialPath);
 
+var jwtClient = new google.auth.JWT(
+    key.client_email,
+    null,
+    key.private_key,
+    ['https://www.googleapis.com/auth/drive'],
+    null
+  );
+  
+var parents = process.env.PARENTS;
 // Connecting to database
 require("./db/conn")
 const Users = require("./models/user")
@@ -59,13 +73,13 @@ app.get("/semester", (req,res)=>{
     res.render("semester")
 })
 app.get("/subject", (req,res)=>{
-    res.render("subject.hbs")
+    res.render("subject")
 })
 app.get("/feedback", (req,res)=>{
-    res.render("feedback.hbs")
+    res.render("feedback")
 })
 app.get("*", (req,res)=>{
-    res.render("404.hbs")
+    res.render("404")
 })
 
 //Making POST requests

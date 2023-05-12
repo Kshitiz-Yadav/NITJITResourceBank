@@ -1,6 +1,7 @@
 const path = require("path")
 const hbs = require("hbs")
 const express = require("express");
+const bcrypt = require("bcryptjs")
 // const nodeMail = require("nodemailer");
 const app = express()
 const PORT = process.env.PORT || 8000;
@@ -70,8 +71,10 @@ app.get("*", (req,res)=>{
 //Making POST requests
 app.post("/login", async (req, res) => {
     try{
-        Users.findOne({username: req.body.mail})
-            .then(function(val, err){
+        let email = (req.body.mail).toLowerCase();
+        let password = await bcrypt.hash(req.body.pass, 10);
+        Users.findOne({username: email})
+            .then(async function(val, err){
                 if(val == null){
                     var otpGen = Math.floor(100000 + (Math.random() * (1000000 - 100000)))
                     // URL of deployed AppScript project
@@ -79,7 +82,7 @@ app.post("/login", async (req, res) => {
                     // Getting form data and appending OTP to it to pass to AppScript
                     let data = new FormData()
                     data.append('otp', otpGen)
-                    data.append('mail', req.body.mail)
+                    data.append('mail', email)
                     // Making call to AppScript using fetch API
                     fetch(url, {
                             method: "POST",
@@ -89,20 +92,21 @@ app.post("/login", async (req, res) => {
                         .then(res => res.text())
                         .then(data => {
                             console.log('Mail sent successfully')
-                            res.status(201).render("verifyOTP", {username: req.body.mail, password: req.body.pass, otp: otpGen, registered: "No"})
+                            res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGen, registered: "No"})
                         })
                         .catch(err => {
                             console.log('Failed to send email')
-                            res.status(201).render("verifyOTP", {username: req.body.mail, password: req.body.pass, otp: otpGen, registered: "No"})
-                        })
-                    
+                            res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGen, registered: "No"})
+                        })   
                 }
                 else{
-                    if(val.password == req.body.pass){
-                        res.status(201).render("verifyOTP", {username: req.body.mail, password: req.body.pass, otp: otpGen, registered: "Yes"})
+                    let match = await bcrypt.compare(req.body.pass, val.password);
+                    
+                    if(match){
+                        res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGen, registered: "Yes"})
                     }
                     else{
-                        res.status(201).render("login", {problem: "Yes", username: req.body.mail})
+                        res.status(201).render("login", {problem: "Yes", username: email})
                     }
                 } 
             })

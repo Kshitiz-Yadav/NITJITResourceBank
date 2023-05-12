@@ -1,0 +1,6 @@
+# dependencies
+/node_modules
+
+#secrets
+.env
+private_key.json

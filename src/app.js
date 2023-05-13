@@ -4,7 +4,7 @@ var {google} = require("googleapis");
 var {drive} = google.drive("v3");
 var key = require("../private_key.json");
 var fs = require("fs");
-require('dotenv').config()
+require('dotenv').config();
 const express = require("express");
 const bcrypt = require("bcryptjs")
 // const nodeMail = require("nodemailer");
@@ -28,7 +28,7 @@ var jwtClient = new google.auth.JWT(
     ['https://www.googleapis.com/auth/drive'],
     null
   );
-var parent = "1tbSa2zauaIR4N8nhaNPSeKROBINzVog7";
+var parent = process.env.PARENTS;
 
 async function loadChild(parent, jwtClient){
     try {
@@ -113,7 +113,7 @@ app.post("/login", async (req, res) => {
                 if(val == null){
                     var otpGen = Math.floor(100000 + (Math.random() * (1000000 - 100000)))
                     // URL of deployed AppScript project
-                    let url = "https://script.google.com/macros/s/AKfycbyWbN7L_H_TcBUsPlNIT6T_Kx2DHkBZHosz3JMSInt9IuvZW34ziCWNwgp_IL7O71jfxQ/exec";
+                    let url = process.env.MAIL_URL;
                     // Getting form data and appending OTP to it to pass to AppScript
                     let data = new FormData()
                     data.append('otp', otpGen)

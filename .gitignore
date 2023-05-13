@@ -2,6 +2,6 @@
 /node_modules
 
 #secrets
-.env
+/src/.env
 private_key.json
 /src/db

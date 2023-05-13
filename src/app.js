@@ -1,8 +1,8 @@
 const path = require("path")
 const hbs = require("hbs")
 var {google} = require("googleapis");
-var {drive} = google.drive("v3");
 var key = require("../private_key.json");
+var XLSX = require('xlsx');
 var fs = require("fs");
 require('dotenv').config();
 const express = require("express");
@@ -33,7 +33,7 @@ var parent = process.env.PARENTS;
 async function loadChild(parent, jwtClient){
     try {
       await jwtClient.authorize();
-      var service = google.drive('v3');
+      var service = google.drive("v3");
       var response = await service.files.list({
         auth: jwtClient,
         pageSize: 900,
@@ -48,6 +48,22 @@ async function loadChild(parent, jwtClient){
     }
   }
   
+  async function downloadFile(fileId){
+    try{
+        await jwtClient.authorize();
+        var service = google.drive("v3");
+        var response = await service.files.get(
+            {fileId: fileId, alt: 'media', auth: jwtClient},
+            {responseType: 'arraybuffer'});
+        const workbook = XLSX.read(response.data);
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const array = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+        return JSON.stringify(array);
+    } catch(err){
+        console.log(err);
+    }
+  }
 
 
 // Connecting to database
@@ -231,7 +247,8 @@ app.post("/subject", (req, res)=>{
         }
 
         let innerFiles = await loadChild(child, jwtClient);
-        let excelF = await loadChild(excelID, jwtClient);
+        let excelFl = await loadChild(excelID, jwtClient);
+        let excelF = await downloadFile(excelFl[0].id);
         let bookID = "", otherID = "", pptID = "", notesID = "";
         for(let i=0;i<innerFiles.length;i++){
             switch(innerFiles[i].name){
@@ -257,7 +274,7 @@ app.post("/subject", (req, res)=>{
         otherF = await loadChild(otherID, jwtClient);
         pptF = await loadChild(pptID, jwtClient);
 
-        res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: JSON.stringify(excelF)})
+        res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: excelF})
       })();
     }
     catch(err){

@@ -21,14 +21,18 @@ function pyqsCreate(pyqFiles) {
         let name = pyqFiles[i].name;
 		let thumbnail = pyqFiles[i].thumbnailLink;
 		let webview = pyqFiles[i].webViewLink;
-		webview = webview.replace("view", "preview");
-		webview = webview.replace("?usp=drivesdk", "");
+		let webview2 = webview.replace("view", "preview");
+		webview2 = webview2.replace("?usp=drivesdk", "");
 		let download = pyqFiles[i].webContentLink;
         var pyqDiv = document.createElement("div");
         pyqDiv.className = "col-lg-2_5 col-md-6 wow fadeInUp";
 		pyqDiv.setAttribute("data-wow-delay", "0.1s");
-        pyqDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a onclick="model_file('${webview}')"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
-        document.getElementById("pyqs").appendChild(pyqDiv);
+        if(pyqFiles[i].mimeType == "application/pdf"){
+        	pyqDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a onclick="model_file('${webview2}')"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+		}else{
+			pyqDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a target="_blank" href="${webview}"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+		}
+		document.getElementById("pyqs").appendChild(pyqDiv);
 		document.getElementById("pyqs").appendChild(document.createElement("br"));
     }
 }

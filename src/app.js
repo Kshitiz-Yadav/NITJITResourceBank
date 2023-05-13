@@ -20,6 +20,7 @@ app.set('view engine', "hbs");
 const partialPath = "../partials"
 hbs.registerPartials(partialPath);
 
+// Loading the root google drive directory
 var jwtClient = new google.auth.JWT(
     key.client_email,
     null,
@@ -27,8 +28,28 @@ var jwtClient = new google.auth.JWT(
     ['https://www.googleapis.com/auth/drive'],
     null
   );
+var parent = "1tbSa2zauaIR4N8nhaNPSeKROBINzVog7";
+
+async function loadChild(parent, jwtClient){
+    try {
+      await jwtClient.authorize();
+      var service = google.drive('v3');
+      var response = await service.files.list({
+        auth: jwtClient,
+        pageSize: 900,
+        q: `'${parent}' in parents`,
+        fields: 'files(id, name, mimeType, thumbnailLink, webViewLink, webContentLink)'
+      });
+      var files = response.data.files;
+      return files;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
   
-var parents = process.env.PARENTS;
+
+
 // Connecting to database
 require("./db/conn")
 const Users = require("./models/user")
@@ -164,16 +185,42 @@ app.post("/feedback", async(req, res)=>{
 })
 
 app.post("/semester", (req, res)=>{
-    try{
-        res.status(201).render("semester", {semNum: req.body.semNum})
-    }
-    catch(err){
+    loadChild(parent, jwtClient)
+    .then(files => {
+        let child = ""
+        for(let i=0;i<files.length;i++){
+            if(files[i].name == req.body.semNum){
+                child = files[i].id
+                break
+            }
+        }
+        // console.log("child-> "+child)
+        loadChild(child, jwtClient)
+        .then(semFiles => {
+            let pyqID = ""
+            for(let i=0;i<semFiles.length;i++){
+                // console.log(semFiles[i].name + "-> " + semFiles[i].id)
+                if(semFiles[i].name == "Previous Year Exams"){
+                    pyqID = semFiles[i].id
+                    break
+                }
+            }
+            // console.log("pyqID->"+pyqID)
+            loadChild(pyqID, jwtClient)
+            .then(pyqFiles => {
+                pyqFiles = JSON.stringify(pyqFiles)
+                res.status(201).render("semester", {semNum: req.body.semNum, semID: child, pyqs: pyqFiles})
+            })
+        })
+    })
+    .catch(err => {
         console.log(err);
-    }
+    });
 })
 
 app.post("/subject", (req, res)=>{
     try{
+        console.log(req.body.semID)
         res.status(201).render("subject", {subName: req.body.subName})
     }
     catch(err){

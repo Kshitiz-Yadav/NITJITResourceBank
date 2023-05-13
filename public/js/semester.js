@@ -49,16 +49,31 @@ var dept_elec = {
 };
 
 const semester_no = document.getElementById("semNum").value
+let pyqFiles = JSON.parse(document.getElementById("pyqFiles").value)
+
+function pyqsCreate(pyqFiles) {
+	for (var i = 0; i < pyqFiles.length; i++) {
+        let name = pyqFiles[i].name;
+		let thumbnail = pyqFiles[i].thumbnailLink;
+		let webview = pyqFiles[i].webViewLink;
+		let download = pyqFiles[i].webContentLink;
+        var pyqDiv = document.createElement("div");
+        pyqDiv.className = "col-lg-2_5 col-md-6 wow fadeInUp";
+		pyqDiv.setAttribute("data-wow-delay", "0.1s");
+        pyqDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a target="_blank" href=${webview}><img class="img-fluid" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+        document.getElementById("pyqs").appendChild(pyqDiv);
+		document.getElementById("pyqs").appendChild(document.createElement("br"));
+    }
+}
 
 function redirectToSubject(subject) {
-	// Redirect to Semester.html and pass the semester value as a URL parameter
-	// window.location.href = 'curriculum/semester?semester=' + semester;
-	// window.location.href = 'subject?subject='+subject;
 	document.getElementById("subName").value = subject
+	document.getElementById("semIDSend").value = document.getElementById("semIDReceive").value
 	let form = document.getElementById("subjectForm")
 	form.setAttribute("action", "/subject")
 	form.submit()
 };
+
 function go_to_sem (semester_no) {
 	// Get the value of the semester variable
 	var semester = semester_no;
@@ -124,14 +139,39 @@ function go_to_sem (semester_no) {
     }
 
     // loop through the subjectsList and append the "Subjects" div for each subject
-    for (var i = 0; i < labsArray.length; i++) {
-        var subject = labsArray[i];
-        var subjectDiv = document.createElement("div");
-        subjectDiv.className = "row g-4 justify-content-lg-center";
-        subjectDiv.innerHTML = `<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left click_cursor pt-3" onclick="redirectToSubject('${subject}')"><div class="p-1"><h5 class="mb-3 ms-5">${subject}</h5></div></div></div>`;
-        document.getElementById("lab_subjects").appendChild(subjectDiv);
-		document.getElementById("lab_subjects").appendChild(document.createElement("br"))
-    }
+    // for (var i = 0; i < labsArray.length; i++) {
+    //     var subject = labsArray[i];
+    //     var subjectDiv = document.createElement("div");
+    //     subjectDiv.className = "row g-4 justify-content-lg-center";
+    //     subjectDiv.innerHTML = `<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left click_cursor pt-3" onclick="redirectToSubject('${subject}')"><div class="p-1"><h5 class="mb-3 ms-5">${subject}</h5></div></div></div>`;
+    //     document.getElementById("lab_subjects").appendChild(subjectDiv);
+	// 	document.getElementById("lab_subjects").appendChild(document.createElement("br"))
+    // }
+	pyqsCreate(pyqFiles);
 };
 
 go_to_sem(semester_no);
+
+
+
+
+//  <div class="col-lg-2 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+//     <div class="team-item bg-light">
+//         <div class="overflow-hidden">
+//             <a href='${webview}'><img class="img-fluid"
+//                     src='${thumbnail}' alt="Thumbnail"></a>
+//         </div>
+//         <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+//             <div class="bg-light d-flex justify-content-center pt-2 px-1">
+//                 <a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a>
+//                 <a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a>
+//                 <a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-download ">'${download}'</i></a>
+//             </div>
+//         </div>
+//         <div class="text-center p-4">
+//             <h5 class="mb-0">'${name}'</h5>
+//             <small>Assistant Professor (Grade-I)</small>
+//         </div>
+//     </div>
+// </div> 
+

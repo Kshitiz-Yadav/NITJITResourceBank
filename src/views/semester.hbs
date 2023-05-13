@@ -56,6 +56,8 @@
 
     <form id="semesterForm" hidden>
         <input id="semNum" value="{{semNum}}" hidden>
+        <input id="semIDReceive" value="{{semID}}" hidden>
+        <input id="pyqFiles" value="{{pyqs}}" hidden>
     </form>
 
     <!-- Service Start -->
@@ -66,18 +68,20 @@
                 <h1 class="mb-5">Theory</h1>
             </div>
         </div>
-        <br>
+        {{!-- <br>
         <div id="lab_subjects" class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Subjects</h6>
                 <h1 class="mb-5">Pratical</h1>
             </div>
-        </div>
+        </div> --}}
         <br>
-        <div id="pyqs" class="container">
+        <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">PYQs</h6>
                 <h1 class="mb-5">Previous Year Question Papers</h1>
+            </div>
+            <div class="row g-4" id="pyqs">
             </div>
         </div>
     </div>
@@ -85,6 +89,7 @@
 
     <form id="subjectForm" method="post" hidden>
         <input type="text" name="subName" id="subName" hidden>
+        <input type="text" name="semID" id="semIDSend" hidden>
     </form>
 
     {{>footer}}

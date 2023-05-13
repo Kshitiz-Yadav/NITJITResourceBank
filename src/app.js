@@ -207,7 +207,7 @@ app.post("/semester", (req, res)=>{
 
             let pyqFiles = await loadChild(pyqID, jwtClient);
 
-            res.status(201).render("semester", {semNum: req.body.semNum, semID: child, pyqs: JSON.stringify(pyqFiles)})
+            res.status(201).render("semester", {semNum: req.body.semNum, semID: child, pyqs: JSON.stringify(pyqFiles), semF: JSON.stringify(semFiles)})
         })();
     }
     catch(err){

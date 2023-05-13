@@ -60,7 +60,7 @@ function pyqsCreate(pyqFiles) {
         var pyqDiv = document.createElement("div");
         pyqDiv.className = "col-lg-2_5 col-md-6 wow fadeInUp";
 		pyqDiv.setAttribute("data-wow-delay", "0.1s");
-        pyqDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a target="_blank" href=${webview}><img class="img-fluid" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+        pyqDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a target="_blank" href=${webview}><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
         document.getElementById("pyqs").appendChild(pyqDiv);
 		document.getElementById("pyqs").appendChild(document.createElement("br"));
     }
@@ -151,27 +151,3 @@ function go_to_sem (semester_no) {
 };
 
 go_to_sem(semester_no);
-
-
-
-
-//  <div class="col-lg-2 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-//     <div class="team-item bg-light">
-//         <div class="overflow-hidden">
-//             <a href='${webview}'><img class="img-fluid"
-//                     src='${thumbnail}' alt="Thumbnail"></a>
-//         </div>
-//         <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-//             <div class="bg-light d-flex justify-content-center pt-2 px-1">
-//                 <a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a>
-//                 <a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a>
-//                 <a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-download ">'${download}'</i></a>
-//             </div>
-//         </div>
-//         <div class="text-center p-4">
-//             <h5 class="mb-0">'${name}'</h5>
-//             <small>Assistant Professor (Grade-I)</small>
-//         </div>
-//     </div>
-// </div> 
-

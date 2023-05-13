@@ -52,80 +52,29 @@ var dept_elec = {
 // const urlParams = new URLSearchParams(queryString);
 // const subject_name = urlParams.get('subject');
 const subject_name = document.getElementById("subName").value
-
-
-function go_to_sub(subject_name) {
-	// Get the value of the subject variable
-	var semester = subject_name;
-	// Get the appropriate array based on the semester value
-	var subjectsArray = [];
-	var labsArray = [];
-	switch (semester) {
-		case 'sem_3':
-            sem_name = semester3.name
-			subjectsArray = semester3.subjects;
-			labsArray = semester3.labs;
-			break;
-		case 'sem_4':
-            sem_name = semester4.name
-			subjectsArray = semester4.subjects;
-			labsArray = semester4.labs;
-			break;
-        case 'sem_5':
-            sem_name = semester5.name
-			subjectsArray = semester5.subjects;
-			labsArray = semester5.labs;
-			break;
-		case 'sem_6':
-            sem_name = semester6.name
-			subjectsArray = semester6.subjects;
-			labsArray = semester6.labs;
-			break;
-		case 'sem_7':
-            sem_name = semester7.name
-			subjectsArray = semester7.subjects;
-			labsArray = semester7.labs;
-			break;
-		case 'sem_8':
-            sem_name = semester8.name
-			subjectsArray = semester8.subjects;
-			labsArray = semester8.labs;
-			break;
-		case 'open_electives':
-            sem_name = open_elec.name
-			subjectsArray = open_elec.subjects;
-			labsArray = open_elec.labs;
-			break;
-		case 'departmental_electives':
-            sem_name = dept_elec.name
-			subjectsArray = dept_elec.subjects;
-			labsArray = dept_elec.labs;
-			break;
-		default:
-			alert('Invalid semester value');
-			return;
-	}
-	
-	
-    // // loop through the subjectsList and append the "Subjects" div for each subject
-    // for (var i = 0; i < subjectsArray.length; i++) {
-    //     var subject = subjectsArray[i];
-    //     var subjectDiv = document.createElement("div");
-    //     subjectDiv.className = "row g-4 justify-content-lg-center";
-    //     subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
-    //     document.getElementById("subjects").appendChild(subjectDiv);
-	// 	document.getElementById("subjects").appendChild(document.createElement("br"));
-    // }
-
-    // // loop through the subjectsList and append the "Lab Subjects" div for each subject
-    // for (var i = 0; i < labsArray.length; i++) {
-    //     var subject = labsArray[i];
-    //     var subjectDiv = document.createElement("div");
-    //     subjectDiv.className = "row g-4 justify-content-lg-center";
-    //     subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
-    //     document.getElementById("lab_subjects").appendChild(subjectDiv);
-	// 	document.getElementById("lab_subjects").appendChild(document.createElement("br"))
-    // }
-};
+const bookF = JSON.parse(document.getElementById("bookFiles").value)
+const notesF = JSON.parse(document.getElementById("notesFiles").value)
+const pptF = JSON.parse(document.getElementById("pptFiles").value)
+const otherF = JSON.parse(document.getElementById("otherFiles").value)
+const excelF = JSON.parse(document.getElementById("excelFiles").value)
 document.getElementById("subject_name").innerHTML= `${subject_name}`;
-// go_to_sub(subject_name);
+
+function dynamicCreate(parent_id, Files) {
+	for (var i = 0; i < Files.length; i++) {
+        let name = Files[i].name;
+		let thumbnail = Files[i].thumbnailLink;
+		let webview = Files[i].webViewLink;
+		let download = Files[i].webContentLink;
+        var fileDiv = document.createElement("div");
+        fileDiv.className = "col-lg-2_5 col-md-6 wow fadeInUp";
+		fileDiv.setAttribute("data-wow-delay", "0.1s");
+        fileDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a target="_blank" href=${webview}><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+        document.getElementById(parent_id).appendChild(fileDiv);
+		document.getElementById(parent_id).appendChild(document.createElement("br"));
+    }
+}
+
+dynamicCreate("notes", notesF);
+dynamicCreate("ppts", pptF);
+dynamicCreate("books", bookF);
+dynamicCreate("others", otherF);

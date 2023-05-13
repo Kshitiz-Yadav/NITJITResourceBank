@@ -185,48 +185,91 @@ app.post("/feedback", async(req, res)=>{
 })
 
 app.post("/semester", (req, res)=>{
-    loadChild(parent, jwtClient)
-    .then(files => {
-        let child = ""
-        for(let i=0;i<files.length;i++){
-            if(files[i].name == req.body.semNum){
-                child = files[i].id
-                break
+    try{
+        (async function() {
+            let child = "";
+            let files = await loadChild(parent, jwtClient);
+            for(let i=0;i<files.length;i++){
+                if(files[i].name == req.body.semNum){
+                    child = files[i].id
+                    break
+                }
             }
-        }
-        // console.log("child-> "+child)
-        loadChild(child, jwtClient)
-        .then(semFiles => {
+
+            let semFiles = await loadChild(child, jwtClient);
             let pyqID = ""
             for(let i=0;i<semFiles.length;i++){
-                // console.log(semFiles[i].name + "-> " + semFiles[i].id)
                 if(semFiles[i].name == "Previous Year Exams"){
                     pyqID = semFiles[i].id
                     break
                 }
             }
-            // console.log("pyqID->"+pyqID)
-            loadChild(pyqID, jwtClient)
-            .then(pyqFiles => {
-                pyqFiles = JSON.stringify(pyqFiles)
-                res.status(201).render("semester", {semNum: req.body.semNum, semID: child, pyqs: pyqFiles})
-            })
-        })
-    })
-    .catch(err => {
-        console.log(err);
-    });
-})
 
-app.post("/subject", (req, res)=>{
-    try{
-        console.log(req.body.semID)
-        res.status(201).render("subject", {subName: req.body.subName})
+            let pyqFiles = await loadChild(pyqID, jwtClient);
+
+            res.status(201).render("semester", {semNum: req.body.semNum, semID: child, pyqs: JSON.stringify(pyqFiles)})
+        })();
     }
     catch(err){
         console.log(err);
     }
 })
+
+app.post("/subject", (req, res)=>{
+    try{
+        (async function() {
+        let semfiles = await loadChild(req.body.semID, jwtClient);
+        let excelID = "";
+        let child = "";
+        for(let i=0;i<semfiles.length;i++){
+            if((semfiles[i].name).substring(0,8) == (req.body.subName).substring(0,8)){
+                child = semfiles[i].id
+            }
+            if((semfiles[i].name) == "Youtube Playlist"){
+                excelID = semfiles[i].id
+            }
+        }
+
+        let innerFiles = await loadChild(child, jwtClient);
+        let excelF = await loadChild(excelID, jwtClient);
+        let bookID = "", otherID = "", pptID = "", notesID = "";
+        for(let i=0;i<innerFiles.length;i++){
+            switch(innerFiles[i].name){
+                case "BOOKS":
+                    bookID = innerFiles[i].id;
+                    break;
+                case "PPT":
+                    pptID = innerFiles[i].id;
+                    break;
+                case "Others":
+                    otherID = innerFiles[i].id;
+                    break;
+                case "Notes":
+                    notesID = innerFiles[i].id;
+                    break;
+                default:
+            }
+        }
+
+        let bookF, notesF, otherF, pptF;
+        bookF = await loadChild(bookID, jwtClient);
+        notesF = await loadChild(notesID, jwtClient);
+        otherF = await loadChild(otherID, jwtClient);
+        pptF = await loadChild(pptID, jwtClient);
+
+        // console.log(bookF);
+        // console.log(notesF);
+        // console.log(otherF);
+        // console.log(pptF);
+        // console.log(excelF);
+
+        res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: JSON.stringify(excelF)})
+      })();
+    }
+    catch(err){
+        console.log(err);
+    }
+});
 
 app.listen(PORT, ()=>{
     console.log("Listening to port " + PORT); 

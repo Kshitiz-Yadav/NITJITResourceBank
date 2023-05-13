@@ -14,7 +14,7 @@ var semester4 = {
 var semester5 = {
 	name: "Semester 5",
 	subjects: ["ITPC-301: Cryptography and Network Security","ITPC-303: Software Engineering Concepts","ITPC-305: Web Design Technologies","ITPC-307: Computer Graphics and Applications","ITPC-309: Discrete Mathematics"],
-	labs: ["ITPC-321: Cryptography and Network Security Lab","ITPC-323: Software Engineering Concepts Lab","ITPC-325: Web Design Technologies Lab"," ITPC-327: Computer Graphics and Applications Lab"]
+	labs: ["ITPC-321: Cryptography and Network Security Lab","ITPC-323: Software Engineering Concepts Lab","ITPC-325: Web Design Technologies Lab","ITPC-327: Computer Graphics and Applications Lab"]
 };
 
 var semester6 = {

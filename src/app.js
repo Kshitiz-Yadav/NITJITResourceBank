@@ -257,12 +257,6 @@ app.post("/subject", (req, res)=>{
         otherF = await loadChild(otherID, jwtClient);
         pptF = await loadChild(pptID, jwtClient);
 
-        // console.log(bookF);
-        // console.log(notesF);
-        // console.log(otherF);
-        // console.log(pptF);
-        // console.log(excelF);
-
         res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: JSON.stringify(excelF)})
       })();
     }

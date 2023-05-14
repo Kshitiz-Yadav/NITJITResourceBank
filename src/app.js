@@ -59,12 +59,28 @@ async function loadChild(parent, jwtClient){
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const array = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+        for(let i=0;i<array.length;i++){
+            array[i][1] = await convertYoutubeUrlToEmbed(array[i][1]);
+        }
         return JSON.stringify(array);
     } catch(err){
         console.log(err);
     }
   }
 
+  async function convertYoutubeUrlToEmbed(url) {
+    let apiUrl = "https://www.youtube.com/oembed?url=" + url + "&format=json"; // construct the API URL
+    let code = await fetch(apiUrl) // make a request to the API
+      .then(response => response.json()) // parse the response as JSON
+      .then(data => {
+        return data.html; // return the embed code
+      })
+      .catch(error => {
+        console.error(error); // handle errors
+        return null;
+      });
+      return code;
+  }
 
 // Connecting to database
 require("./db/conn")

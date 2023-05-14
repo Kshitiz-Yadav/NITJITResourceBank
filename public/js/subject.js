@@ -9,27 +9,20 @@ document.getElementById("subject_name").innerHTML= `${subject_name}`;
 
 let yt = [];
 for(let i=0;i<excelF.length;i++){
-	if(excelF[i][0].substring(0,8) == subject_name.substring(0,8)){
-		let rowlink = excelF[i][1];
-		if(rowlink.includes("playlist?list")){
-			let pos = rowlink.indexOf("?list=");
-			let playlistID = rowlink.substring(pos+6);
-			rowlink = "https://www.youtube.com/embed/videoseries?list="+playlistID;
-		}
-		else{
-			let videoID = rowlink.replace("https://youtu.be/", "");
-			rowlink = "https://www.youtube.com/embed/"+videoID;
-		}
-		let link = '<iframe width="500" height="300" src="'+rowlink+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
-		
+	if(excelF[i][1]!=null &&excelF[i][0].substring(0,8) == subject_name.substring(0,8)){
+		let link = excelF[i][1];
+		link = link.substring(0,8)+ 'width="500" height="300"'+link.substring(32);
 		yt.push([link,excelF[i][2]]);
 	}
 }
 
 function dynamicCreate(parent_id,col_width, Files) {
 	for (var i = 0; i < Files.length; i++) {
-        let name = Files[i].name;
+		let name = Files[i].name;
 		let thumbnail = Files[i].thumbnailLink;
+		if(thumbnail==undefined){
+			thumbnail="../img/preview_thumbnail.png"
+		}
 		let webview = Files[i].webViewLink;
 		let webview2 = "";
 		let download = Files[i].webContentLink;

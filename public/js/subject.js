@@ -11,7 +11,15 @@ let yt = [];
 for(let i=0;i<excelF.length;i++){
 	if(excelF[i][0].substring(0,8) == subject_name.substring(0,8)){
 		let rowlink = excelF[i][1];
-		rowlink = rowlink.replace("https://www.youtube.com/playlist", "https://www.youtube.com/embed/videoseries");
+		if(rowlink.includes("playlist?list")){
+			let pos = rowlink.indexOf("?list=");
+			let playlistID = rowlink.substring(pos+6);
+			rowlink = "https://www.youtube.com/embed/videoseries?list="+playlistID;
+		}
+		else{
+			let videoID = rowlink.replace("https://youtu.be/", "");
+			rowlink = "https://www.youtube.com/embed/"+videoID;
+		}
 		let link = '<iframe width="500" height="300" src="'+rowlink+'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
 		
 		yt.push([link,excelF[i][2]]);
@@ -23,14 +31,21 @@ function dynamicCreate(parent_id,col_width, Files) {
         let name = Files[i].name;
 		let thumbnail = Files[i].thumbnailLink;
 		let webview = Files[i].webViewLink;
-		let webview2 = webview.replace("view", "preview");
-		webview2 = webview2.replace("?usp=drivesdk", "");
+		let webview2 = "";
 		let download = Files[i].webContentLink;
         var fileDiv = document.createElement("div");
         fileDiv.className = col_width+" col-md-6 wow fadeInUp";
 		fileDiv.setAttribute("data-wow-delay", "0.1s");
-		if(Files[i].mimeType == "application/pdf"){
+		if(webview.includes("/view")){
+			webview2 = webview.replace("view", "preview");
+			webview2 = webview2.replace("?usp=drivesdk", "");
         	fileDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a onclick="model_file('${webview2}')"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+		}
+		else if(webview.includes("docs.google.com")){
+			let start = webview.indexOf("/d/");
+			let end = webview.indexOf("/edit")
+			webview2 = "https://docs.google.com/gview?url=https://drive.google.com/uc?id="+webview.substring(start+3,end)+"&embedded=true";
+			fileDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a onclick="model_file('${webview2}')"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
 		}else{
 			fileDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a target="_blank" href="${webview}"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
 		}

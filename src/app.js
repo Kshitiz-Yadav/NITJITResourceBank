@@ -1,10 +1,10 @@
 const path = require("path")
 const hbs = require("hbs")
 var {google} = require("googleapis");
-var {drive} = google.drive("v3");
 var key = require("../private_key.json");
+var XLSX = require('xlsx');
 var fs = require("fs");
-require('dotenv').config()
+require('dotenv').config();
 const express = require("express");
 const bcrypt = require("bcryptjs")
 // const nodeMail = require("nodemailer");
@@ -20,6 +20,7 @@ app.set('view engine', "hbs");
 const partialPath = "../partials"
 hbs.registerPartials(partialPath);
 
+// Loading the root google drive directory
 var jwtClient = new google.auth.JWT(
     key.client_email,
     null,
@@ -27,8 +28,60 @@ var jwtClient = new google.auth.JWT(
     ['https://www.googleapis.com/auth/drive'],
     null
   );
+var parent = process.env.PARENTS;
+
+async function loadChild(parent, jwtClient){
+    try {
+      await jwtClient.authorize();
+      var service = google.drive("v3");
+      var response = await service.files.list({
+        auth: jwtClient,
+        pageSize: 900,
+        q: `'${parent}' in parents`,
+        fields: 'files(id, name, mimeType, thumbnailLink, webViewLink, webContentLink)'
+      });
+      var files = response.data.files;
+      return files;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
   
-var parents = process.env.PARENTS;
+  async function downloadFile(fileId){
+    try{
+        await jwtClient.authorize();
+        var service = google.drive("v3");
+        var response = await service.files.get(
+            {fileId: fileId, alt: 'media', auth: jwtClient},
+            {responseType: 'arraybuffer'});
+        const workbook = XLSX.read(response.data);
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const array = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+        for(let i=0;i<array.length;i++){
+            array[i][1] = await convertYoutubeUrlToEmbed(array[i][1]);
+        }
+        return JSON.stringify(array);
+    } catch(err){
+        console.log(err);
+    }
+  }
+
+  async function convertYoutubeUrlToEmbed(url) {
+    let apiUrl = "https://www.youtube.com/oembed?url=" + url + "&format=json"; // construct the API URL
+    let code = await fetch(apiUrl) // make a request to the API
+      .then(response => response.json()) // parse the response as JSON
+      .then(data => {
+        return data.html; // return the embed code
+      })
+      .catch(error => {
+        console.error(error); // handle errors
+        return null;
+      });
+      return code;
+  }
+
 // Connecting to database
 require("./db/conn")
 const Users = require("./models/user")
@@ -92,7 +145,7 @@ app.post("/login", async (req, res) => {
                 if(val == null){
                     var otpGen = Math.floor(100000 + (Math.random() * (1000000 - 100000)))
                     // URL of deployed AppScript project
-                    let url = "https://script.google.com/macros/s/AKfycbyWbN7L_H_TcBUsPlNIT6T_Kx2DHkBZHosz3JMSInt9IuvZW34ziCWNwgp_IL7O71jfxQ/exec";
+                    let url = process.env.MAIL_URL;
                     // Getting form data and appending OTP to it to pass to AppScript
                     let data = new FormData()
                     data.append('otp', otpGen)
@@ -162,6 +215,88 @@ app.post("/feedback", async(req, res)=>{
     }
     res.status(201).render("feedback")
 })
+
+app.post("/semester", (req, res)=>{
+    try{
+        (async function() {
+            let child = "";
+            let files = await loadChild(parent, jwtClient);
+            for(let i=0;i<files.length;i++){
+                if(files[i].name == req.body.semNum){
+                    child = files[i].id
+                    break
+                }
+            }
+
+            let semFiles = await loadChild(child, jwtClient);
+            let pyqID = ""
+            for(let i=0;i<semFiles.length;i++){
+                if(semFiles[i].name == "Previous Year Exams"){
+                    pyqID = semFiles[i].id
+                    break
+                }
+            }
+
+            let pyqFiles = await loadChild(pyqID, jwtClient);
+
+            res.status(201).render("semester", {semNum: req.body.semNum, semID: child, pyqs: JSON.stringify(pyqFiles), semF: JSON.stringify(semFiles)})
+        })();
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
+app.post("/subject", (req, res)=>{
+    try{
+        (async function() {
+        let semfiles = await loadChild(req.body.semID, jwtClient);
+        let excelID = "";
+        let child = "";
+        for(let i=0;i<semfiles.length;i++){
+            if((semfiles[i].name).substring(0,8) == (req.body.subName).substring(0,8)){
+                child = semfiles[i].id
+            }
+            if((semfiles[i].name) == "Youtube Playlist"){
+                excelID = semfiles[i].id
+            }
+        }
+
+        let innerFiles = await loadChild(child, jwtClient);
+        let excelFl = await loadChild(excelID, jwtClient);
+        let excelF = await downloadFile(excelFl[0].id);
+        let bookID = "", otherID = "", pptID = "", notesID = "";
+        for(let i=0;i<innerFiles.length;i++){
+            switch(innerFiles[i].name){
+                case "BOOKS":
+                    bookID = innerFiles[i].id;
+                    break;
+                case "PPT":
+                    pptID = innerFiles[i].id;
+                    break;
+                case "Others":
+                    otherID = innerFiles[i].id;
+                    break;
+                case "Notes":
+                    notesID = innerFiles[i].id;
+                    break;
+                default:
+            }
+        }
+
+        let bookF, notesF, otherF, pptF;
+        bookF = await loadChild(bookID, jwtClient);
+        notesF = await loadChild(notesID, jwtClient);
+        otherF = await loadChild(otherID, jwtClient);
+        pptF = await loadChild(pptID, jwtClient);
+
+        res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: excelF})
+      })();
+    }
+    catch(err){
+        console.log(err);
+    }
+});
 
 app.listen(PORT, ()=>{
     console.log("Listening to port " + PORT); 

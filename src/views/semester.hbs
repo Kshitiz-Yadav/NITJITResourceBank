@@ -54,6 +54,24 @@
     </div>
     <!-- Header End -->
 
+    <!-- model files -->
+        <!-- The Modal -->
+    <div id="myModal" class="modal" style="padding-top: 0%; padding-left: 10%; padding-right: 10%">
+    <!-- The Close Button -->
+    <span class="close">&times;</span>
+    <!-- Modal Content (The File) -->
+    <iframe class="modal-content" id="file01" allow="autoplay" height="100%" ></iframe>
+    <!-- Modal Caption (File Text) -->
+    <div id="model_caption"></div>
+    </div>
+
+    <form id="semesterForm" hidden>
+        <input id="semNum" value="{{semNum}}" hidden>
+        <input id="semIDReceive" value="{{semID}}" hidden>
+        <input id="pyqFiles" value="{{pyqs}}" hidden>
+        <input id="semFiles" value="{{semF}}" hidden>
+    </form>
+
     <!-- Service Start -->
     <div class="container-xxl py-5">
         <div id="subjects" class="container">
@@ -70,14 +88,21 @@
             </div>
         </div>
         <br>
-        <div id="pyqs" class="container">
+        <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">PYQs</h6>
                 <h1 class="mb-5">Previous Year Question Papers</h1>
             </div>
+            <div class="row g-4" id="pyqs">
+            </div>
         </div>
     </div>
     <!-- Service End -->
+
+    <form id="subjectForm" method="post" hidden>
+        <input type="text" name="subName" id="subName" hidden>
+        <input type="text" name="semID" id="semIDSend" hidden>
+    </form>
 
     {{>footer}}
 
@@ -101,12 +126,6 @@
             document.getElementById("curriculam_dropdown").classList.add("active");
             document.getElementById("placements_dropdown").classList.remove("active");
             document.getElementById("feedback_menu").classList.remove("active");
-        }
-
-        function redirectToSubject(subject) {
-            // Redirect to Semester.html and pass the semester value as a URL parameter
-            // window.location.href = 'curriculum/semester?semester=' + semester;
-            window.location.href = 'subject?subject=' + subject;
         }
     </script>
 </body>

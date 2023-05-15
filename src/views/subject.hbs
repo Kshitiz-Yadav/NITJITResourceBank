@@ -54,40 +54,70 @@
     </div>
     <!-- Header End -->
 
+    <!-- model files -->
+        <!-- The Modal -->
+    <div id="myModal" class="modal" style="padding-top: 0%; padding-left: 10%; padding-right: 10%">
+    <!-- The Close Button -->
+    <span class="close">&times;</span>
+    <!-- Modal Content (The File) -->
+    <iframe class="modal-content" id="file01" allow="autoplay" height="100%"></iframe>
+    <!-- Modal Caption (File Text) -->
+    <div id="model_caption"></div>
+    </div>
+
+    <form id="subjectForm" hidden>
+        <input id="subName" value="{{subName}}" hidden>
+        <input id="bookFiles" value="{{bookF}}" hidden>
+        <input id="notesFiles" value="{{notesF}}" hidden>
+        <input id="pptFiles" value="{{pptF}}" hidden>
+        <input id="otherFiles" value="{{otherF}}" hidden>
+        <input id="excelFiles" value="{{excelF}}" hidden>
+    </form>
+
     <!-- Service Start -->
     <div class="container-xxl py-5">
-        <div id="notes" class="container">
+        <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Notes</h6>
                 <h1 class="mb-5">Notes By Students</h1>
             </div>
+            <div class="row g-4" id="notes">
+            </div>
         </div>
         <br>
-        <div id="ppts" class="container">
+        <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">PPTs</h6>
                 <h1 class="mb-5">Power Point Presentation</h1>
             </div>
+            <div class="row g-4" id="ppts">
+            </div>
         </div>
         <br>
-        <div id="books" class="container">
+        <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Books</h6>
                 <h1 class="mb-5">Digital Books</h1>
             </div>
+            <div class="row g-4" id="books">
+            </div>
         </div>
         <br>
-        <div id="lab_subjects" class="container">
+        <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">YouTube</h6>
                 <h1 class="mb-5">YouTube Playlists</h1>
             </div>
+            <div class="row g-4" id="ytplaylist">
+            </div>
         </div>
         <br>
-        <div id="lab_subjects" class="container">
+        <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Others</h6>
                 <h1 class="mb-5">Other Resources</h1>
+            </div>
+            <div class="row g-4" id="others">
             </div>
         </div>
         <br>

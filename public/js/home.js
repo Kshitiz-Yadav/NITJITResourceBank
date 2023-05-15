@@ -12,7 +12,6 @@ function show_contact(element_id1,element_id2){
 
 
 // Showing Model Image
-
 var modal = document.getElementById("myModal")
 var modalImg = document.getElementById("img01");
 function model_img(src)

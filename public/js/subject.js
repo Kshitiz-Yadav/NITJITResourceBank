@@ -1,128 +1,83 @@
-// Define the arrays for each semester
-var semester3 = {
-    name: "Semester 3",
-    subjects: ["ITPC-201: Object Oriented Programming Concepts", "ITPC-203: Data Structures", "ITPC-205: Data Communication and Networking", "ITPC-207: Fundamentals of Database Management Systems", "ITPC-209 Computer System Architecture", "MACI-203: Numerical Methods"],
-    labs: ["ITPC-221: Object Oriented Programming Concepts Lab", "ITPC-223: Data Structures Lab ", "ITPC-225: Data Communication and Networking Lab", "ITPC-227: Fundamentals of Database Management Systems Lab"]
-  };
-
-var semester4 = {
-	name: "Semester 4",
-	subjects: ["ITPC-202: Introduction to Design and Analysis of Algorithms","ITPC-204: Operating System Concepts","ITPC-206: Java Programming","ITPC-208: Data Mining and Data Warehousing Concepts","ITPC-210: Formal Language and Automata Theory","HMCI-201: Economics for Engineers"],
-	labs: ["ITPC-222: Introduction to Design and Analysis of Algorithms Lab","ITPC-224: Operating System Concepts Lab","ITPC-226: Java Programming Lab","ITPC-228: Data Mining and Data Warehousing Concepts Lab"]
-};
-
-var semester5 = {
-	name: "Semester 5",
-	subjects: ["ITPC-301: Cryptography and Network Security","ITPC-303: Software Engineering Concepts","ITPC-305: Web Design Technologies","ITPC-307: Computer Graphics and Applications","ITPC-309: Discrete Mathematics"],
-	labs: ["ITPC-321: Cryptography and Network Security Lab","ITPC-323: Software Engineering Concepts Lab","ITPC-325: Web Design Technologies Lab"," ITPC-327: Computer Graphics and Applications Lab"]
-};
-
-var semester6 = {
-	name: "Semester 6",
-	subjects: ["ITPC-302: Soft Computing Concepts","ITPC-304: Object-Oriented Modeling and Design with UML","ITPC-306: Mobile Application Development","ITPC-308: Machine Learning Concepts"],
-	labs: ["ITPC-322: Soft Computing Concepts Lab","ITPC-324: Object-Oriented Modeling and Design with UML Lab","ITPC-326: Mobile Application Development Lab"]
-};
-
-var semester7 = {
-	name: "Semester 7",
-	subjects: ["ITPC-401: Software Testing","ITPC-403: Cloud Computing"],
-	labs: ["ITPC-421: Software Testing Lab","ITPC-423: Cloud Computing Lab"]
-};
-
-var semester8 = {
-	name: "Semester 8",
-	subjects: ["ITPC-402: Introduction to System Programming","ITPC-404: E- Commerce","ITPC-406: Decision Support Systems Methodology"],
-	labs: ["ITPC-422: Introduction to System Programming Lab",]
-};
-
-var open_elec = {
-	name: "Open Electives",
-	subjects: ["ITOE-001: Fundamentals of Software Engineering","ITOE-002: Web Design Concepts","ITOE-003: Fundamentals of Data Analytics","ITOE-004: Agile Software Engineering","ITOE-005: Mobile Application Development Concepts","ITOE-006: Fundamentals of Cloud Computing"],
-	labs: []
-};
-
-
-var dept_elec = {
-	name: "Departmental Electives ",
-	subjects: ["ITPE-051: Advanced Concepts in Operating System","ITPE-052: Wireless Data Networks","ITPE-053: Information Security System","ITPE-054: Mobile Computing","ITPE-055: Software Project Management Concepts","ITPE-056: Agile Software Development","ITPE-057: Principles of Compiler Design","ITPE-058: Principles of Programming Languages","ITPE-059: Data Analytics","ITPE-060: Digital Image Processing","ITPE-061: Multicore Programming","ITPE-062: Cyber Forensic","ITPE-063: Artificial Intelligence Concepts","ITPE-064: Internet of Things (IoT) Concepts"],
-	labs: []
-};
-
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const subject_name = urlParams.get('subject');
-function go_to_sub(subject_name) {
-	// Get the value of the subject variable
-	var semester = subject_name;
-	// Get the appropriate array based on the semester value
-	var subjectsArray = [];
-	var labsArray = [];
-	switch (semester) {
-		case 'sem_3':
-            sem_name = semester3.name
-			subjectsArray = semester3.subjects;
-			labsArray = semester3.labs;
-			break;
-		case 'sem_4':
-            sem_name = semester4.name
-			subjectsArray = semester4.subjects;
-			labsArray = semester4.labs;
-			break;
-        case 'sem_5':
-            sem_name = semester5.name
-			subjectsArray = semester5.subjects;
-			labsArray = semester5.labs;
-			break;
-		case 'sem_6':
-            sem_name = semester6.name
-			subjectsArray = semester6.subjects;
-			labsArray = semester6.labs;
-			break;
-		case 'sem_7':
-            sem_name = semester7.name
-			subjectsArray = semester7.subjects;
-			labsArray = semester7.labs;
-			break;
-		case 'sem_8':
-            sem_name = semester8.name
-			subjectsArray = semester8.subjects;
-			labsArray = semester8.labs;
-			break;
-		case 'open_electives':
-            sem_name = open_elec.name
-			subjectsArray = open_elec.subjects;
-			labsArray = open_elec.labs;
-			break;
-		case 'departmental_electives':
-            sem_name = dept_elec.name
-			subjectsArray = dept_elec.subjects;
-			labsArray = dept_elec.labs;
-			break;
-		default:
-			alert('Invalid semester value');
-			return;
-	}
-	
-	
-    // // loop through the subjectsList and append the "Subjects" div for each subject
-    // for (var i = 0; i < subjectsArray.length; i++) {
-    //     var subject = subjectsArray[i];
-    //     var subjectDiv = document.createElement("div");
-    //     subjectDiv.className = "row g-4 justify-content-lg-center";
-    //     subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
-    //     document.getElementById("subjects").appendChild(subjectDiv);
-	// 	document.getElementById("subjects").appendChild(document.createElement("br"));
-    // }
-
-    // // loop through the subjectsList and append the "Lab Subjects" div for each subject
-    // for (var i = 0; i < labsArray.length; i++) {
-    //     var subject = labsArray[i];
-    //     var subjectDiv = document.createElement("div");
-    //     subjectDiv.className = "row g-4 justify-content-lg-center";
-    //     subjectDiv.innerHTML = '<div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s"><div class="service-item text-left pt-3"><div class="p-1"><h5 class="mb-3 ms-5">' + subject + '</h5></div></div></div>';
-    //     document.getElementById("lab_subjects").appendChild(subjectDiv);
-	// 	document.getElementById("lab_subjects").appendChild(document.createElement("br"))
-    // }
-};
+const subject_name = document.getElementById("subName").value
+const bookF = JSON.parse(document.getElementById("bookFiles").value)
+const notesF = JSON.parse(document.getElementById("notesFiles").value)
+const pptF = JSON.parse(document.getElementById("pptFiles").value)
+const otherF = JSON.parse(document.getElementById("otherFiles").value)
+const excelF = JSON.parse(document.getElementById("excelFiles").value)
 document.getElementById("subject_name").innerHTML= `${subject_name}`;
-// go_to_sub(subject_name);
+
+
+let yt = [];
+for(let i=0;i<excelF.length;i++){
+	if(excelF[i][1]!=null &&excelF[i][0].substring(0,8) == subject_name.substring(0,8)){
+		let link = excelF[i][1];
+		link = link.substring(0,8)+ 'width="500" height="300"'+link.substring(32);
+		yt.push([link,excelF[i][2]]);
+	}
+}
+
+function dynamicCreate(parent_id,col_width, Files) {
+	for (var i = 0; i < Files.length; i++) {
+		let name = (Files[i].name==undefined)?"...":Files[i].name;
+		let thumbnail = Files[i].thumbnailLink;
+		if(thumbnail==undefined){
+			thumbnail="../img/preview_thumbnail.png"
+		}
+		let webview = Files[i].webViewLink;
+		let webview2 = "";
+		let download = Files[i].webContentLink;
+        var fileDiv = document.createElement("div");
+        fileDiv.className = col_width+" col-md-6 wow fadeInUp";
+		fileDiv.setAttribute("data-wow-delay", "0.1s");
+		if(webview.includes("/view")){
+			webview2 = webview.replace("view", "preview");
+			webview2 = webview2.replace("?usp=drivesdk", "");
+        	fileDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a onclick="model_file('${webview2}')"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+		}
+		else if(webview.includes("docs.google.com")){
+			let start = webview.indexOf("/d/");
+			let end = webview.indexOf("/edit")
+			webview2 = "https://docs.google.com/gview?url=https://drive.google.com/uc?id="+webview.substring(start+3,end)+"&embedded=true";
+			fileDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a onclick="model_file('${webview2}')"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+		}else{
+			fileDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><a target="_blank" href="${webview}"><img class="img-fluid click_cursor" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></a></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><a class="btn btn-sm-square btn-primary mx-1" href=${download}><i class="fa fa-download "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+		}
+        document.getElementById(parent_id).appendChild(fileDiv);
+		document.getElementById(parent_id).appendChild(document.createElement("br"));
+    }
+}
+
+dynamicCreate("notes", "col-lg-2_5", notesF);
+dynamicCreate("ppts", "col-lg-2_5", pptF);
+dynamicCreate("books", "col-lg-2_5", bookF);
+dynamicCreate("others", "col-lg-2_5", otherF);
+
+// for YT Playlists
+for (var i = 0; i < yt.length; i++) {
+	let name = (yt[i][1]==undefined)?"...":yt[i][1];
+	let ytlink = yt[i][0];
+	var fileDiv = document.createElement("div");
+	fileDiv.className = "col-lg-6 col-md-6 wow fadeInUp";
+	fileDiv.setAttribute("data-wow-delay", "0.1s");
+	fileDiv.innerHTML = `<div class="team-item bg-light" style="padding-top: 5%" ><div class="overflow-hidden text-center">'${ytlink}'</div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-3 px-1"><a class="btn btn-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a></div></div><div class="text-center p-4"><hr style="margin: 0em"><h2 class="mb-0">${name}</h2></div></div>`;
+	document.getElementById("ytplaylist").appendChild(fileDiv);
+	document.getElementById("ytplaylist").appendChild(document.createElement("br"));
+}
+
+// Showing Model Files
+var modal = document.getElementById("myModal")
+var modalFile = document.getElementById("file01");
+function model_file(src)
+{
+    modal.style.display = "block";
+    modalFile.src = src;
+}
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+modal.onclick = function() {
+    modal.style.display = "none";
+  }

@@ -18,7 +18,7 @@ for(let i=0;i<excelF.length;i++){
 
 function dynamicCreate(parent_id,col_width, Files) {
 	for (var i = 0; i < Files.length; i++) {
-		let name = Files[i].name;
+		let name = (Files[i].name==undefined)?"...":Files[i].name;
 		let thumbnail = Files[i].thumbnailLink;
 		if(thumbnail==undefined){
 			thumbnail="../img/preview_thumbnail.png"
@@ -54,7 +54,7 @@ dynamicCreate("others", "col-lg-2_5", otherF);
 
 // for YT Playlists
 for (var i = 0; i < yt.length; i++) {
-	let name = yt[i][1];
+	let name = (yt[i][1]==undefined)?"...":yt[i][1];
 	let ytlink = yt[i][0];
 	var fileDiv = document.createElement("div");
 	fileDiv.className = "col-lg-6 col-md-6 wow fadeInUp";

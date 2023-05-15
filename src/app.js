@@ -59,7 +59,7 @@ async function loadChild(parent, jwtClient){
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const array = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-        for(let i=0;i<array.length;i++){
+        for(let i=1;i<array.length;i++){
             array[i][1] = await convertYoutubeUrlToEmbed(array[i][1]);
         }
         return JSON.stringify(array);
@@ -69,17 +69,17 @@ async function loadChild(parent, jwtClient){
   }
 
   async function convertYoutubeUrlToEmbed(url) {
-    let apiUrl = "https://www.youtube.com/oembed?url=" + url + "&format=json"; // construct the API URL
-    let code = await fetch(apiUrl) // make a request to the API
-      .then(response => response.json()) // parse the response as JSON
-      .then(data => {
-        return data.html; // return the embed code
-      })
-      .catch(error => {
-        console.error(error); // handle errors
-        return null;
-      });
-      return code;
+    try{
+        let apiUrl = "https://www.youtube.com/oembed?url=" + url + "&format=json"; // construct the API URL
+        let code = await fetch(apiUrl) // make a request to the API
+          .then(response => response.json()) // parse the response as JSON
+          .then(data => {
+            return data.html; // return the embed code
+          })
+        return code;
+    }catch(err) {
+        console.error(err); // handle errors
+    };
   }
 
 // Connecting to database
@@ -290,7 +290,7 @@ app.post("/subject", (req, res)=>{
         otherF = await loadChild(otherID, jwtClient);
         pptF = await loadChild(pptID, jwtClient);
 
-        res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: excelF})
+        res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: excelF});
       })();
     }
     catch(err){

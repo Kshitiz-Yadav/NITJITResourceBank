@@ -54,6 +54,7 @@
     <!-- Navbar End -->
     <script>
         function redirectToSemester(semester) {
+            $('#spinner').addClass('show');
             document.getElementById("semNumH").value = semester
             let form = document.getElementById("semesterFormH")
             form.setAttribute("action", "/semester")

@@ -45,6 +45,7 @@ function pyqsCreate(pyqFiles) {
 }
 
 function redirectToSubject(subject) {
+	$('#spinner').addClass('show');
 	document.getElementById("subName").value = subject
 	document.getElementById("semIDSend").value = document.getElementById("semIDReceive").value
 	let form = document.getElementById("subjectForm")

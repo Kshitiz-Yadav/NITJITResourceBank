@@ -15,17 +15,20 @@
 <body>
 	<h1 class="heading">INFORMATION TECHNOLOGY <br> RESOURCE BANK</h1>
 	<div class="box">
-		<form id="loginForm" autocomplete="on">
-			<h2>Verify E-Mail</h2>
+		<form id="loginForm">
 			<input id="registeredIn" value="{{registered}}" hidden />
-			<input id="otpIn" value="{{otp}}" hidden />
-			<input id="usernameIn" value="{{username}}" hidden />
-			<input id="passwordIn" value="{{password}}" hidden />
+			<input id="otpIn" name="otpGen" value="{{otp}}" hidden />
+			<input id="usernameIn" name="username" value="{{username}}" hidden />
+			<input id="passwordIn" name="password" value="{{password}}" hidden />
+			<input id="problem" value="{{problem}}" hidden/>
+
+			<h2>Verify E-Mail</h2>
 			<div id="inputBox1" class="inputBox">
 				<input id="receiversOTP" name="otp" type="text"  required="required"/>
 				<span id="uname">Enter OTP sent to your email</span>
 				<i></i>
 			</div>
+
 			<p class="error_msg" id="error_box_otp"></p>
 			<button id="next">Next</button>
 		</form>

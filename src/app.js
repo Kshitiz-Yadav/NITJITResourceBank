@@ -48,7 +48,7 @@ async function loadChild(parent, jwtClient){
     }
   }
   
-  async function downloadFile(fileId){
+async function downloadFile(fileId){
     try{
         await jwtClient.authorize();
         var service = google.drive("v3");
@@ -63,12 +63,12 @@ async function loadChild(parent, jwtClient){
             array[i][1] = await convertYoutubeUrlToEmbed(array[i][1]);
         }
         return JSON.stringify(array);
-    } catch(err){
+    }catch(err){
         console.log(err);
     }
-  }
+}
 
-  async function convertYoutubeUrlToEmbed(url) {
+async function convertYoutubeUrlToEmbed(url) {
     let apiUrl = "https://www.youtube.com/oembed?url=" + url + "&format=json"; // construct the API URL
     let code = await fetch(apiUrl) // make a request to the API
       .then(response => response.json()) // parse the response as JSON
@@ -80,7 +80,36 @@ async function loadChild(parent, jwtClient){
         return null;
       });
       return code;
-  }
+}
+
+function isMailValid(mail){
+    if(mail.endsWith('@nitj.ac.in')){
+        return true;
+    }
+    return false;
+}
+
+function isPassStrong(pass){
+    // if(pass.length < 8){
+    //     return false;
+    // }
+    // let a = 0, A = 0, n = 0;
+    // for(let i=0;i<pass.length;i++){
+    //     if(pass.charAt(i) >= 'a' && pass.chatAt(i) <= 'z'){
+    //         a++;
+    //     }
+    //     if(pass.charAt(i) >= 'A' && pass.chatAt(i) <= 'Z'){
+    //         A++;
+    //     }
+    //     if(pass.charAt(i) >= '0' && pass.chatAt(i) <= '9'){
+    //         n++;
+    //     }
+    // }
+    // if(a == 0 || A == 0 || n == 0){
+    //     return false
+    // }
+    return true
+}
 
 // Connecting to database
 require("./db/conn")
@@ -139,11 +168,20 @@ app.get("*", (req,res)=>{
 app.post("/login", async (req, res) => {
     try{
         let email = (req.body.mail).toLowerCase();
-        let password = await bcrypt.hash(req.body.pass, 10);
-        Users.findOne({username: email})
+        let password = req.body.pass;
+        if(!isMailValid(email)){
+            res.status(201).render("login", {problem: "InvalidMail", username: ""})
+        }
+        else if(!isPassStrong(password)){
+            res.status(201).render("login", {problem: "WeakPassword", username: email})
+        }
+        else{
+            password = await bcrypt.hash(password, 10);
+            Users.findOne({username: email})
             .then(async function(val, err){
                 if(val == null){
-                    var otpGen = Math.floor(100000 + (Math.random() * (1000000 - 100000)))
+                    var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
+                    var otpGenSafe = await bcrypt.hash(otpGen, 10);
                     // URL of deployed AppScript project
                     let url = process.env.MAIL_URL;
                     // Getting form data and appending OTP to it to pass to AppScript
@@ -159,40 +197,44 @@ app.post("/login", async (req, res) => {
                         .then(res => res.text())
                         .then(data => {
                             console.log('Mail sent successfully')
-                            res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGen, registered: "No"})
+                            res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "No"})
                         })
                         .catch(err => {
                             console.log('Failed to send email')
-                            res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGen, registered: "No"})
+                            res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "No"})
                         })   
-                }
-                else{
-                    let match = await bcrypt.compare(req.body.pass, val.password);
-                    
-                    if(match){
-                        res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGen, registered: "Yes"})
                     }
                     else{
-                        res.status(201).render("login", {problem: "Yes", username: email})
-                    }
-                } 
-            })
-        }                   
+                        let match = await bcrypt.compare(req.body.pass, val.password);
+                        if(match){
+                            res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "Yes"})
+                        }
+                        else{
+                            res.status(201).render("login", {problem: "InvalidPassword", username: email})
+                        }
+                    } 
+                })
+            }                   
+        }
         catch (err){
             console.log(err)
         }
     })
-
+        
 app.post("/home", async (req, res)=>{
-    if(req.body.otp == "Account exists"){
+    let userOTP = req.body.otp, otpGen = req.body.otpGen;
+    if(userOTP == "Account exists"){
         res.status(201).render("index", {username: req.body.username})
+    }
+    else if(!await bcrypt.compare(userOTP, otpGen)){
+        res.status(201).render("verifyOTP", {problem: "InvalidOTP"})
     }
     else{
         try{
             const registerUser = new Users({
                 username: req.body.username,
                 password: req.body.password,
-                otp: req.body.otp
+                otp: req.body.otpGen
             })
             await registerUser.save()
             .then(() => console.log("Saved successfully"))

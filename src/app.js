@@ -159,6 +159,9 @@ app.get("/subject", (req,res)=>{
 app.get("/feedback", (req,res)=>{
     res.render("feedback")
 })
+app.get("/team", (req,res)=>{
+    res.render("team")
+})
 app.get("*", (req,res)=>{
     res.render("404")
 })
@@ -330,7 +333,6 @@ app.post("/subject", (req, res)=>{
         notesF = await loadChild(notesID, jwtClient);
         otherF = await loadChild(otherID, jwtClient);
         pptF = await loadChild(pptID, jwtClient);
-
         res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: excelF});
       })();
     }

@@ -54,7 +54,6 @@ function redirectToSubject(subject) {
 };
 
 pyqsCreate(pyqFiles);
-
 // loop through the subjectsList and append the "Subjects" div for each subject
 for (var i = 0; i < Subjects.length; i++) {
 	var subject = Subjects[i];
@@ -74,21 +73,3 @@ for (var i = 0; i < Labs.length; i++) {
 	document.getElementById("lab_subjects").appendChild(subjectDiv);
 	document.getElementById("lab_subjects").appendChild(document.createElement("br"))
 }
-
-// Showing Model Files
-var modal = document.getElementById("myModal")
-var modalFile = document.getElementById("file01");
-function model_file(src)
-{
-    modal.style.display = "block";
-    modalFile.src = src;
-}
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-modal.onclick = function() {
-    modal.style.display = "none";
-  }

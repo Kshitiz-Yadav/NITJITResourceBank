@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Files</title>
+</head>
+<body>  
+    <!-- Preview files -->
+    <!-- The Preview Model -->
+    <div id="myModel" class="model" style="padding-top: 0%; padding-left: 10%; padding-right: 10%">
+    <!-- The Close Button -->
+    <span class="close">&times;</span>
+    <!-- Model Content (The File) -->
+    <iframe class="model-content" id="file01" allow="autoplay" height="100%"></iframe>
+    <!-- Model Caption (File Text) -->
+    <div id="model_caption"></div>
+    </div>
+</body>
+<script>
+    // Showing Preview Model Files
+    var model = document.getElementById("myModel")
+    var modelFile = document.getElementById("file01");
+    function model_file(src)
+    {
+        model.style.display = "block";
+        modelFile.src = src;
+    }
+    // Get the <span> element that closes the model
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks on <span> (x), close the model
+    span.onclick = function() {
+      model.style.display = "none";
+    }
+    model.onclick = function() {
+        model.style.display = "none";
+    }
+</script>
+</html>

@@ -12,19 +12,19 @@ function show_contact(element_id1,element_id2){
 
 
 // Showing Model Image
-var modal = document.getElementById("myModal")
-var modalImg = document.getElementById("img01");
+var model = document.getElementById("myModel")
+var modelImg = document.getElementById("img01");
 function model_img(src)
 {
-    modal.style.display = "block";
-    modalImg.src = src;
+    model.style.display = "block";
+    modelImg.src = src;
 }
-// Get the <span> element that closes the modal
+// Get the <span> element that closes the model
 var span = document.getElementsByClassName("close")[0];
-// When the user clicks on <span> (x), close the modal
+// When the user clicks on <span> (x), close the model
 span.onclick = function() {
-  modal.style.display = "none";
+  model.style.display = "none";
 }
-modal.onclick = function() {
-    modal.style.display = "none";
+model.onclick = function() {
+    model.style.display = "none";
   }

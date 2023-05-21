@@ -38,6 +38,11 @@
 <body>
     {{>header}}
 
+    <form id="homeForm" hidden>
+        <input id="facultyFiles" value="{{facultyF}}" hidden>
+        <input id="faculty_excel" value="{{faculty_xl}}" hidden>
+    </form>
+
     <!-- Carousel Start -->
     <div class="container-fluid p-0 mb-5">
         <div class="owl-carousel header-carousel position-relative">
@@ -175,169 +180,7 @@
                 <h6 class="section-title bg-white text-center text-primary px-3">Faculty</h6>
                 <h1 class="mb-5">Our Faculty</h1>
             </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="https://www.nitj.ac.in/index.php/nitj_cinfo/Faculty/29"><img class="img-fluid" src="img/team-male.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_1','phone_team_1')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_1">&nbsp;<small>guptadk@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_1">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Mr D K Gupta</h5>
-                            <small>Associate Professor & Head</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="https://www.nitj.ac.in/index.php/nitj_cinfo/Faculty/241"><img class="img-fluid" src="img/team-male.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_2','phone_team_2')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_2">&nbsp;<small>vijayk@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_2">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr Vijay Kumar</h5>
-                            <small>Associate Professor</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="https://www.nitj.ac.in/index.php/nitj_cinfo/Faculty/212"><img class="img-fluid" src="img/team-male.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_3','phone_team_3')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_3">&nbsp;<small>kumarmohit@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_3">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr Mohit Kumar</h5>
-                            <small>Assistant Professor</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="https://www.nitj.ac.in/index.php/nitj_cinfo/Faculty/213"><img class="img-fluid" src="img/team-female.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_4','phone_team_4')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_4">&nbsp;<small>chaurasian@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_4">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr Nisha Chaurasia</h5>
-                            <small>Assistant Professor</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="https://www.nitj.ac.in/index.php/nitj_cinfo/Faculty/223"><img class="img-fluid" src="img/team-female.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_5','phone_team_5')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_5">&nbsp;<small>vyasa@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_5">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr Avani Vyas</h5>
-                            <small>Assistant Professor</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="https://www.nitj.ac.in/index.php/nitj_cinfo/Faculty/224"><img class="img-fluid" src="img/team-male.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_6','phone_team_6')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_6">&nbsp;<small>guptank@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_6">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr Naveen Kumar Gupta</h5>
-                            <small>Assistant Professor</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="https://www.nitj.ac.in/index.php/nitj_cinfo/Faculty/225"><img class="img-fluid" src="img/team-female.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_7','phone_team_7')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_7">&nbsp;<small>shivanis@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_7">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr Shivani Sharma</h5>
-                            <small>Assistant Professor</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="https://scholar.google.com/citations?hl=en&user=rOKW0Y8AAAAJ"><img class="img-fluid" src="img/team-male.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_8','phone_team_8')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_8">&nbsp;<small>neerajk.it@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_8">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr Neeraj Kumar</h5>
-                            <small>Guest Faculty</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="team-item bg-light">
-                        <div class="overflow-hidden">
-                            <a href="/na"><img class="img-fluid" src="img/team-female.jpg" alt=""></a>
-                        </div>
-                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                            <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                <span class="btn btn-faculty-wide btn-primary mx-1" onclick="show_contact('mail_team_9','phone_team_9')"></a><i class="fa fa-envelope ">&nbsp; Contact</i></span>
-                            </div>
-                        </div>
-                        <i class="fa fa-envelope text-center team-contact" id="mail_team_9">&nbsp;<small>vanithaps.it@nitj.ac.in</small></i>
-                        <i class="fa fa-phone text-center team-contact"  id="phone_team_9">&nbsp;<small>+91xxxxxxxxxx</small></i>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Dr Vanitha PS</h5>
-                            <small>Guest Faculty</small>
-                        </div>
-                    </div>
-                </div>
+            <div class="row g-4" id="teachers">
             </div>
         </div>
     </div>

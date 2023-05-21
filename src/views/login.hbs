@@ -29,6 +29,22 @@
 		</form>
 	</div>
 	<script src="js/login.js"></script>
-	
+	<script>
+		document.getElementById("receiversMail").addEventListener("focus", function() {
+  		document.getElementById("receiversMail").placeholder = "Enter your NITJ E-Mail ID";
+		});
+
+		document.getElementById("receiversMail").addEventListener("blur", function() {
+  		document.getElementById("receiversMail").placeholder = "";
+		});
+
+		document.getElementById("receiversPass").addEventListener("focus", function() {
+  		document.getElementById("receiversPass").placeholder = "Enter new/existing Password";
+		});
+
+		document.getElementById("receiversPass").addEventListener("blur", function() {
+  		document.getElementById("receiversPass").placeholder = "";
+		});
+	</script>
 </body>
 </html>

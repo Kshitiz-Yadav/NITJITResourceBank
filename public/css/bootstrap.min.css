@@ -5919,16 +5919,16 @@ fieldset:disabled .btn {
     word-wrap: break-word
 }
 
-.modal-open {
+.model-open {
     overflow: hidden
 }
 
-.modal-open .modal {
+.model-open .model {
     overflow-x: hidden;
     overflow-y: auto
 }
 
-.modal {
+.model {
     position: fixed;
     top: 0;
     left: 0;
@@ -5940,52 +5940,52 @@ fieldset:disabled .btn {
     outline: 0
 }
 
-.modal-dialog {
+.model-dialog {
     position: relative;
     width: auto;
     margin: .5rem;
     pointer-events: none
 }
 
-.modal.fade .modal-dialog {
+.model.fade .model-dialog {
     transition: transform 0.3s ease-out;
     transform: translate(0, -50px)
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .modal.fade .modal-dialog {
+    .model.fade .model-dialog {
         transition: none
     }
 }
 
-.modal.show .modal-dialog {
+.model.show .model-dialog {
     transform: none
 }
 
-.modal.modal-static .modal-dialog {
+.model.model-static .model-dialog {
     transform: scale(1.02)
 }
 
-.modal-dialog-scrollable {
+.model-dialog-scrollable {
     height: calc(100% - 1rem)
 }
 
-.modal-dialog-scrollable .modal-content {
+.model-dialog-scrollable .model-content {
     max-height: 100%;
     overflow: hidden
 }
 
-.modal-dialog-scrollable .modal-body {
+.model-dialog-scrollable .model-body {
     overflow-y: auto
 }
 
-.modal-dialog-centered {
+.model-dialog-centered {
     display: flex;
     align-items: center;
     min-height: calc(100% - 1rem)
 }
 
-.modal-content {
+.model-content {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -5998,7 +5998,7 @@ fieldset:disabled .btn {
     outline: 0
 }
 
-.modal-backdrop {
+.model-backdrop {
     position: fixed;
     top: 0;
     left: 0;
@@ -6008,15 +6008,15 @@ fieldset:disabled .btn {
     background-color: #000
 }
 
-.modal-backdrop.fade {
+.model-backdrop.fade {
     opacity: 0
 }
 
-.modal-backdrop.show {
+.model-backdrop.show {
     opacity: .5
 }
 
-.modal-header {
+.model-header {
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -6027,23 +6027,23 @@ fieldset:disabled .btn {
     border-top-right-radius: calc(.3rem - 1px)
 }
 
-.modal-header .btn-close {
+.model-header .btn-close {
     padding: .5rem .5rem;
     margin: -.5rem -.5rem -.5rem auto
 }
 
-.modal-title {
+.model-title {
     margin-bottom: 0;
     line-height: 1.5
 }
 
-.modal-body {
+.model-body {
     position: relative;
     flex: 1 1 auto;
     padding: 1rem
 }
 
-.modal-footer {
+.model-footer {
     display: flex;
     flex-wrap: wrap;
     flex-shrink: 0;
@@ -6055,199 +6055,199 @@ fieldset:disabled .btn {
     border-bottom-left-radius: calc(.3rem - 1px)
 }
 
-.modal-footer>* {
+.model-footer>* {
     margin: .25rem
 }
 
 @media (min-width: 576px) {
-    .modal-dialog {
+    .model-dialog {
         max-width: 500px;
         margin: 1.75rem auto
     }
 
-    .modal-dialog-scrollable {
+    .model-dialog-scrollable {
         height: calc(100% - 3.5rem)
     }
 
-    .modal-dialog-centered {
+    .model-dialog-centered {
         min-height: calc(100% - 3.5rem)
     }
 
-    .modal-sm {
+    .model-sm {
         max-width: 300px
     }
 }
 
 @media (min-width: 992px) {
 
-    .modal-lg,
-    .modal-xl {
+    .model-lg,
+    .model-xl {
         max-width: 800px
     }
 }
 
 @media (min-width: 1200px) {
-    .modal-xl {
+    .model-xl {
         max-width: 1140px
     }
 }
 
-.modal-fullscreen {
+.model-fullscreen {
     width: 100vw;
     max-width: none;
     height: 100%;
     margin: 0
 }
 
-.modal-fullscreen .modal-content {
+.model-fullscreen .model-content {
     height: 100%;
     border: 0;
     border-radius: 0
 }
 
-.modal-fullscreen .modal-header {
+.model-fullscreen .model-header {
     border-radius: 0
 }
 
-.modal-fullscreen .modal-body {
+.model-fullscreen .model-body {
     overflow-y: auto
 }
 
-.modal-fullscreen .modal-footer {
+.model-fullscreen .model-footer {
     border-radius: 0
 }
 
 @media (max-width: 575.98px) {
-    .modal-fullscreen-sm-down {
+    .model-fullscreen-sm-down {
         width: 100vw;
         max-width: none;
         height: 100%;
         margin: 0
     }
 
-    .modal-fullscreen-sm-down .modal-content {
+    .model-fullscreen-sm-down .model-content {
         height: 100%;
         border: 0;
         border-radius: 0
     }
 
-    .modal-fullscreen-sm-down .modal-header {
+    .model-fullscreen-sm-down .model-header {
         border-radius: 0
     }
 
-    .modal-fullscreen-sm-down .modal-body {
+    .model-fullscreen-sm-down .model-body {
         overflow-y: auto
     }
 
-    .modal-fullscreen-sm-down .modal-footer {
+    .model-fullscreen-sm-down .model-footer {
         border-radius: 0
     }
 }
 
 @media (max-width: 767.98px) {
-    .modal-fullscreen-md-down {
+    .model-fullscreen-md-down {
         width: 100vw;
         max-width: none;
         height: 100%;
         margin: 0
     }
 
-    .modal-fullscreen-md-down .modal-content {
+    .model-fullscreen-md-down .model-content {
         height: 100%;
         border: 0;
         border-radius: 0
     }
 
-    .modal-fullscreen-md-down .modal-header {
+    .model-fullscreen-md-down .model-header {
         border-radius: 0
     }
 
-    .modal-fullscreen-md-down .modal-body {
+    .model-fullscreen-md-down .model-body {
         overflow-y: auto
     }
 
-    .modal-fullscreen-md-down .modal-footer {
+    .model-fullscreen-md-down .model-footer {
         border-radius: 0
     }
 }
 
 @media (max-width: 991.98px) {
-    .modal-fullscreen-lg-down {
+    .model-fullscreen-lg-down {
         width: 100vw;
         max-width: none;
         height: 100%;
         margin: 0
     }
 
-    .modal-fullscreen-lg-down .modal-content {
+    .model-fullscreen-lg-down .model-content {
         height: 100%;
         border: 0;
         border-radius: 0
     }
 
-    .modal-fullscreen-lg-down .modal-header {
+    .model-fullscreen-lg-down .model-header {
         border-radius: 0
     }
 
-    .modal-fullscreen-lg-down .modal-body {
+    .model-fullscreen-lg-down .model-body {
         overflow-y: auto
     }
 
-    .modal-fullscreen-lg-down .modal-footer {
+    .model-fullscreen-lg-down .model-footer {
         border-radius: 0
     }
 }
 
 @media (max-width: 1199.98px) {
-    .modal-fullscreen-xl-down {
+    .model-fullscreen-xl-down {
         width: 100vw;
         max-width: none;
         height: 100%;
         margin: 0
     }
 
-    .modal-fullscreen-xl-down .modal-content {
+    .model-fullscreen-xl-down .model-content {
         height: 100%;
         border: 0;
         border-radius: 0
     }
 
-    .modal-fullscreen-xl-down .modal-header {
+    .model-fullscreen-xl-down .model-header {
         border-radius: 0
     }
 
-    .modal-fullscreen-xl-down .modal-body {
+    .model-fullscreen-xl-down .model-body {
         overflow-y: auto
     }
 
-    .modal-fullscreen-xl-down .modal-footer {
+    .model-fullscreen-xl-down .model-footer {
         border-radius: 0
     }
 }
 
 @media (max-width: 1399.98px) {
-    .modal-fullscreen-xxl-down {
+    .model-fullscreen-xxl-down {
         width: 100vw;
         max-width: none;
         height: 100%;
         margin: 0
     }
 
-    .modal-fullscreen-xxl-down .modal-content {
+    .model-fullscreen-xxl-down .model-content {
         height: 100%;
         border: 0;
         border-radius: 0
     }
 
-    .modal-fullscreen-xxl-down .modal-header {
+    .model-fullscreen-xxl-down .model-header {
         border-radius: 0
     }
 
-    .modal-fullscreen-xxl-down .modal-body {
+    .model-fullscreen-xxl-down .model-body {
         overflow-y: auto
     }
 
-    .modal-fullscreen-xxl-down .modal-footer {
+    .model-fullscreen-xxl-down .model-footer {
         border-radius: 0
     }
 }

@@ -10,11 +10,12 @@
 	<h1 class="heading">INFORMATION TECHNOLOGY <br> RESOURCE BANK</h1>
 	<div class="box">
 		<form id="loginForm" autocomplete="on">
-			<h2>Sign in</h2>
+			<h2>Sign up / Sign in</h2>
 			<input id="problem" value="{{problem}}" hidden />
 			<div id="inputBox1" class="inputBox">
-				<input id="receiversMail" name="mail" type="email" value="{{username}}" required="required"/>
+				<input id="receiversMail" name="mail" type="email" value="{{username}}" required="required" placeholder="Enter your email ID"/>
 				<span id="uname">Username</span>
+				{{!-- <span>Enter yout NITJ Domain ID.</span> --}}
 				<i></i>
 			</div>
 			<p class="error_msg" id="error_box_user"></p>

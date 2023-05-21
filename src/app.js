@@ -7,7 +7,7 @@ var fs = require("fs");
 require('dotenv').config();
 const express = require("express");
 const bcrypt = require("bcryptjs")
-// const nodeMail = require("nodemailer");
+const nodemailer = require("nodemailer");
 const app = express()
 const PORT = process.env.PORT || 8000;
 
@@ -116,30 +116,28 @@ require("./db/conn")
 const Users = require("./models/user")
 app.use(express.urlencoded({extended:false}));
 
-// async function receiveMail(name, email, subject, message) {
-//     const transporter = nodeMail.createTransport({
-//       service: "gmail",
-//       auth: {
-//         user: "resourcebank.it@nitj.ac.in",
-//         pass: "ResourceBank@IT2023",
-//       },
-//     });
-//     const mailOption = {
-//       from: email,
-//       to: "resourcebank.it@nitj.ac.in",
-//       subject: subject,
-//       html: `You got a message from 
-//       Email : ${email}
-//       Name: ${name}
-//       Message: ${message}`,
-//     };
-//     try {
-//       await transporter.sendMail(mailOption);
-//       return Promise.resolve("Message Sent Successfully!");
-//     } catch (error) {
-//       return Promise.reject(error);
-//     }
-//   }
+async function sendMail(toP, fromP, subjectP, bodyP){
+    const PASSWORD = process.env.PASS;
+    let transporter = nodemailer.createTransport({
+        // host: "smtp.ethereal.email",
+        service: "gmail",
+        // port: 587,
+        auth: {
+            user: 'resourcebank.it@nitj.ac.in', // generated ethereal username
+            pass: PASSWORD // generated ethereal password 
+        },
+    });
+
+      // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: fromP, // sender address
+      to: toP, // list of receivers
+      subject: subjectP, // Subject line
+      text: bodyP, // plain text body
+      html: "", // html body
+    });
+}
+
 
 // Making GET requests
 app.get("/login", (req,res)=>{
@@ -157,7 +155,7 @@ app.get("/semester", (req,res)=>{
 app.get("/subject", (req,res)=>{
     res.render("subject")
 })
-app.get("/feedback", (req,res)=>{
+app.get("/support", (req,res)=>{
     res.render("feedback")
 })
 app.get("*", (req,res)=>{
@@ -182,27 +180,14 @@ app.post("/login", async (req, res) => {
                 if(val == null){
                     var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
                     var otpGenSafe = await bcrypt.hash(otpGen, 10);
-                    // URL of deployed AppScript project
-                    let url = process.env.MAIL_URL;
-                    // Getting form data and appending OTP to it to pass to AppScript
-                    let data = new FormData()
-                    data.append('otp', otpGen)
-                    data.append('mail', email)
-                    // Making call to AppScript using fetch API
-                    fetch(url, {
-                            method: "POST",
-                            mode: 'no-cors',
-                            body: data,
-                        })
-                        .then(res => res.text())
+                        await sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
                         .then(data => {
                             console.log('Mail sent successfully')
                             res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "No"})
                         })
                         .catch(err => {
-                            console.log('Failed to send email')
-                            res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "No"})
-                        })   
+                            console.log('Failed to send email:\n' + err)
+                        })  
                     }
                     else{
                         let match = await bcrypt.compare(req.body.pass, val.password);
@@ -249,7 +234,7 @@ app.post("/home", async (req, res)=>{
 
 app.post("/feedback", async(req, res)=>{
     try{
-        await receiveMail(req.body.name, req.body.email, req.body.subject, req.body.message);
+        await sendMail("resourcebank.it@nitj.ac.in", req.body.email, req.body.subject, req.body.name + " says,\n" + req.body.message);
         console.log("Feedback sent successfully")
     }
     catch(err){

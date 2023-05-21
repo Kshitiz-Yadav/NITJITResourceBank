@@ -28,7 +28,8 @@ var jwtClient = new google.auth.JWT(
     ['https://www.googleapis.com/auth/drive'],
     null
   );
-var parent = process.env.PARENTS;
+var parent = process.env.PARENT;
+var facultyID = process.env.FACULTY;
 
 async function loadChild(parent, jwtClient){
     try {
@@ -59,10 +60,7 @@ async function downloadFile(fileId){
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const array = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-        for(let i=1;i<array.length;i++){
-            array[i][1] = await convertYoutubeUrlToEmbed(array[i][1]);
-        }
-        return JSON.stringify(array);
+        return array;
     }catch(err){
         console.log(err);
     }
@@ -144,8 +142,17 @@ app.use(express.urlencoded({extended:false}));
 app.get("/login", (req,res)=>{
     res.render("login")
 })
-app.get("/home", (req,res)=>{
-    res.render("index")
+app.get("/home", async (req,res)=>{
+    let facultyF = await loadChild(facultyID, jwtClient);
+    let facultyExcelID = ""
+    for(let i=0;i<facultyF.length;i++){
+        if(facultyF[i].name == "faculty_list.xlsx"){
+            facultyExcelID = facultyF[i].id
+            break
+        }
+    }
+    let faculty_xl = await downloadFile(facultyExcelID);
+    res.status(201).render("index", {facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
 })
 app.get("/curriculum", (req,res)=>{
     res.render("curriculum")
@@ -224,9 +231,18 @@ app.post("/login", async (req, res) => {
     })
         
 app.post("/home", async (req, res)=>{
+    let facultyF = await loadChild(facultyID, jwtClient);
+    let facultyExcelID = ""
+    for(let i=0;i<facultyF.length;i++){
+        if(facultyF[i].name == "faculty_list.xlsx"){
+            facultyExcelID = facultyF[i].id
+            break
+        }
+    }
+    let faculty_xl = await downloadFile(facultyExcelID);
     let userOTP = req.body.otp, otpGen = req.body.otpGen;
     if(userOTP == "Account exists"){
-        res.status(201).render("index", {username: req.body.username})
+        res.status(201).render("index", {username: req.body.username, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
     }
     else if(!await bcrypt.compare(userOTP, otpGen)){
         res.status(201).render("verifyOTP", {problem: "InvalidOTP"})
@@ -241,7 +257,7 @@ app.post("/home", async (req, res)=>{
             await registerUser.save()
             .then(() => console.log("Saved successfully"))
             .catch((err) => console.log(err))
-            res.status(201).render("index", {username: req.body.username})
+            res.status(201).render("index", {username: req.body.username, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
         }
         catch(err){
             console.log(err)
@@ -328,12 +344,17 @@ app.post("/subject", (req, res)=>{
             }
         }
 
+        
+        for(let i=1;i<excelF.length;i++){
+            excelF[i][1] = await convertYoutubeUrlToEmbed(excelF[i][1]);
+        }
+
         let bookF, notesF, otherF, pptF;
         bookF = await loadChild(bookID, jwtClient);
         notesF = await loadChild(notesID, jwtClient);
         otherF = await loadChild(otherID, jwtClient);
         pptF = await loadChild(pptID, jwtClient);
-        res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: excelF});
+        res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: JSON.stringify(excelF)});
       })();
     }
     catch(err){

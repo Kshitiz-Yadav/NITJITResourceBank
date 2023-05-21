@@ -250,7 +250,7 @@ app.post("/home", async (req, res)=>{
     }
 })
 
-app.post("/feedback", async(req, res)=>{
+app.post("/support", async(req, res)=>{
     try{
         await sendMail("resourcebank.it@nitj.ac.in", req.body.email, req.body.subject, req.body.name + " says,\n" + req.body.message);
         console.log("Feedback sent successfully")

@@ -1,6 +1,6 @@
 function onClickSendMail(){
     let form = document.getElementById("")
-    form.setAttribute("action", "/feedback")
+    form.setAttribute("action", "/support")
     form.submit()
 }
 

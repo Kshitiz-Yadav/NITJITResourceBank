@@ -9,9 +9,9 @@ async function isMailValid(mail){
 }
 
 async function isPassStrong(pass){
-    // if(pass.length < 8){
-    //     return false;
-    // }
+    if(pass.length < 8){
+        return false;
+    }
     // let a = 0, A = 0, n = 0;
     // for(let i=0;i<pass.length;i++){
     //     if(pass.charAt(i) >= 'a' && pass.chatAt(i) <= 'z'){
@@ -55,5 +55,6 @@ async function sendMail(toP, fromP, subjectP, bodyP){
       html: "", // html body
     });
 }
+
 
 module.exports = {isMailValid, isPassStrong, sendMail}

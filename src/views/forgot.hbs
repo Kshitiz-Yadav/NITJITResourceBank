@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>SignIn / SignUp - IT Resource Bank</title>
+	<link rel="stylesheet" href="css/loginPage.css">
+	    <script type="text/javascript">
+        window.history.forward();
+        function noBack() {
+            window.history.forward();
+        }
+    </script>
+</head>
+<body>
+	<h1 class="heading">INFORMATION TECHNOLOGY <br> RESOURCE BANK</h1>
+	<div class="box">
+		<form id="loginForm">
+			<input id="registeredIn" value="{{registered}}" hidden />
+			<input id="otpIn" name="otpGen" value="{{otp}}" hidden />
+			<input id="usernameIn" name="username" value="{{username}}" hidden />
+			<input id="passwordIn" name="password" value="{{password}}" hidden />
+			<input id="problem" value="{{problem}}" hidden/>
+
+			<h2>Forgot Password</h2>
+			<div id="inputBox1" class="inputBox">
+				<input id="pass" name="pass" type="password" required="required"/>
+				<span id="uname">Enter new password</span>
+				<i></i>
+			</div>
+			<p class="error_msg" id="error_box_pass"></p>
+			
+			<div id="inputBox1" class="inputBox">
+				<input id="receiversOTP" name="otp" type="text"  required="required"/>
+				<span id="uname">Enter OTP sent to your email</span>
+				<i></i>
+			</div>
+			<p class="error_msg" id="error_box_otp"></p>
+			
+			<button id="next">Next</button>
+		</form>
+	</div>
+	<script src="js/forgot.js"></script>
+	
+</body>
+</html>

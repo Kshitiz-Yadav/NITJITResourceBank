@@ -28,6 +28,7 @@ const PORT = process.env.PORT || 8000;
 
 // Making GET requests
 app.get("/login", (req,res)=>{
+    res.clearCookie('itrbauth')
     res.render("login")
 })
 app.get("/forgotpass", (req, res)=>{
@@ -64,10 +65,10 @@ app.post("/login", async (req, res) => {
         let email = (req.body.mail).toLowerCase();
         let password = req.body.pass;
         if(!await register.isMailValid(email)){
-            res.status(201).render("login", {problem: "InvalidMail", username: ""})
+            return res.status(201).render("login", {problem: "InvalidMail", username: ""})
         }
         else if(!await register.isPassStrong(password)){
-            res.status(201).render("login", {problem: "WeakPassword", username: email})
+            return res.status(201).render("login", {problem: "WeakPassword", username: email})
         }
         else{
             password = await bcrypt.hash(password, 10);
@@ -79,7 +80,7 @@ app.post("/login", async (req, res) => {
                     await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
                     .then(data => {
                         console.log('Mail sent successfully')
-                        res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "No"})
+                        return res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "No"})
                     })
                     .catch(err => {
                         console.log('Failed to send email:\n' + err)
@@ -88,10 +89,10 @@ app.post("/login", async (req, res) => {
                 else{
                     let match = await bcrypt.compare(req.body.pass, val.password);
                     if(match){
-                        res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "Yes"})
+                        return res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "Yes"})
                     }
                     else{
-                        res.status(201).render("login", {problem: "InvalidPassword", username: email})
+                        return res.status(201).render("login", {problem: "InvalidPassword", username: email})
                     }
                  } 
             })
@@ -102,16 +103,17 @@ app.post("/login", async (req, res) => {
     }
 }) 
 
-app.post("/forgotPassword", auth, async (req, res) =>{
+app.post("/forgotPassword", async (req, res) =>{
     let email = (req.body.mail).toLowerCase();
     if(!await register.isMailValid(email)){
-        res.status(201).render("login", {problem: "InvalidMail", username: ""})
+        console.log("Hello1")
+        return res.status(201).render("login", {problem: "InvalidMail", username: ""})
     }
     else{
         Users.findOne({username: email})
             .then(async function(val, err){
                 if(val == null){
-                    res.status(201).render("login", {problem: "UserDNE", username: email})
+                    return res.status(201).render("login", {problem: "UserDNE", username: email})
                 }
                 else{
                     var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
@@ -119,7 +121,7 @@ app.post("/forgotPassword", auth, async (req, res) =>{
                     await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
                     .then(data => {
                         console.log('Mail sent successfully')
-                        res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
+                        return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
                     })
                     .catch(err => {
                         console.log('Failed to send email:\n' + err)
@@ -129,22 +131,31 @@ app.post("/forgotPassword", auth, async (req, res) =>{
     }
 })
         
-app.post("/home", auth, async (req, res)=>{
+app.post("/home", async (req, res)=>{
     let userOTP = req.body.otp, otpGen = req.body.otpGen, pass = req.body.password, user = req.body.username;
     if(pass == process.env.FORGOTPASS){
-        let newPass = req.body.pass
+        let newPass = await bcrypt.hash(req.body.pass, 10);
+        const registerUser = new Users({
+            username: user,
+            password: newPass,
+            admin: false
+        })
         if(!await register.isPassStrong(newPass)){
-            res.status(201).render("forgot", {problem: "WeakPassword", username: user, password: pass, opt: otpGen, registered: ""})
+            return res.status(201).render("forgot", {problem: "WeakPassword", username: user, password: pass, otp: otpGen, registered: ""})
         }
         else if(!await bcrypt.compare(userOTP, otpGen)){
-            res.status(201).render("forgot", {problem: "InvalidOTP", username: user, password: pass, opt: otpGen, registered: ""})
+            return res.status(201).render("forgot", {problem: "InvalidOTP", username: user, password: pass, otp: otpGen, registered: ""})
         }
         else{
-            let newPass = await bcrypt.hash(req.body.pass, 10);
             await Users.updateOne({username: user}, {$set: {password: newPass}}, {});
+            const token = await registerUser.generateAuthToken()
+            res.cookie("itrbauth", token, {
+                expires: new Date(Date.now() + 1300000),
+                httpOnly: true
+            });
             (async function(){
                 const {facultyF, faculty_xl} = await fm.getFacultyData() 
-                res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
+                return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
             })()
         }
     }
@@ -162,11 +173,11 @@ app.post("/home", auth, async (req, res)=>{
             });
             (async function(){
                 const {facultyF, faculty_xl} = await fm.getFacultyData() 
-                res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
+                return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
             })()
         }
         else if(!await bcrypt.compare(userOTP, otpGen)){
-            res.status(201).render("verifyOTP", {problem: "InvalidOTP"})
+            return res.status(201).render("verifyOTP", {problem: "InvalidOTP"})
         }
         else{
             try{
@@ -180,7 +191,7 @@ app.post("/home", auth, async (req, res)=>{
                 .catch((err) => console.log(err));
                 (async function(){
                     const {facultyF, faculty_xl} = await fm.getFacultyData() 
-                    res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
+                    return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
                 })()
             }
             catch(err){

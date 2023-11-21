@@ -9,6 +9,7 @@ function main(){
     
     if(document.getElementById("registeredIn").value == "Yes"){
         document.getElementById("receiversOTP").value = "Account exists"
+        document.getElementById("receiversOTP").type = "Hidden"
         form.submit()
     }
     else if(problem == "InvalidOTP"){

@@ -7,6 +7,7 @@ const register = require("./models/register")
 const fm = require("./models/fileManager")
 const auth = require("./middleware/auth")
 const cookieParser = require("cookie-parser")
+const jwt = require("jsonwebtoken")
 require('dotenv').config();
 app.use(cookieParser())
 
@@ -31,8 +32,27 @@ app.get("/login", (req,res)=>{
     res.clearCookie('itrbauth')
     res.render("login")
 })
-app.get("/forgotpass", (req, res)=>{
-    res.render("forgot")
+app.get("/changePassword", (req, res)=>{
+    token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
+    email = token.username
+    Users.findOne({username: email})
+    .then(async function(val, err){
+        if(val == null){
+            return res.status(201).render("login", {problem: "UserDNE", username: email})
+        }
+        else{
+            var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
+            var otpGenSafe = await bcrypt.hash(otpGen, 10);
+            await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
+            .then(data => {
+                console.log('Mail sent successfully')
+                return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
+            })
+            .catch(err => {
+                console.log('Failed to send email:\n' + err)
+            })  
+         }
+    })
 })
 app.get("/home", auth, async (req,res)=>{
     (async function(){
@@ -120,31 +140,30 @@ app.post("/login", async (req, res) => {
     }
 }) 
 
-app.post("/forgotPassword", async (req, res) =>{
+app.post("/changePassword", async (req, res) =>{
     let email = (req.body.mail).toLowerCase();
     if(!await register.isMailValid(email)){
-        console.log("Hello1")
         return res.status(201).render("login", {problem: "InvalidMail", username: ""})
     }
     else{
         Users.findOne({username: email})
-            .then(async function(val, err){
-                if(val == null){
-                    return res.status(201).render("login", {problem: "UserDNE", username: email})
-                }
-                else{
-                    var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
-                    var otpGenSafe = await bcrypt.hash(otpGen, 10);
-                    await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
-                    .then(data => {
-                        console.log('Mail sent successfully')
-                        return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
-                    })
-                    .catch(err => {
-                        console.log('Failed to send email:\n' + err)
-                    })  
-                 }
-            })
+        .then(async function(val, err){
+            if(val == null){
+                return res.status(201).render("login", {problem: "UserDNE", username: email})
+            }
+            else{
+                var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
+                var otpGenSafe = await bcrypt.hash(otpGen, 10);
+                await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
+                .then(data => {
+                    console.log('Mail sent successfully')
+                    return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
+                })
+                .catch(err => {
+                    console.log('Failed to send email:\n' + err)
+                })  
+             }
+        })
     }
 })
         

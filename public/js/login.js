@@ -9,7 +9,7 @@ function onClickNext(){
 function onClickForgot(){
     let form = document.getElementById("loginForm")
     form.setAttribute("method", "POST")
-    form.setAttribute("action", "/forgotPassword")
+    form.setAttribute("action", "/changePassword")
     form.submit()
     return false
 }

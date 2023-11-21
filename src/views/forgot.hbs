@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,18 +21,25 @@
 			<input id="passwordIn" name="password" value="{{password}}" hidden />
 			<input id="problem" value="{{problem}}" hidden/>
 
-			<h2 id="verifyMsg">Verify E-Mail</h2>
+			<h2>Forgot Password</h2>
 			<div id="inputBox1" class="inputBox">
-				<input id="receiversOTP" name="otp" type="text"  required="required"/>
-				<span id="spanmsg">Enter OTP sent to your email</span>
+				<input id="pass" name="pass" type="password" required="required"/>
+				<span id="uname">Enter new password</span>
 				<i></i>
 			</div>
-
+			<p class="error_msg" id="error_box_pass"></p>
+			
+			<div id="inputBox1" class="inputBox">
+				<input id="receiversOTP" name="otp" type="text"  required="required"/>
+				<span id="uname">Enter OTP sent to your email</span>
+				<i></i>
+			</div>
 			<p class="error_msg" id="error_box_otp"></p>
+			
 			<button id="next">Next</button>
 		</form>
 	</div>
-	<script src="js/verifyOTP.js"></script>
+	<script src="js/forgot.js"></script>
 	
 </body>
 </html>

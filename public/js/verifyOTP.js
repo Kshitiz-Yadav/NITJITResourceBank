@@ -9,7 +9,9 @@ function main(){
     
     if(document.getElementById("registeredIn").value == "Yes"){
         document.getElementById("receiversOTP").value = "Account exists"
-        document.getElementById("receiversOTP").type = "Hidden"
+        document.getElementById("next").style = "Display: None;"
+        document.getElementById("inputBox1").style = "Display: None;"
+        document.getElementById("verifyMsg").innerText = "Verifying Email\nPlease Wait..."
         form.submit()
     }
     else if(problem == "InvalidOTP"){

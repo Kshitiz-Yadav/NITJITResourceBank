@@ -44,10 +44,26 @@ app.get("/curriculum", auth, (req,res)=>{
     res.render("curriculum")
 })
 app.get("/semester", auth, (req,res)=>{
-    res.render("semester")
+    try{
+        (async function(){
+            const {semFiles, pyqFiles, child} = await fm.getSemData(req.query.semNum)
+            return res.status(201).render("semester", {semNum: req.query.semNum, semID: child, pyqs: JSON.stringify(pyqFiles), semF: JSON.stringify(semFiles)})
+        })()
+    }
+    catch{
+        console.log(error)
+    } 
 })
 app.get("/subject", auth, (req,res)=>{
-    res.render("subject")
+    try{
+        (async function() {
+            const {bookF, notesF, pptF, otherF, excelF} = await fm.getSubData(req.query.semID, req.query.subName)
+            return res.status(201).render("subject", {subName: req.query.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: JSON.stringify(excelF)});
+      })();
+    }
+    catch(err){
+        console.log(err);
+    }
 })
 app.get("/support", auth, (req,res)=>{
     res.render("feedback")
@@ -84,6 +100,7 @@ app.post("/login", async (req, res) => {
                     })
                     .catch(err => {
                         console.log('Failed to send email:\n' + err)
+                        return res.status(201).render("login");
                     })  
                 }
                 else{
@@ -150,7 +167,7 @@ app.post("/home", async (req, res)=>{
             await Users.updateOne({username: user}, {$set: {password: newPass}}, {});
             const token = await registerUser.generateAuthToken()
             res.cookie("itrbauth", token, {
-                expires: new Date(Date.now() + 1300000),
+                expires: new Date(Date.now() + 1300000000),
                 httpOnly: true
             });
             (async function(){
@@ -168,7 +185,7 @@ app.post("/home", async (req, res)=>{
         if(userOTP == "Account exists"){
             const token = await registerUser.generateAuthToken()
             res.cookie("itrbauth", token, {
-                expires: new Date(Date.now() + 1300000),
+                expires: new Date(Date.now() + 1300000000),
                 httpOnly: true
             });
             (async function(){
@@ -183,7 +200,7 @@ app.post("/home", async (req, res)=>{
             try{
                 const token = await registerUser.generateAuthToken()
                 res.cookie("itrbauth", token, {
-                    expires: new Date(Date.now() + 1300000),
+                    expires: new Date(Date.now() + 1300000000),
                     httpOnly: true
                 })
                 await registerUser.save()
@@ -211,30 +228,6 @@ app.post("/support", auth, async(req, res)=>{
     }
     res.status(201).render("feedback")
 })
-
-app.post("/semester", auth, (req, res) => {
-    try{
-        (async function(){
-            const {semFiles, pyqFiles, child} = await fm.getSemData(req.body.semNum)
-            res.status(201).render("semester", {semNum: req.body.semNum, semID: child, pyqs: JSON.stringify(pyqFiles), semF: JSON.stringify(semFiles)})
-        })()
-    }
-    catch{
-        console.log(error)
-    }
-})
-
-app.post("/subject", auth, (req, res)=>{
-    try{
-        (async function() {
-            const {bookF, notesF, pptF, otherF, excelF} = await fm.getSubData(req.body.semID, req.body.subName)
-            res.status(201).render("subject", {subName: req.body.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: JSON.stringify(excelF)});
-      })();
-    }
-    catch(err){
-        console.log(err);
-    }
-});
 
 app.listen(PORT, ()=>{
     console.log("Listening to port " + PORT); 

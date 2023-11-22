@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Curriculum - IT Resource Bank</title>
+    <title>Placement - IT Resource Bank</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -39,14 +39,14 @@
         <div class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
-                    <h1 class="display-3 text-white animated slideInDown">Curriculum</h1>
+                    <h1 class="display-3 text-white animated slideInDown">Placements</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
-                            <li class="breadcrumb-item text-white active" aria-current="page">Notes</li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">PPTs</li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Books</li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">PYQs</li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Lectures</li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">DSA</li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">OOPs</li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Coding</li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Development</li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Interview preparation</li>
                         </ol>
                     </nav>
                 </div>
@@ -59,84 +59,115 @@
     <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Semesters</h6>
-                <h1 class="mb-5">All Semesters</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">Placement Prepration</h6>
+                <h1 class="mb-5">ALL Domains</h1>
             </div>
             <div class="row g-4 ">
                 <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 3')">
+                    <a href="/dsa"><div class="service-item text-center pt-3 click_cursor">
                         <div class="p-4">
-                            <h5 class="mb-3">Semester 3</h5>
+                            <h5 class="mb-3">DSA</h5>
+                            {{!-- <p>OOPS / DS / DCN /</p>
+                            <p>DBMS / CSA / NM</p> --}}
+                        </div>
+                    </div></a>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
+                    <a href="/dsa"><div class="service-item text-center pt-3 click_cursor">
+                        <div class="p-4">
+                            <h5 class="mb-3">Interview Experiences</h5>
+                            {{!-- <p>OOPS / DS / DCN /</p>
+                            <p>DBMS / CSA / NM</p> --}}
+                        </div>
+                    </div></a>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
+                    <a href="/dsa"><div class="service-item text-center pt-3 click_cursor">
+                        <div class="p-4">
+                            <h5 class="mb-3">Resume Building</h5>
+                            {{!-- <p>OOPS / DS / DCN /</p>
+                            <p>DBMS / CSA / NM</p> --}}
+                        </div>
+                    </div></a>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
+                    <div class="service-item text-center pt-3 click_cursor">
+                        <div class="p-4">
+                            <h5 class="mb-3">OOPs</h5>
                             {{!-- <p>OOPS / DS / DCN /</p>
                             <p>DBMS / CSA / NM</p> --}}
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 5')">
+                    <div class="service-item text-center pt-3 click_cursor">
                         <div class="p-4">
-                            <h5 class="mb-3">Semester 5</h5>
+                            <h5 class="mb-3">DBMS</h5>
                             {{!-- <p>SE / CG / DM /</p>
                             <p>WebD / Crypto</p> --}}
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.7s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 7')">
+                    <div class="service-item text-center pt-3 click_cursor">
                         <div class="p-4">
-                            <h5 class="mb-3">Semester 7</h5>
+                            <h5 class="mb-3">Computer Networking</h5>
                             {{!-- <p>Software Testing /</p>
                             <p>Cloud Computing</p> --}}
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.7s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Departmental Electives')">
+                    <div class="service-item text-center pt-3 click_cursor">
                         <div class="p-4">
-                            <h5 class="mb-3">Departmental Electives</h5>
+                            <h5 class="mb-3">Operating Systems</h5>
+                            {{!-- <p>Software Testing /</p>
+                            <p>Cloud Computing</p> --}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.7s">
+                    <div class="service-item text-center pt-3 click_cursor">
+                        <div class="p-4">
+                            <h5 class="mb-3">Machine Learning</h5>
                             {{!-- <p>Data Analytics /</p>
                             <p>Advanced OS</p> --}}
                         </div>
                     </div>
                 </div>
-            </div>
-            <br>
-            <div class="row g-4">
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s" >
-                    {{!-- <a href="/curriculum/semester?semester=semester-4" style=""> --}}
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 4')">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.7s">
+                    <div class="service-item text-center pt-3 click_cursor">
                         <div class="p-4">
-                            <h5 class="mb-3">Semester 4</h5>
-                            {{!-- <p>IDAA / OS / JAVA /</p>
-                            <p>DMDWC / FLAT / ECO</p> --}}
-                        </div>
-                    </div>
-                    {{!-- </a> --}}
-                </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 6')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Semester 6</h5>
-                            {{!-- <p>ML / Mobile App Dev /</p>
-                            <p>Soft Computing / OOMD</p> --}}
+                            <h5 class="mb-3">Cloud Computing</h5>
+                            {{!-- <p>Data Analytics /</p>
+                            <p>Advanced OS</p> --}}
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 8')">
+                    <div class="service-item text-center pt-3 click_cursor">
                         <div class="p-4">
-                            <h5 class="mb-3">Semester 8</h5>
+                            <h5 class="mb-3">Blockchain</h5>
                             {{!-- <p>System Programming</p>
                             <p>E-Com / DSSM</p> --}}
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Open Electives')">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s" >
+                    <div class="service-item text-center pt-3 click_cursor">
                         <div class="p-4">
-                            <h5 class="mb-3">Open Electives</h5>
-                            {{!-- <p>BT / ME / IPE / ICE / ME / EE</p>
-                            <p>CE / TT / CE / PH / CH / HM / MA</p> --}}
+                            <h5 class="mb-3">Mobile Application Devlopment</h5>
+                            {{!-- <p>IDAA / OS / JAVA /</p>
+                            <p>DMDWC / FLAT / ECO</p> --}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
+                    <div class="service-item text-center pt-3 click_cursor">
+                        <div class="p-4">
+                            <h5 class="mb-3">Web Application Devlopment</h5>
+                            {{!-- <p>ML / Mobile App Dev /</p>
+                            <p>Soft Computing / OOMD</p> --}}
                         </div>
                     </div>
                 </div>
@@ -144,9 +175,9 @@
         </div>
     </div>
     <!-- Service End -->
-    <form id="semesterForm" method="post" hidden>
+    {{!-- <form id="semesterForm" method="post" hidden>
         <input type="text" name="semNum" id="semNum" hidden>
-    </form>
+    </form> --}}
 
     {{>footer}}
 
@@ -163,17 +194,17 @@
     <script>
         window.onload = function(){
             document.getElementById("home_menu").classList.remove("active");
-            document.getElementById("curriculam_dropdown").classList.add("active");
-            document.getElementById("placements_dropdown").classList.remove("active");
+            document.getElementById("curriculam_dropdown").classList.remove("active");
+            document.getElementById("placements_dropdown").classList.add("active");
             document.getElementById("feedback_menu").classList.remove("active");
         }
-        function redirectToSemester(semester) {
+        /*function redirectToSemester(semester) {
             $('#spinner').addClass('show');
             document.getElementById("semNumH").value = semester
             let form = document.getElementById("semesterFormH")
             form.setAttribute("action", "/semester")
             form.submit()
-        }
+        }*/
     </script>
 </body>
 </html>

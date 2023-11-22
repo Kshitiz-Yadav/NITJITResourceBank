@@ -97,6 +97,12 @@ app.get("/subject", auth, (req,res)=>{
         console.log(err);
     }
 })
+app.get("/dsa",auth ,(req,res)=>{
+    res.render("dsa")
+})
+app.get("/placement",auth ,(req,res)=>{
+    res.render("placement")
+})
 app.get("/support", auth, (req,res)=>{
     res.render("feedback")
 })

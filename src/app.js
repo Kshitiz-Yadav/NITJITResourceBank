@@ -33,8 +33,8 @@ app.get("/login", (req,res)=>{
     res.render("login")
 })
 app.get("/changePassword", (req, res)=>{
-    token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
-    email = token.username
+    let token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
+    let email = token.username
     Users.findOne({username: email})
     .then(async function(val, err){
         if(val == null){
@@ -55,10 +55,22 @@ app.get("/changePassword", (req, res)=>{
     })
 })
 app.get("/home", auth, async (req,res)=>{
+    let token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
+    let isAdmin = token.admin;
     (async function(){
         const {facultyF, faculty_xl} = await fm.getFacultyData() 
-        res.status(201).render("index", {username: req.body.username, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
+        res.status(201).render("index", {username: req.body.username, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
     })()
+})
+app.get("/admin", auth, async(req, res)=>{
+    let token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
+    let isAdmin = token.admin;
+    if(isAdmin){
+        res.status(201).render("admin")
+    }
+    else{
+        res.status(201).redirect("index", {username: req.body.username, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
+    }
 })
 app.get("/curriculum", auth, (req,res)=>{
     res.render("curriculum")
@@ -169,12 +181,13 @@ app.post("/changePassword", async (req, res) =>{
         
 app.post("/home", async (req, res)=>{
     let userOTP = req.body.otp, otpGen = req.body.otpGen, pass = req.body.password, user = req.body.username;
+    let isAdmin = await register.isAdmin(user)
     if(pass == process.env.FORGOTPASS){
         let newPass = await bcrypt.hash(req.body.pass, 10);
         const registerUser = new Users({
             username: user,
             password: newPass,
-            admin: false
+            admin: isAdmin
         })
         if(!await register.isPassStrong(newPass)){
             return res.status(201).render("forgot", {problem: "WeakPassword", username: user, password: pass, otp: otpGen, registered: ""})
@@ -191,7 +204,7 @@ app.post("/home", async (req, res)=>{
             });
             (async function(){
                 const {facultyF, faculty_xl} = await fm.getFacultyData() 
-                return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
+                return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
             })()
         }
     }
@@ -199,7 +212,7 @@ app.post("/home", async (req, res)=>{
         const registerUser = new Users({
             username: user,
             password: pass,
-            admin: false
+            admin: isAdmin
         })
         if(userOTP == "Account exists"){
             const token = await registerUser.generateAuthToken()
@@ -209,7 +222,7 @@ app.post("/home", async (req, res)=>{
             });
             (async function(){
                 const {facultyF, faculty_xl} = await fm.getFacultyData() 
-                return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
+                return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
             })()
         }
         else if(!await bcrypt.compare(userOTP, otpGen)){
@@ -227,7 +240,7 @@ app.post("/home", async (req, res)=>{
                 .catch((err) => console.log(err));
                 (async function(){
                     const {facultyF, faculty_xl} = await fm.getFacultyData() 
-                    return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl)})
+                    return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
                 })()
             }
             catch(err){

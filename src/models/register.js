@@ -31,6 +31,10 @@ async function isPassStrong(pass){
 }
 
 async function isAdmin(mail){
+    let regex = /(\.[a-z]{2}\.[0-9]{2})/
+    if(!regex.test(mail)){
+        return true;
+    }
     return false;
 }
 
@@ -57,4 +61,4 @@ async function sendMail(toP, fromP, subjectP, bodyP){
 }
 
 
-module.exports = {isMailValid, isPassStrong, sendMail}
+module.exports = {isMailValid, isPassStrong, sendMail, isAdmin}

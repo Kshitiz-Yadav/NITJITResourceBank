@@ -71,4 +71,4 @@ span.onclick = function() {
 }
 model.onclick = function() {
     model.style.display = "none";
-  }
+}

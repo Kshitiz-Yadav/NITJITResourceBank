@@ -312,6 +312,10 @@
     display: none;
 }
 
+.interview_ans{
+    display: none;
+}
+
 /*** Testimonial ***/
 .testimonial-carousel::before {
     position: absolute;

@@ -1,5 +1,19 @@
 
 const nodemailer = require("nodemailer");
+const { google } = require('googleapis');
+require('dotenv').config();
+
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLEINT_SECRET = process.env.CLEINT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI;
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+
+const oAuth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLEINT_SECRET,
+  REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 async function isMailValid(mail){
     if(mail.endsWith('@nitj.ac.in')){
@@ -39,25 +53,34 @@ async function isAdmin(mail){
 }
 
 async function sendMail(toP, fromP, subjectP, bodyP){
-    const PASSWORD = process.env.PASS;
-    let transporter = nodemailer.createTransport({
-        // host: "smtp.ethereal.email",
-        service: "gmail",
-        // port: 587,
-        auth: {
-            user: 'resourcebank.it@nitj.ac.in', // generated ethereal username
-            pass: PASSWORD // generated ethereal password 
-        },
-    });
-
-    // send mail with defined transport object
-    await transporter.sendMail({
-      from: fromP, // sender address
-      to: toP, // list of receivers
-      subject: subjectP, // Subject line
-      text: bodyP, // plain text body
-      html: "", // html body
-    });
+    try {
+        const accessToken = await oAuth2Client.getAccessToken();
+    
+        const transport = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            type: 'OAuth2',
+            user: fromP,
+            clientId: CLIENT_ID,
+            clientSecret: CLEINT_SECRET,
+            refreshToken: REFRESH_TOKEN,
+            accessToken: accessToken,
+          },
+        });
+    
+        const mailOptions = {
+          from: `IT REsource Bank <${fromP}>`,
+          to: toP,
+          subject: subjectP,
+          text: bodyP,
+          html: `<h1>${bodyP}</h1>`,
+        };
+    
+        const result = await transport.sendMail(mailOptions);
+        return result;
+      } catch (error) {
+        return error;
+      }
 }
 
 

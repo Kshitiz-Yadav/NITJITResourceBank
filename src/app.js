@@ -43,7 +43,7 @@ app.get("/changePassword", (req, res)=>{
         else{
             var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
             var otpGenSafe = await bcrypt.hash(otpGen, 10);
-            await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
+            await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
             .then(data => {
                 console.log('Mail sent successfully')
                 return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
@@ -131,7 +131,7 @@ app.post("/login", async (req, res) => {
                 if(val == null){
                     var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
                     var otpGenSafe = await bcrypt.hash(otpGen, 10);
-                    await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
+                    await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
                     .then(data => {
                         console.log('Mail sent successfully')
                         return res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "No"})
@@ -172,7 +172,7 @@ app.post("/changePassword", async (req, res) =>{
             else{
                 var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
                 var otpGenSafe = await bcrypt.hash(otpGen, 10);
-                await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!! (｡◕‿◕｡)")
+                await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
                 .then(data => {
                     console.log('Mail sent successfully')
                     return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})

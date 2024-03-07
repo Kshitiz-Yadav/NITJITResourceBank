@@ -137,11 +137,11 @@ async function getSubData(semNum, subName) {
 
 async function getFacultyData(){
   let facultyF = await loadChild(FACULTYID, jwtClient);
-  let facultyExcelID = ""
+  let facultyExcelID = "";
   for(let i=0;i<facultyF.length;i++){
       if(facultyF[i].name == "faculty_list.xlsx"){
-          facultyExcelID = facultyF[i].id
-          break
+          facultyExcelID = facultyF[i].id;
+          break;
       }
   }
   let faculty_xl = await downloadFile(facultyExcelID);

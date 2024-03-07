@@ -258,7 +258,7 @@ app.post("/home", async (req, res)=>{
 
 app.post("/support", auth, async(req, res)=>{
     try{
-        await register.sendMail("resourcebank.it@nitj.ac.in", req.body.email, req.body.subject, req.body.name + " says,\n" + req.body.message);
+        await register.sendMail("resourcebank.it@nitj.ac.in", "resourcebank.it@nitj.ac.in", req.body.subject, req.body.name + " says,\n" + req.body.message+"\n\nSender Mail: "+req.body.email);
         console.log("Feedback sent successfully")
     }
     catch(err){

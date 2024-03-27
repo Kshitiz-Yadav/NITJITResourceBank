@@ -5,7 +5,7 @@ const hbs = require("hbs")
 const bcrypt = require("bcryptjs");
 const register = require("./models/register")
 const fm = require("./models/fileManager")
-const auth = require("./middleware/auth")
+const {auth, authAdmin, authFaculty} = require("./middleware/auth")
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
 require('dotenv').config();
@@ -26,6 +26,7 @@ const Users = require("./models/user")
 app.use(express.urlencoded({extended:false}));
 
 const PORT = process.env.PORT || 8000;
+const SUPPORT_MAIL = process.nextTick.SUPPORT_MAIL || "resourcebank.it@nitj.ac.in"
 
 // Making GET requests
 app.get("/login", (req,res)=>{
@@ -43,7 +44,7 @@ app.get("/changePassword", (req, res)=>{
         else{
             var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
             var otpGenSafe = await bcrypt.hash(otpGen, 10);
-            await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
+            await register.sendMail(email, SUPPORT_MAIL, "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
             .then(data => {
                 console.log('Mail sent successfully')
                 return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
@@ -62,15 +63,8 @@ app.get("/home", auth, async (req,res)=>{
         res.status(201).render("index", {username: req.body.username, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
     })()
 })
-app.get("/admin", auth, async(req, res)=>{
-    let token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
-    let isAdmin = token.admin;
-    if(isAdmin){
+app.get("/admin", authAdmin, async(req, res)=>{
         res.status(201).render("admin")
-    }
-    else{
-        res.status(201).redirect("index", {username: req.body.username, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
-    }
 })
 app.get("/curriculum", auth, (req,res)=>{
     res.render("curriculum")
@@ -109,7 +103,7 @@ app.get("/support", auth, (req,res)=>{
 app.get("/team", auth, (req,res)=>{
     res.render("team")
 })
-app.get("*", auth, (req,res)=>{
+app.get("*", (req,res)=>{
     res.render("404")
 })
 
@@ -131,10 +125,11 @@ app.post("/login", async (req, res) => {
                 if(val == null){
                     var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
                     var otpGenSafe = await bcrypt.hash(otpGen, 10);
-                    await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
+                    var userEncrypted = await bcrypt.hash(email, 10);
+                    await register.sendMail(email, SUPPORT_MAIL, "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
                     .then(data => {
                         console.log('Mail sent successfully')
-                        return res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "No"})
+                        return res.status(201).render("verifyOTP", {username: userEncrypted, password: password, otp: otpGenSafe, registered: "No"})
                     })
                     .catch(err => {
                         console.log('Failed to send email:\n' + err)
@@ -143,8 +138,9 @@ app.post("/login", async (req, res) => {
                 }
                 else{
                     let match = await bcrypt.compare(req.body.pass, val.password);
+                    var userEncrypted = await bcrypt.hash(email, 10);
                     if(match){
-                        return res.status(201).render("verifyOTP", {username: email, password: password, otp: otpGenSafe, registered: "Yes"})
+                        return res.status(201).render("verifyOTP", {username: email, usernameEnc: userEncrypted, password: password, otp: otpGenSafe, registered: "Yes"})
                     }
                     else{
                         return res.status(201).render("login", {problem: "InvalidPassword", username: email})
@@ -172,10 +168,11 @@ app.post("/changePassword", async (req, res) =>{
             else{
                 var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
                 var otpGenSafe = await bcrypt.hash(otpGen, 10);
-                await register.sendMail(email, "resourcebank.it@nitj.ac.in", "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
+                var userEncrypted = await bcrypt.hash(email, 10);
+                await register.sendMail(email, SUPPORT_MAIL, "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
                 .then(data => {
                     console.log('Mail sent successfully')
-                    return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
+                    return res.status(201).render("forgot", {username: email, usernameEnc: userEncrypted, password: process.env.FORGOTPASS, otp: otpGenSafe})
                 })
                 .catch(err => {
                     console.log('Failed to send email:\n' + err)
@@ -186,23 +183,22 @@ app.post("/changePassword", async (req, res) =>{
 })
         
 app.post("/home", async (req, res)=>{
-    let userOTP = req.body.otp, otpGen = req.body.otpGen, pass = req.body.password, user = req.body.username;
+    let userOTP = req.body.otp, otpGen = req.body.otpGen, pass = req.body.password, user = req.body.username, userEnc=req.body.usernameEnc;
     let isAdmin = await register.isAdmin(user)
+    if(!await bcrypt.compare(user, userEnc)){
+        return res.status(201).render("login", {problem: "Invalid User", username: user})
+    }
     if(pass == process.env.FORGOTPASS){
         let newPass = await bcrypt.hash(req.body.pass, 10);
-        const registerUser = new Users({
-            username: user,
-            password: newPass,
-            admin: isAdmin
-        })
         if(!await register.isPassStrong(newPass)){
-            return res.status(201).render("forgot", {problem: "WeakPassword", username: user, password: pass, otp: otpGen, registered: ""})
+            return res.status(201).render("forgot", {problem: "WeakPassword", username: user, usernameEnc: userEnc, password: pass, otp: otpGen})
         }
         else if(!await bcrypt.compare(userOTP, otpGen)){
-            return res.status(201).render("forgot", {problem: "InvalidOTP", username: user, password: pass, otp: otpGen, registered: ""})
+            return res.status(201).render("forgot", {problem: "InvalidOTP", username: user, usernameEnc: userEnc, password: pass, otp: otpGen})
         }
         else{
             await Users.updateOne({username: user}, {$set: {password: newPass}}, {});
+            const registerUser = await Users.findOne({username: user});
             const token = await registerUser.generateAuthToken()
             res.cookie("itrbauth", token, {
                 expires: new Date(Date.now() + 1300000000),
@@ -218,7 +214,8 @@ app.post("/home", async (req, res)=>{
         const registerUser = new Users({
             username: user,
             password: pass,
-            admin: isAdmin
+            admin: isAdmin,
+            faculty: false
         })
         if(userOTP == "Account exists"){
             const token = await registerUser.generateAuthToken()
@@ -258,7 +255,7 @@ app.post("/home", async (req, res)=>{
 
 app.post("/support", auth, async(req, res)=>{
     try{
-        await register.sendMail("resourcebank.it@nitj.ac.in", "resourcebank.it@nitj.ac.in", req.body.subject, req.body.name + " says,\n" + req.body.message+"\n\nSender Mail: "+req.body.email);
+        await register.sendMail(SUPPORT_MAIL, SUPPORT_MAIL, req.body.subject, req.body.name + " says,\n" + req.body.message+"\n\nSender Mail: "+req.body.email);
         console.log("Feedback sent successfully")
     }
     catch(err){

@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema({
     admin: {
         type: Boolean
     },
+    faculty: {
+        type: Boolean
+    },
     tokens:[{
         token: {
             type: String
@@ -23,9 +26,9 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateAuthToken = async function(){
     try{
-        const token = jwt.sign({username: this.username, password: this.password, admin: this.admin}, process.env.SECRET)
+        const token = jwt.sign({username: this.username, password: this.password, admin: this.admin, faculty: this.faculty}, process.env.SECRET)
         // console.log(token)
-        return token
+        return token;
     }
     catch(error){
         console.log(error)
@@ -33,4 +36,4 @@ userSchema.methods.generateAuthToken = async function(){
 }
 
 const User = new mongoose.model('User', userSchema);
-module.exports = User
+module.exports = User;

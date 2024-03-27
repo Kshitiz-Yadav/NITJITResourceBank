@@ -7,6 +7,7 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLEINT_SECRET = process.env.CLEINT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+const SUPPORT_MAIL = process.env.SUPPORT_MAIL;
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -45,8 +46,7 @@ async function isPassStrong(pass){
 }
 
 async function isAdmin(mail){
-    let regex = /(\.[a-z]{2}\.[0-9]{2})/
-    if(!regex.test(mail)){
+    if(mail.toLowerCase()==SUPPORT_MAIL){
         return true;
     }
     return false;

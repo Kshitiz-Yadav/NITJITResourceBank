@@ -24,7 +24,7 @@ for(let i=1;i<faculty_xl.length;i++){
     let Designation = faculty_xl[i][2];
     let EMail = faculty_xl[i][3];
     let Mobile = faculty_xl[i][4];
-    let Image = ""
+    let Image = "";
     for(let j=1;j<facultyF.length;j++){
         if(facultyF[j].name==faculty_xl[i][5]){
             Image = facultyF[j].webContentLink;

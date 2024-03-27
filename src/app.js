@@ -1,15 +1,18 @@
 const express = require("express");
 const app = express()
+const methodOverride = require('method-override');
 const path = require("path")
 const hbs = require("hbs")
 const bcrypt = require("bcryptjs");
 const register = require("./models/register")
 const fm = require("./models/fileManager")
+const {getUsersWithNoPrivileges, getUsersWithPrivileges, removeUserById, updateUserModeById} = require("./models/manageUserAccess");
 const {auth, authAdmin, authFaculty} = require("./middleware/auth")
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
 require('dotenv').config();
 app.use(cookieParser())
+app.use(methodOverride('_method'));
 
 // Setting up path
 const staticPath = path.join("../public")     
@@ -64,7 +67,15 @@ app.get("/home", auth, async (req,res)=>{
     })()
 })
 app.get("/admin", authAdmin, async(req, res)=>{
-        res.status(201).render("admin")
+    try {
+        const allUsers = await getUsersWithNoPrivileges();
+        const privilegedUsers =  await getUsersWithPrivileges();
+        res.status(201).render("admin", { allUsersList: JSON.stringify(allUsers), privilegedUsersList: JSON.stringify(privilegedUsers) });
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+      }
+
 })
 app.get("/curriculum", auth, (req,res)=>{
     res.render("curriculum")
@@ -129,7 +140,7 @@ app.post("/login", async (req, res) => {
                     await register.sendMail(email, SUPPORT_MAIL, "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
                     .then(data => {
                         console.log('Mail sent successfully')
-                        return res.status(201).render("verifyOTP", {username: userEncrypted, password: password, otp: otpGenSafe, registered: "No"})
+                        return res.status(201).render("verifyOTP", {username: email,usernameEnc:userEncrypted, password: password, otp: otpGenSafe, registered: "No"})
                     })
                     .catch(err => {
                         console.log('Failed to send email:\n' + err)
@@ -237,7 +248,7 @@ app.post("/home", async (req, res)=>{
                 res.cookie("itrbauth", token, {
                     expires: new Date(Date.now() + 1300000000),
                     httpOnly: true
-                })
+                });
                 await registerUser.save()
                 .then(() => console.log("Saved successfully"))
                 .catch((err) => console.log(err));
@@ -262,6 +273,42 @@ app.post("/support", auth, async(req, res)=>{
         console.log(err)
     }
     res.status(201).render("feedback")
+})
+
+app.delete("/admin/remove-user",authAdmin, async (req, res)=>{
+    const userId = req.body.userToBeRemoved;
+    try {
+        await removeUserById(userId);
+        // Send the ID of the deleted user as a response
+        res.redirect('/admin')
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('500');
+    }
+})
+
+app.put("/admin/remove-privileged-access",authAdmin, async (req, res)=>{
+    const userId = req.body.userToRemoveAccess;
+    try {
+        await updateUserModeById(userId, false);
+        // Send the ID of the deleted user as a response
+        res.redirect('/admin')
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('500');
+    }
+})
+
+app.put("/admin/provide-privileged-access",authAdmin, async (req, res)=>{
+    const userId = req.body.userToProvideAccess;
+    try {
+        await updateUserModeById(userId, true);
+        // Send the ID of the deleted user as a response
+        res.redirect('/admin')
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('500');
+    }
 })
 
 app.listen(PORT, ()=>{

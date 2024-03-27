@@ -12,10 +12,6 @@ function show_contact(element_id1,element_id2){
 
 let facultyF = JSON.parse(document.getElementById("facultyFiles").value);
 let faculty_xl = JSON.parse(document.getElementById("faculty_excel").value);
-let isAdmin = document.getElementById("isAdmin").value;
-if(isAdmin == 'true'){
-    document.getElementById('adminPrivDrop').style = "display: block;"
-}
 
 let faculty = [];
 for(let i=1;i<faculty_xl.length;i++){

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Support - IT Resource Bank</title>
+    <title>Admin - IT Resource Bank</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -14,7 +14,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -33,7 +35,10 @@
 
 <body>
     {{>header}}
-
+    <form id="adminForm" hidden>
+        <input id="allUsersList" value="{{allUsersList}}" hidden>
+        <input id="privilegedUsersList" value="{{privilegedUsersList}}" hidden>
+    </form>
     <!-- Header Start -->
     <div class="container-fluid bg-primary py-5 mb-5 page-header">
         <div class="container py-5">
@@ -42,8 +47,8 @@
                     <h1 class="display-3 text-white animated slideInDown">Admin</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
-                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Feedback</li>
+                            <li class="breadcrumb-item"><a class="text-white" href="/home">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Admin</li>
                         </ol>
                     </nav>
                 </div>
@@ -58,60 +63,48 @@
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Admin</h6>
-                <h1 class="mb-5">Contact For Queries and Feedback</h1>
+                <h1 class="mb-5">Manage Users and Access</h1>
             </div>
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <h5>Get In Touch</h5>
-                    <p class="mb-4" style="text-align: justify;">Thank you for visiting our study resoure bank website.
-                        We value your feedback and would appreciate your thoughts on how we can improve our site to
-                        better meet your needs. Please share any suggestions or concerns you may have. Your input is
-                        important to us.</p>
-                    <div class="d-flex align-items-center">
-                        <a href="mailto:resourcebank.it@nitj.ac.in">
-                            <div class="d-flex align-items-center justify-content-center flex-shrink-0 bg-primary"
-                                style="width: 50px; height: 50px;">
-                                <i class="fa fa-envelope-open text-white"></i>
-                            </div>
-                        </a>
-                        <div class="ms-3">
-                            <h5 class="text-primary">Email</h5>
-                            <p class="mb-0">resourcebank.it@nitj.ac.in</p>
-                        </div>
+                    <h5>Privileged Users</h5>
+                    <div class="mb-3">
+                        <input id="searchInputPrivilegedUsers" type="text" class="form-control" placeholder="Search by username">
+                    </div>
+                    <div style="height: 500px; overflow-y:auto;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="text-align: center;">Username</th>
+                                    <th scope="col" style="width: 30%; text-align: center;">Remove Privileged Access
+                                    </th>
+                                    <th scope="col" style="width: 25%; text-align: center;">Remove User</th>
+                                </tr>
+                            </thead>
+                            <tbody id="privilegedUsersTableBody">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
-                    <form id="mailForm", method="POST">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" name="name" placeholder="Your Name">
-                                    <label for="name">Your Name</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="email" class="form-control" name="email" placeholder="Your Email">
-                                    <label for="email">Your Email</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" name="subject" placeholder="Subject">
-                                    <label for="subject">Subject</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <textarea class="form-control" placeholder="Leave a message here" name="message" style="height: 150px"></textarea>
-                                    <label for="message">Message</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <button class="btn btn-primary w-100 py-3" type="submit" id="sendMail">Send Message</button>
-                            </div>
-                        </div>
-                    </form>
+                    <h5>Non-Privileged Users</h5>
+                    <div class="mb-3">
+                        <input id="searchInputAllUsers" type="text" class="form-control" placeholder="Search by username">
+                    </div>
+                    <div style="height: 500px; overflow-y:auto;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="text-align: center;">Username</th>
+                                    <th scope="col" style="width: 30%; text-align: center;">Provide Privileged Access
+                                    </th>
+                                    <th scope="col" style="width: 25%; text-align: center;">Remove User</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allUsersTableBody">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -130,12 +123,14 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script src="js/admin.js"></script>
     <script>
         window.onload = function () {
             document.getElementById("home_menu").classList.remove("active");
             document.getElementById("curriculam_dropdown").classList.remove("active");
             document.getElementById("placements_dropdown").classList.remove("active");
-            document.getElementById("feedback_menu").classList.add("active");
+            document.getElementById("feedback_menu").classList.remove("active");
+            document.getElementById("me_dropdown").classList.add("active");
         }
     </script>
 </body>

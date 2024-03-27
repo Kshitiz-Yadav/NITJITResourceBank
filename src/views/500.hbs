@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Curriculum - IT Resource Bank</title>
+    <title>Internal Server Problem</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -34,59 +34,22 @@
 <body>
     {{>header}}
 
-    <!-- Header Start -->
-    <div class="container-fluid bg-primary py-5 mb-5 page-header">
-        <div class="container py-5">
+    <!-- 404 Start -->
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container text-center">
             <div class="row justify-content-center">
-                <div class="col-lg-10 text-center">
-                    <h1 id="semester_name" class="display-3 text-white animated slideInDown"></h1>
+                <div class="col-lg-6">
+                    <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
+                    <h1 class="display-1">500</h1>
+                    <h1 class="mb-4">Internal Server Problem</h1>
+                    <p class="mb-4">We're sorry, some problem at our end, please retry again!</p>
+                    <a class="btn btn-primary rounded-pill py-3 px-5" href="/home">Go Back To Home</a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Header End -->
-
-    {{>preview}}
-
-    <form id="semesterForm" hidden>
-        <input id="semNum" value="{{semNum}}" hidden>
-        <input id="semIDReceive" value="{{semID}}" hidden>
-        <input id="pyqFiles" value="{{pyqs}}" hidden>
-        <input id="semFiles" value="{{semF}}" hidden>
-    </form>
-
-    <!-- Service Start -->
-    <div class="container-xxl py-5">
-        <div id="subjects" class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Subjects</h6>
-                <h1 class="mb-5">Theory</h1>
-            </div>
-        </div>
-        <br>
-        <div id="lab_subjects" class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Subjects</h6>
-                <h1 class="mb-5">Pratical</h1>
-            </div>
-        </div>
-        <br>
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">PYQs</h6>
-                <h1 class="mb-5">Previous Year Question Papers</h1>
-            </div>
-            <div class="row g-4" id="pyqs">
-            </div>
-        </div>
-    </div>
-    <!-- Service End -->
-
-    <form id="subjectForm" method="get" hidden>
-        <input type="text" name="semID" id="semIDSend" hidden>
-        <input type="text" name="subName" id="subName" hidden>
-    </form>
-
+    <!-- 404 End -->
+        
     {{>footer}}
 
     <!-- JavaScript Libraries -->
@@ -99,11 +62,10 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-    <script src="js/semester.js"></script>
     <script>
         window.onload = function(){
             document.getElementById("home_menu").classList.remove("active");
-            document.getElementById("curriculam_dropdown").classList.add("active");
+            document.getElementById("curriculam_dropdown").classList.remove("active");
             document.getElementById("placements_dropdown").classList.remove("active");
             document.getElementById("feedback_menu").classList.remove("active");
             document.getElementById("me_dropdown").classList.remove("active");

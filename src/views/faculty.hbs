@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin - IT Resource Bank</title>
+    <title>Faculty - IT Resource Bank</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -41,7 +41,8 @@
         <input id="privilegedUsersList" value="{{privilegedUsersList}}" hidden>
     </form>
 
-    <form id="deleteDirectoryForm" action="/admin/delete-directory?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to delete the directory?');" hidden>
+    <form id="deleteDirectoryForm" action="/admin/delete-directory?_method=DELETE" method="POST"
+        onsubmit="return confirm('Are you sure you want to delete the directory?');" hidden>
         <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" name="directoryToBeDeleted" id="directoryToBeDeleted" value="">
     </form>
@@ -82,37 +83,83 @@
         </div>
     </div>
 
-    <div class="modal fade" id="schemaManagementModal" tabindex="-1" aria-labelledby="schemaManagementModalLabel"
+    <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="schemaManagementModalLabel">Enter Name</h5>
+                    <h5 class="modal-title" id="uploadFileModalLabel">Upload Resources</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-dismiss="modal"
-                        data-bs-target="#schemaManagementModal" aria-label="Close"></button>
+                        data-bs-target="#uploadFileModal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="schemaManagementForm">
-                        <input type="hidden" name="_method" id="schemaManagementFormMethod">
-                        <input type="hidden" name="directoryToBeModified" id="directoryToBeModified">
-                        <div class="mb-3">
-                            <label for="newName" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="newName" placeholder="HMCI-201: Economics for Engineers" name="newName" required>
+                    <form id="fileUploadForm" action="/faculty/upload?_method=POST" method="POST">
+                        <input type="hidden" name="_method" id="fileUploadFormMethod" value="POST">
+                        <div id="semesterDiv" class="mb-3 row">
+                            <label for="semesterSelect" class="col-sm-3 col-form-label">Choose Semester:</label>
+                            <div class="col-sm-9">
+                                <select required onchange="setSubjectOptions()" id="semesterSelect"
+                                    name="semesterSelect" class="form-select border border-secondary"
+                                    aria-label="Choose Semester">
+                                </select>
+                            </div>
                         </div>
-                        <div id="subDiv" class="mb-3">
-                            <label for="subType" class="form-label">Subject Type</label>
-                            <select class="form-select" id="subType" name="subType" required>
-                                <option value="Theory" selected>Theory</option>
-                                <option value="Lab">Lab</option>
-                            </select>
+                        <div id="subjectDiv" class="mb-3 row hidden">
+                            <div class="form-text" style="color: crimson;">* If you want to upload PYQs, choose Subject
+                                as <b><i>"Previous Year Exams"</i></b>. </div>
+                            <label for="subjectSelect" class="col-sm-3 col-form-label">Choose Subject:</label>
+                            <div class="col-sm-9">
+                                <select required id="subjectSelect" onchange="setTypeOptions()" name="subjectSelect"
+                                    class="form-select border border-secondary" aria-label="Choose Subject"></select>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div id="typeDiv" class="mb-3 row hidden">
+                            <label for="typeSelect" class="col-sm-3 col-form-label">Choose Type:</label>
+                            <div class="col-sm-9">
+                                <select required onchange="setFileInfoOptions()" id="typeSelect" name="typeSelect"
+                                    class="form-select border border-secondary" aria-label="Choose Type"></select>
+                            </div>
+                        </div>
+                        <div id="fileInputDiv" class="mb-3 row hidden">
+                        </div>
+                        <div id="fileNameDiv" class="mb-3 row hidden">
+                            <label for="fileName" id="fileNameLabel" class="col-sm-3 col-form-label">File Name To Be Saved:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="fileName" name="fileName" aria-label="File Name">
+                            </div>
+                        </div>
+                        <div id="fileAuthorDiv" class="mb-3 row hidden">
+                            <label for="fileAuthor" class="col-sm-3 col-form-label">Uploaded By:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="fileAuthor" name="fileAuthor" aria-label="Uploaded By">
+                            </div>
+                        </div>
+                        <div id="fileTopicsDiv" class="mb-3 row hidden">
+                            <label for="fileTopics" class="col-sm-3 col-form-label">Topics Covered:</label>
+                            <div class="col-sm-9">
+                                <input type="text" maxlength="100" required class="form-control-plaintext border border-secondary"
+                                    id="fileTopics" name="fileTopics" aria-label="Topics Covered" placeholder="Maximum 100 characters are allowed.">
+                            </div>
+                        </div>
+                        <div id="fileDescDiv" class="mb-3 row hidden">
+                            <label for="fileDesc" class="col-sm-3 col-form-label">Description:</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control border border-secondary" id="fileDesc" name="fileDesc"
+                                    aria-label="File Description" row="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="d-grid gap-2 col-9 mx-auto position-absolute end-0">
+                                <button type="button" onclick="submitUploadForm()" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        data-bs-target="#schemaManagementModal" aria-label="Close"
-                        id="schemaManagementModalClose">Close</button>
+                        data-bs-target="#uploadFileModal" aria-label="Close" id="uploadFileModalClose">Close</button>
                 </div>
             </div>
         </div>
@@ -123,11 +170,11 @@
         <div class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
-                    <h1 class="display-3 text-white animated slideInDown">Admin</h1>
+                    <h1 class="display-3 text-white animated slideInDown">Manage Resources</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
                             <li class="breadcrumb-item"><a class="text-white" href="/home">Home</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Admin</li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Privileged Users</li>
                         </ol>
                     </nav>
                 </div>
@@ -140,50 +187,21 @@
     <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Admin</h6>
-                <h1 class="mb-5">Manage Users and Access</h1>
+                <h6 class="section-title bg-white text-center text-primary px-3">Academics</h6>
+                <h1 class="mb-5">Manage Academics Resource</h1>
             </div>
             <div class="row g-4">
-                <div class="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.1s">
-                    <h5>Privileged Users</h5>
-                    <div class="mb-3">
-                        <input id="searchInputPrivilegedUsers" type="text" class="form-control"
-                            placeholder="Search by username">
-                    </div>
-                    <div style="height: 500px; overflow-y:auto;">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="text-align: center;">Username</th>
-                                    <th scope="col" style="width: 30%; text-align: center;">Remove Privileged Access
-                                    </th>
-                                    <th scope="col" style="width: 25%; text-align: center;">Remove User</th>
-                                </tr>
-                            </thead>
-                            <tbody id="privilegedUsersTableBody">
-                            </tbody>
-                        </table>
+                <div class="col-lg-12 col-sm-12 col-md-12 wow fadeInUp" data-wow-delay="0.1s">
+                    <h5>Upload Resources(File, YT Link, Other Link)</h5>
+                    <div class="d-grid gap-2 col-6">
+                        <button id="upload-resources-btn" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#uploadFileModal" onclick="loadSemList()" disabled=>Wait, we are setting
+                            up...</button>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
-                    <h5>Non-Privileged Users</h5>
-                    <div class="mb-3">
-                        <input id="searchInputAllUsers" type="text" class="form-control"
-                            placeholder="Search by username">
-                    </div>
-                    <div style="height: 500px; overflow-y:auto;">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="text-align: center;">Username</th>
-                                    <th scope="col" style="width: 30%; text-align: center;">Provide Privileged Access
-                                    </th>
-                                    <th scope="col" style="width: 25%; text-align: center;">Remove User</th>
-                                </tr>
-                            </thead>
-                            <tbody id="allUsersTableBody">
-                            </tbody>
-                        </table>
+                <div class="progress col-lg-6 col-sm-6 col-md-6 border border-primary" style="display: none; padding-left:0%; padding-right:0%">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                        aria-valuemax="100">
                     </div>
                 </div>
             </div>
@@ -268,7 +286,7 @@
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
         <script src="js/main.js"></script>
-        <script src="js/admin.js"></script>
+        <script src="js/faculty.js"></script>
         <script>
             window.onload = function () {
                 document.getElementById("home_menu").classList.remove("active");

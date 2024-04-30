@@ -144,6 +144,7 @@ app.get("/subject", auth, (req,res)=>{
         console.error(err);
     }
 })
+
 app.get("/dsa",auth ,(req,res)=>{
     res.render("dsa")
 })
@@ -340,6 +341,17 @@ app.post("/faculty/upload",authFaculty, upload.single('fileInput'), async (req, 
     }
 })
 
+app.post("/get-files-metadata", auth, async (req,res)=>{
+    try{
+        const files = await fileManager.getListFilesMetadata(req.body);
+        res.status(200).json(files);
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).render("500");
+    }
+}) 
+
 app.delete("/admin/remove-user",authAdmin, async (req, res)=>{
     const userId = req.body.userToBeRemoved;
     try {
@@ -355,6 +367,17 @@ app.delete("/admin/remove-user",authAdmin, async (req, res)=>{
 
 app.delete("/admin/delete-directory",authAdmin, async (req, res)=>{
     const fileId = req.body.directoryToBeDeleted;
+    try {
+        await fileManager.deleteFile(fileId);
+        res.sendStatus(200);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(504);
+    }
+})
+
+app.delete("/faculty/delete-file",authFaculty, async (req, res)=>{
+    const fileId = req.body.fileToBeDeleted;
     try {
         await fileManager.deleteFile(fileId);
         res.sendStatus(200);

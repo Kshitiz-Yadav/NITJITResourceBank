@@ -289,7 +289,7 @@ class FileManager {
       });
       return res.data.id;
     } catch (err) {
-      console.error('Error uploading file to Google Drive:', err);
+      throw(err);
     }
   }
 
@@ -315,7 +315,7 @@ class FileManager {
       });
       return res.data.id;
     } catch (err) {
-      console.error('Error uploading file to Google Drive:', err);
+      throw(err);
     }
   }
 
@@ -333,6 +333,28 @@ class FileManager {
       }
     } catch (err) {
       console.error('Error uploading file to Google Drive:', err);
+    }
+  }
+
+  async getListFilesMetadata(body){
+    try {
+      await this.authorize();
+      const service = google.drive("v3");
+      let parentID = "";
+      if(body.type == 'PYQs'){
+        parentID = body.subject;
+      } else{
+        parentID = await this.getIDByName(body.subject, body.type);
+      }
+      const response = await service.files.list({
+        auth: this.jwtClient,
+        pageSize: 900,
+        q: `'${parentID}' in parents`,
+        fields: 'files(id, name, properties)'
+      });
+      return response.data.files;
+    } catch (err) {
+      throw err;
     }
   }
 

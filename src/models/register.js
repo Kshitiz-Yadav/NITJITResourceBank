@@ -69,7 +69,7 @@ async function sendMail(toP, fromP, subjectP, bodyP){
         });
     
         const mailOptions = {
-          from: `IT REsource Bank <${fromP}>`,
+          from: `IT Resource Bank <${fromP}>`,
           to: toP,
           subject: subjectP,
           text: bodyP,

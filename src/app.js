@@ -1,20 +1,28 @@
 const express = require("express");
 const app = express()
+const methodOverride = require('method-override');
 const path = require("path")
 const hbs = require("hbs")
+const multer = require('multer');
 const bcrypt = require("bcryptjs");
 const register = require("./models/register")
-const fm = require("./models/fileManager")
+const FileManager = require("./models/fileManager");
+const {getUsersWithNoPrivileges, getUsersWithPrivileges, removeUserById, updateUserModeById} = require("./models/manageUserAccess");
 const {auth, authAdmin, authFaculty} = require("./middleware/auth")
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
 require('dotenv').config();
 app.use(cookieParser())
+app.use(methodOverride('_method'));
 
 // Setting up path
 const staticPath = path.join("../public")     
-app.use(express.static(staticPath))
+app.use(express.static(staticPath));
+app.use(express.json());
+app.use(express.urlencoded({extended: true})); 
 app.set('view engine', "hbs");
+
+const upload = multer();
 
 // Setting up partials
 const partialPath = "../partials"
@@ -27,6 +35,9 @@ app.use(express.urlencoded({extended:false}));
 
 const PORT = process.env.PORT || 8000;
 const SUPPORT_MAIL = process.nextTick.SUPPORT_MAIL || "resourcebank.it@nitj.ac.in"
+
+// Instantiate FileManager class
+const fileManager = FileManager.getInstance();
 
 // Making GET requests
 app.get("/login", (req,res)=>{
@@ -50,7 +61,7 @@ app.get("/changePassword", (req, res)=>{
                 return res.status(201).render("forgot", {username: email, password: process.env.FORGOTPASS, otp: otpGenSafe, registered: ""})
             })
             .catch(err => {
-                console.log('Failed to send email:\n' + err)
+                console.error('Failed to send email:\n' + err)
             })  
          }
     })
@@ -59,38 +70,81 @@ app.get("/home", auth, async (req,res)=>{
     let token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
     let isAdmin = token.admin;
     (async function(){
-        const {facultyF, faculty_xl} = await fm.getFacultyData() 
-        res.status(201).render("index", {username: req.body.username, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
+        const {facultyFiles, facultyExcelData} = await fileManager.getFacultyData()
+        res.status(201).render("index", {username: req.body.username, facultyFiles: JSON.stringify(facultyFiles), facultyExcelData: JSON.stringify(facultyExcelData)})
     })()
 })
+
 app.get("/admin", authAdmin, async(req, res)=>{
-        res.status(201).render("admin")
+    try {
+        const allUsers = await getUsersWithNoPrivileges();
+        const privilegedUsers =  await getUsersWithPrivileges();
+        res.status(201).render("admin", { allUsersList: JSON.stringify(allUsers), privilegedUsersList: JSON.stringify(privilegedUsers)});
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+      }
+
 })
+
+app.get("/faculty", authFaculty, async(req, res)=>{
+    try {
+        res.status(201).render("faculty");
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+      }
+
+})
+
+app.get("/admin/academic_schema", authAdmin, async(req, res)=>{
+    try {
+        const acadmicsSchema =  await fileManager.listFolders();
+        res.json(acadmicsSchema);
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+      }
+
+})
+
+app.get("/faculty/academic_schema", authFaculty, async(req, res)=>{
+    try {
+        const acadmicsSchema =  await fileManager.listFolders();
+        res.json(acadmicsSchema);
+      } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+      }
+})
+
 app.get("/curriculum", auth, (req,res)=>{
     res.render("curriculum")
 })
 app.get("/semester", auth, (req,res)=>{
     try{
         (async function(){
-            const {semFiles, pyqFiles, child} = await fm.getSemData(req.query.semNum)
-            return res.status(201).render("semester", {semNum: req.query.semNum, semID: child, pyqs: JSON.stringify(pyqFiles), semF: JSON.stringify(semFiles)})
+            const dict = await fileManager.listFolders();
+            const {semFiles, pyqFilesList, semFolderID} = await fileManager.getSemData(req.query.semNum)
+            return res.status(201).render("semester", {semNum: req.query.semNum, semID: semFolderID, pyqs: JSON.stringify(pyqFilesList), semF: JSON.stringify(semFiles)})
         })()
     }
     catch{
-        console.log(error)
+        console.error(error)
     } 
 })
 app.get("/subject", auth, (req,res)=>{
     try{
         (async function() {
-            const {bookF, notesF, pptF, otherF, excelF} = await fm.getSubData(req.query.semID, req.query.subName)
+            const {bookF, notesF, pptF, otherF, excelF} = await fileManager.getSubData(req.query.semID, req.query.subName)
             return res.status(201).render("subject", {subName: req.query.subName, bookF: JSON.stringify(bookF), notesF: JSON.stringify(notesF), pptF: JSON.stringify(pptF), otherF: JSON.stringify(otherF), excelF: JSON.stringify(excelF)});
       })();
     }
     catch(err){
-        console.log(err);
+        console.error(err);
     }
 })
+
 app.get("/dsa",auth ,(req,res)=>{
     res.render("dsa")
 })
@@ -129,10 +183,10 @@ app.post("/login", async (req, res) => {
                     await register.sendMail(email, SUPPORT_MAIL, "OTP for IT portal" , "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
                     .then(data => {
                         console.log('Mail sent successfully')
-                        return res.status(201).render("verifyOTP", {username: userEncrypted, password: password, otp: otpGenSafe, registered: "No"})
+                        return res.status(201).render("verifyOTP", {username: email,usernameEnc:userEncrypted, password: password, otp: otpGenSafe, registered: "No"})
                     })
                     .catch(err => {
-                        console.log('Failed to send email:\n' + err)
+                        console.error('Failed to send email:\n' + err)
                         return res.status(201).render("login");
                     })  
                 }
@@ -150,7 +204,7 @@ app.post("/login", async (req, res) => {
         }                   
     }
     catch (err){
-        // console.log(err)
+        console.error(err)
     }
 }) 
 
@@ -175,7 +229,7 @@ app.post("/changePassword", async (req, res) =>{
                     return res.status(201).render("forgot", {username: email, usernameEnc: userEncrypted, password: process.env.FORGOTPASS, otp: otpGenSafe})
                 })
                 .catch(err => {
-                    console.log('Failed to send email:\n' + err)
+                    console.error('Failed to send email:\n' + err)
                 })  
              }
         })
@@ -205,7 +259,7 @@ app.post("/home", async (req, res)=>{
                 httpOnly: true
             });
             (async function(){
-                const {facultyF, faculty_xl} = await fm.getFacultyData() 
+                const {facultyF, faculty_xl} = await fileManager.getFacultyData() 
                 return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
             })()
         }
@@ -224,7 +278,7 @@ app.post("/home", async (req, res)=>{
                 httpOnly: true
             });
             (async function(){
-                const {facultyF, faculty_xl} = await fm.getFacultyData() 
+                const {facultyF, faculty_xl} = await fileManager.getFacultyData() 
                 return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
             })()
         }
@@ -237,17 +291,17 @@ app.post("/home", async (req, res)=>{
                 res.cookie("itrbauth", token, {
                     expires: new Date(Date.now() + 1300000000),
                     httpOnly: true
-                })
+                });
                 await registerUser.save()
                 .then(() => console.log("Saved successfully"))
-                .catch((err) => console.log(err));
+                .catch((err) => console.error(err));
                 (async function(){
-                    const {facultyF, faculty_xl} = await fm.getFacultyData() 
+                    const {facultyF, faculty_xl} = await fileManager.getFacultyData() 
                     return res.status(201).render("index", {username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin})
                 })()
             }
             catch(err){
-                console.log(err)
+                console.error(err)
             }
         }
     }
@@ -259,9 +313,114 @@ app.post("/support", auth, async(req, res)=>{
         console.log("Feedback sent successfully")
     }
     catch(err){
-        console.log(err)
+        console.error(err)
     }
     res.status(201).render("feedback")
+})
+
+app.post("/admin/add-subjects",authAdmin, async (req, res)=>{
+    const fileId = req.body.directoryToBeModified;
+    const newName = req.body.newName;
+    try {
+        await fileManager.addSubject(fileId, newName);
+        res.sendStatus(200);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(504);
+    }
+})
+
+app.post("/faculty/upload",authFaculty, upload.single('fileInput'), async (req, res)=>{
+    try {
+        const { body, file } = req;
+        await fileManager.uploadToDrive(body, file);
+        res.sendStatus(200);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(504);
+    }
+})
+
+app.post("/get-files-metadata", auth, async (req,res)=>{
+    try{
+        const files = await fileManager.getListFilesMetadata(req.body);
+        res.status(200).json(files);
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).render("500");
+    }
+}) 
+
+app.delete("/admin/remove-user",authAdmin, async (req, res)=>{
+    const userId = req.body.userToBeRemoved;
+    try {
+        await removeUserById(userId);
+        // Send the ID of the deleted user as a response
+        res.redirect('/admin')
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('500');
+    }
+})
+
+
+app.delete("/admin/delete-directory",authAdmin, async (req, res)=>{
+    const fileId = req.body.directoryToBeDeleted;
+    try {
+        await fileManager.deleteFile(fileId);
+        res.sendStatus(200);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(504);
+    }
+})
+
+app.delete("/faculty/delete-file",authFaculty, async (req, res)=>{
+    const fileId = req.body.fileToBeDeleted;
+    try {
+        await fileManager.deleteFile(fileId);
+        res.sendStatus(200);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(504);
+    }
+})
+
+app.put("/admin/remove-privileged-access",authAdmin, async (req, res)=>{
+    const userId = req.body.userToRemoveAccess;
+    try {
+        await updateUserModeById(userId, false);
+        // Send the ID of the deleted user as a response
+        res.redirect('/admin')
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('500');
+    }
+})
+
+app.put("/admin/provide-privileged-access",authAdmin, async (req, res)=>{
+    const userId = req.body.userToProvideAccess;
+    try {
+        await updateUserModeById(userId, true);
+        // Send the ID of the deleted user as a response
+        res.redirect('/admin')
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('500');
+    }
+})
+
+app.put("/admin/rename-directory",authAdmin, async (req, res)=>{
+    const fileId = req.body.directoryToBeModified;
+    const newName = req.body.newName;
+    try {
+        await fileManager.renameFile(fileId, newName);
+        res.sendStatus(200);
+    } catch (err) {
+        res.sendStatus(504);
+        console.error(err);
+    }
 })
 
 app.listen(PORT, ()=>{

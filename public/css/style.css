@@ -465,6 +465,7 @@
     display: none; 
     position: fixed;
     z-index: 100000;
+    height: 100%;
     padding-top: 100px; 
     left: 0;
     top: 0;
@@ -517,3 +518,17 @@
       width: 100%;
     }
   }
+
+  .alert-custom-area {
+    border-radius: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 1000; /* Set a high z-index value */
+}
+
+.hidden {
+    display: none;
+}

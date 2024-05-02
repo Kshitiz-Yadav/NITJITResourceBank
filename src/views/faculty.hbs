@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Faculty - IT Resource Bank</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    {{>header}}
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </symbol>
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+        </symbol>
+    </svg>
+
+    <!-- Modal -->
+
+    <button type="button" class="btn btn-primary rename-semester-btn" id="ShowalertManagementModal"
+        data-bs-toggle="modal" data-bs-target="#alertManagementModal" style="display: none;"></button>
+    <div class="modal fade" id="alertManagementModal" tabindex="-1" aria-labelledby="alertManagementModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alertManagementModalLabel"></h5>
+                    <button id="closeAlertButton" type="button" class="btn-close" data-bs-dismiss="modal"
+                        data-bs-dismiss="modal" data-bs-target="#alertManagementModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="alertModalBody">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadFileModalLabel">Upload Resources</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-dismiss="modal"
+                        data-bs-target="#uploadFileModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="fileUploadForm" action="/faculty/upload?_method=POST" method="POST">
+                        <input type="hidden" name="_method" id="fileUploadFormMethod" value="POST">
+                        <div id="semesterDiv" class="mb-3 row">
+                            <label for="semesterSelect" class="col-sm-3 col-form-label">Choose Semester:</label>
+                            <div class="col-sm-9">
+                                <select required onchange="setSubjectOptions()" id="semesterSelect"
+                                    name="semesterSelect" class="form-select border border-secondary"
+                                    aria-label="Choose Semester">
+                                </select>
+                            </div>
+                        </div>
+                        <div id="subjectDiv" class="mb-3 row hidden">
+                            <div class="form-text" style="color: crimson;">* If you want to upload PYQs, choose Subject
+                                as <b><i style="color:mediumblue;">"Previous Year Exams"</i></b>. </div>
+                            <label for="subjectSelect" class="col-sm-3 col-form-label">Choose Subject:</label>
+                            <div class="col-sm-9">
+                                <select required id="subjectSelect" onchange="setTypeOptions()" name="subjectSelect"
+                                    class="form-select border border-secondary" aria-label="Choose Subject"></select>
+                            </div>
+                        </div>
+                        <div id="typeDiv" class="mb-3 row hidden">
+                            <label for="typeSelect" class="col-sm-3 col-form-label">Choose Type:</label>
+                            <div class="col-sm-9">
+                                <select required onchange="setFileInfoOptions()" id="typeSelect" name="typeSelect"
+                                    class="form-select border border-secondary" aria-label="Choose Type"></select>
+                            </div>
+                        </div>
+                        <div id="fileInputDiv" class="mb-3 row hidden">
+                        </div>
+                        <div id="fileNameDiv" class="mb-3 row hidden">
+                            <label for="fileName" id="fileNameLabel" class="col-sm-3 col-form-label">File Name To Be
+                                Saved:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="fileName" name="fileName" aria-label="File Name">
+                            </div>
+                        </div>
+                        <div id="fileAuthorDiv" class="mb-3 row hidden">
+                            <label for="fileAuthor" class="col-sm-3 col-form-label">Uploaded By:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="fileAuthor" name="fileAuthor" aria-label="Uploaded By">
+                            </div>
+                        </div>
+                        <div id="fileTopicsDiv" class="mb-3 row hidden">
+                            <label for="fileTopics" class="col-sm-3 col-form-label">Topics Covered:</label>
+                            <div class="col-sm-9">
+                                <input type="text" maxlength="100" required
+                                    class="form-control-plaintext border border-secondary" id="fileTopics"
+                                    name="fileTopics" aria-label="Topics Covered"
+                                    placeholder="Maximum 100 characters are allowed.">
+                            </div>
+                        </div>
+                        <div id="fileDescDiv" class="mb-3 row hidden">
+                            <label for="fileDesc" class="col-sm-3 col-form-label">Description:</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control border border-secondary" id="fileDesc" name="fileDesc"
+                                    aria-label="File Description" row="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="d-grid gap-2 col-9 mx-auto position-absolute end-0">
+                                <button type="button" onclick="submitUploadForm()"
+                                    class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-bs-target="#uploadFileModal" aria-label="Close" id="uploadFileModalClose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white animated slideInDown">Manage Resources</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a class="text-white" href="/home">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Privileged Users</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Academics</h6>
+                <h1 class="mb-5">Manage Academics Resource</h1>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-12 col-sm-12 col-md-12 wow fadeInUp" data-wow-delay="0.1s">
+                    <h5>Upload Resources(File, YT Link, Other Link)</h5>
+                    <div class="d-grid gap-2 col-6">
+                        <button id="upload-resources-btn" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#uploadFileModal" onclick="loadSemList()" disabled=>Wait, we are setting
+                            up...</button>
+                    </div>
+                </div>
+                <div class="progress col-lg-6 col-sm-6 col-md-6 border border-primary"
+                    style="display: none; padding-left:0%; padding-right:0%">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                        style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row g-4">
+                <div class="col-lg-12 col-md-12 col-sm-12 wow fadeInUp" data-wow-delay="0.1s">
+                    <h5>Delete Resources</h5>
+                    <br>
+                    <div id="semesterDivForDelete" class="mb-3 row">
+                        <label for="semesterSelectForDelete" class="col-sm-2 col-form-label"><b>Choose
+                                Semester:</b></label>
+                        <div class="col-sm-4">
+                            <select disabled onchange="setSubjectOptionsForDelete()" id="semesterSelectForDelete" class="form-select border border-secondary">
+                            </select>
+                        </div>
+                    </div>
+                    <div id="subjectDivForDelete" class="mb-3 row">
+                        <div class="form-text" style="color: crimson;">* If you want to Delete PYQs, choose Subject
+                                as <b><i style="color:mediumblue;">"Previous Year Exams"</i></b>. </div>
+                        <label for="semesterSelectForDelete" class="col-sm-2 col-form-label"><b>Choose
+                                Subject:</b></label>
+                        <div class="col-sm-4">
+                            <select disabled onchange="setTypeOptionsForDelete()" required id="subjectSelectForDelete" class="form-select border border-secondary">
+                            </select>
+                        </div>
+                    </div>
+                    <div id="typeDivForDelete" class="mb-3 row">
+                        <label for="typeSelectForDelete" class="col-sm-2 col-form-label"><b>Choose
+                                Type:</b></label>
+                        <div class="col-sm-4">
+                            <select disabled onchange="fetchFilesListForDelete()" required id="typeSelectForDelete" class="form-select border border-secondary">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="tableForDelete" class="hidden">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 20%; text-align: center;">Title</th>
+                                    <th scope="col" style="width: 20%; text-align: center;">Uploaded By</th>
+                                    <th scope="col" style=" text-align: center;">Topics Covered</th>
+                                    <th scope="col" style="width: 10%; text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="filesListForDelete">
+                                <tr>
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-grow text-primary" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-grow text-primary" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-grow text-primary" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-grow text-primary" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact End -->
+
+    {{>footer}}
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <script src="js/main.js"></script>
+    <script src="js/faculty.js"></script>
+    <script>
+        window.onload = function () {
+            document.getElementById("home_menu").classList.remove("active");
+            document.getElementById("curriculam_dropdown").classList.remove("active");
+            document.getElementById("placements_dropdown").classList.remove("active");
+            document.getElementById("feedback_menu").classList.remove("active");
+            document.getElementById("me_dropdown").classList.add("active");
+        }
+    </script>
+</body>
+
+</html>

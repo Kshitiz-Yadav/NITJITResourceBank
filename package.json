@@ -16,7 +16,10 @@
     "googleapis": "^118.0.0",
     "hbs": "^4.2.0",
     "jsonwebtoken": "^9.0.2",
+    "method-override": "^3.0.0",
+    "mongodb": "6.5",
     "mongoose": "^7.0.4",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.2",
     "nodemon": "^2.0.20",
     "xlsx": "^0.18.5"

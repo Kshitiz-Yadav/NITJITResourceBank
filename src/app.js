@@ -67,8 +67,6 @@ app.get("/changePassword", (req, res)=>{
     })
 })
 app.get("/home", auth, async (req,res)=>{
-    let token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
-    let isAdmin = token.admin;
     (async function(){
         const {facultyFiles, facultyExcelData} = await fileManager.getFacultyData()
         res.status(201).render("index", {username: req.body.username, facultyFiles: JSON.stringify(facultyFiles), facultyExcelData: JSON.stringify(facultyExcelData)})
@@ -265,13 +263,8 @@ app.post("/home", async (req, res)=>{
         }
     }
     else{
-        const registerUser = new Users({
-            username: user,
-            password: pass,
-            admin: isAdmin,
-            faculty: false
-        })
         if(userOTP == "Account exists"){
+            const registerUser = await Users.findOne({username: user});
             const token = await registerUser.generateAuthToken()
             res.cookie("itrbauth", token, {
                 expires: new Date(Date.now() + 1300000000),
@@ -287,6 +280,12 @@ app.post("/home", async (req, res)=>{
         }
         else{
             try{
+                const registerUser = new Users({
+                    username: user,
+                    password: pass,
+                    admin: isAdmin,
+                    faculty: false
+                })
                 const token = await registerUser.generateAuthToken()
                 res.cookie("itrbauth", token, {
                     expires: new Date(Date.now() + 1300000000),

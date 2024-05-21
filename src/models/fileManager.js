@@ -17,6 +17,7 @@ class FileManager {
     this.expiryTime = null;
     this.authorized = false;
     this.PARENT = process.env.PARENT;
+    this.ACADEMICS = process.env.ACADEMICS;
     this.FACULTYID = process.env.FACULTY;
   }
 
@@ -58,6 +59,108 @@ class FileManager {
     }
   }
 
+  async getSemList(parentID = this.ACADEMICS) {
+    try {
+      await this.authorize();
+      const service = google.drive("v3");
+      const response = await service.files.list({
+        auth: this.jwtClient,
+        pageSize: 900,
+        q: `'${parentID}' in parents`,
+        fields: 'files(id, name)'
+      });
+      return response.data.files;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getSubList(semName) {
+    try {
+      await this.authorize();
+      const service = google.drive("v3");
+      const semID = await this.getIDByName(this.ACADEMICS, semName);
+      const response = await service.files.list({
+        auth: this.jwtClient,
+        pageSize: 900,
+        q: `'${semID}' in parents`,
+        fields: 'files(id, name)'
+      });
+      return response.data.files;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getFiles(parentID) {
+    try {
+      await this.authorize();
+      const service = google.drive("v3");
+      const response = await service.files.list({
+        auth: this.jwtClient,
+        pageSize: 900,
+        q: `'${parentID}' in parents`,
+        fields: 'files(id, name, originalFilename, properties, description, thumbnailLink)'
+      });
+
+      for (let index = 0; index < (response.data.files).length; index++) {
+        if(response.data.files[index].thumbnailLink){
+        const responseThumbnail = await fetch(response.data.files[index].thumbnailLink);
+        const buffer = await responseThumbnail.arrayBuffer();
+        const bytes = new Uint8Array(buffer);
+        const base64String = Buffer.from(bytes).toString('base64');
+        response.data.files[index].thumbnailLink = `data:image/png;base64,${base64String}`;}
+      }
+      return response.data.files;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getPYQs(semName) {
+    try {
+      const semID = await this.getIDByName(this.ACADEMICS, semName);
+      const directoryId = await this.getIDByName(semID, 'Previous Year Exams')
+      return await this.getFiles(directoryId);
+    } catch (error) {
+      throw (error)
+    }
+  }
+
+  async getSubjectFiles(subID, type) {
+    try {
+      const directoryId = await this.getIDByName(subID, type)
+      return await this.getFiles(directoryId);
+    } catch (error) {
+      throw (error)
+    }
+  }
+
+
+  async downloadFileStream(fileID, res) {
+    try {
+      await this.authorize();
+      const service = google.drive("v3");
+      const response = await service.files.get(
+        { fileId: fileID, alt: 'media', auth: this.jwtClient },
+        { responseType: 'stream' } // Request response as a stream
+      );
+
+      // Set response headers
+      res.setHeader('Content-Type', response.headers['content-type']);
+      // Check if the 'content-length' header is present before setting it
+      if (response.headers['content-length']) {
+        res.setHeader('Content-Length', response.headers['content-length']);
+      }
+      // Pipe the file stream to the response
+      response.data.pipe(res); // Stream the file to the client
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      res.status(500).send('Error downloading file');
+    }
+  }
+
+
   async downloadFile(fileId) {
     try {
       await this.authorize();
@@ -69,26 +172,6 @@ class FileManager {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       return XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async getSemData(semNum) {
-    try {
-      const files = await this.loadChild(this.PARENT);
-      const semFolder = files.find(file => file.name === semNum && file.mimeType === 'application/vnd.google-apps.folder');
-      if (!semFolder) {
-        throw new Error(`Semester folder '${semNum}' not found.`);
-      }
-      const semFolderID = semFolder.id;
-      const semFiles = await this.loadChild(semFolder.id);
-      const pyqFolder = semFiles.find(file => file.name === 'Previous Year Exams' && file.mimeType === 'application/vnd.google-apps.folder');
-      if (!pyqFolder) {
-        throw new Error(`'Previous Year Exams' folder not found in '${semNum}' folder.`);
-      }
-      const pyqFilesList = await this.loadChild(pyqFolder.id);
-      return { semFiles, pyqFilesList, semFolderID };
     } catch (err) {
       throw err;
     }
@@ -139,19 +222,7 @@ class FileManager {
     }
   }
 
-  async convertYoutubeUrlToEmbed(url) {
-    try {
-      const apiUrl = "https://www.youtube.com/oembed?url=" + url + "&format=json";
-      const code = await fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => data.html);
-      return code;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async listFolders(rootId = this.PARENT, level = 0) {
+  async listFolders(rootId = this.ACADEMICS, level = 0) {
     try {
       if (level > 1) return [];
       await this.authorize();
@@ -261,6 +332,7 @@ class FileManager {
     }
   }
 
+
   async createFile(parentID, body, file) {
     try {
       await this.authorize();
@@ -272,8 +344,9 @@ class FileManager {
         mimeType: file.mimetype,
         description: body.fileDesc,
         properties: {
-          fileAuthor : body.fileAuthor,
-          fileTopics : body.fileTopics,
+          Title: fileName,
+          fileAuthor: body.fileAuthor,
+          fileTopics: body.fileTopics,
         }
       };
       const media = {
@@ -289,7 +362,7 @@ class FileManager {
       });
       return res.data.id;
     } catch (err) {
-      throw(err);
+      throw (err);
     }
   }
 
@@ -303,8 +376,8 @@ class FileManager {
         description: body.fileDesc,
         properties: {
           URL: body.fileInput,
-          fileAuthor : body.fileAuthor,
-          fileTopics : body.fileTopics,
+          fileAuthor: body.fileAuthor,
+          fileTopics: body.fileTopics,
         }
       };
       const res = await service.files.create({
@@ -315,7 +388,7 @@ class FileManager {
       });
       return res.data.id;
     } catch (err) {
-      throw(err);
+      throw (err);
     }
   }
 
@@ -324,10 +397,10 @@ class FileManager {
       if (body.typeSelect == 'BOOKS' || body.typeSelect == 'Notes' || body.typeSelect == 'PPT') {
         const directoryId = await this.getIDByName(body.subjectSelect, body.typeSelect);
         return await this.createFile(directoryId, body, file);
-      } else if(body.typeSelect == 'PYQs'){
+      } else if (body.typeSelect == 'PYQs') {
         return await this.createFile(body.subjectSelect, body, file);
       }
-      else{
+      else {
         const directoryId = await this.getIDByName(body.subjectSelect, body.typeSelect);
         return await this.createEmptyFile(directoryId, body);
       }
@@ -336,21 +409,21 @@ class FileManager {
     }
   }
 
-  async getListFilesMetadata(body){
+  async getListFilesMetadata(body) {
     try {
       await this.authorize();
       const service = google.drive("v3");
       let parentID = "";
-      if(body.type == 'PYQs'){
+      if (body.type == 'PYQs') {
         parentID = body.subject;
-      } else{
+      } else {
         parentID = await this.getIDByName(body.subject, body.type);
       }
       const response = await service.files.list({
         auth: this.jwtClient,
         pageSize: 900,
         q: `'${parentID}' in parents`,
-        fields: 'files(id, name, properties)'
+        fields: 'files(id, name, properties, description)'
       });
       return response.data.files;
     } catch (err) {

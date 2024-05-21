@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
 </head>
+
 <body>
 
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
@@ -19,10 +22,11 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <a target="_blank" href="https://www.nitj.ac.in/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary"><img style="max-width: 100%; height:auto" src="img/unnamed.png" alt="NITJ LOGO"></h2>
+            <h2 class="m-0 text-primary"><img style="max-width: 100%; height:auto" src="img/unnamed.png"
+                    alt="NITJ LOGO"></h2>
             <span class="m-0 text-primary text-head" style="padding-left: 2vw;">
-                डा बी आर अम्बेडकर राष्ट्रीय प्रौद्योगिकी संस्थान, जालंधर<br/>
-                 Dr B R Ambedkar National Institute of Technology, Jalandhar</span>
+                डा बी आर अम्बेडकर राष्ट्रीय प्रौद्योगिकी संस्थान, जालंधर<br />
+                Dr B R Ambedkar National Institute of Technology, Jalandhar</span>
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -31,20 +35,14 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="/home" id="home_menu" class="nav-item nav-link active">Home</a>
                 <div class="nav-item dropdown">
-                    <a id="curriculam_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Curriculum</a>
-                    <div class="dropdown-menu fade-down m-0">
-                        <span class="dropdown-item click_cursor" onclick="redirectToSemester('Semester 3')">Semester 3</span>
-                        <span class="dropdown-item click_cursor" onclick="redirectToSemester('Semester 4')">Semester 4</span>
-                        <span class="dropdown-item click_cursor" onclick="redirectToSemester('Semester 5')">Semester 5</span>
-                        <span class="dropdown-item click_cursor" onclick="redirectToSemester('Semester 6')">Semester 6</span>
-                        <span class="dropdown-item click_cursor" onclick="redirectToSemester('Semester 7')">Semester 7</span>
-                        <span class="dropdown-item click_cursor" onclick="redirectToSemester('Semester 8')">Semester 8</span>
-                        <span class="dropdown-item click_cursor" onclick="redirectToSemester('Open Electives')">Open Electives</span>
-                        <span class="dropdown-item click_cursor" onclick="redirectToSemester('Departmental Electives')">Departmental Electives</span>
+                    <a id="curriculam_dropdown" class="nav-link dropdown-toggle"
+                        data-bs-toggle="dropdown">Curriculum</a>
+                    <div id="academics_menu" class="dropdown-menu fade-down m-0">
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a id="placements_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Placements</a>
+                    <a id="placements_dropdown" class="nav-link dropdown-toggle"
+                        data-bs-toggle="dropdown">Placements</a>
                     <div class="dropdown-menu fade-down m-0">
                         <span class="dropdown-item click_cursor">Interview Experiences</span>
                         <a href="/dsa"><span class="dropdown-item click_cursor">DSA</span></a>
@@ -55,8 +53,10 @@
                 <div class="nav-item dropdown">
                     <span id="me_dropdown" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Me</span>
                     <div class="dropdown-menu fade-down m-0">
-                        <a href="/admin"><span id="adminPrivDrop" class="dropdown-item click_cursor">Admin Access</span></a>
-                        <a href="/faculty"><span id="adminPrivDrop" class="dropdown-item click_cursor">Privileged Access</span></a>
+                        <a href="/admin"><span id="adminPrivDrop" class="dropdown-item click_cursor">Admin
+                                Access</span></a>
+                        <a href="/faculty"><span id="adminPrivDrop" class="dropdown-item click_cursor">Privileged
+                                Access</span></a>
                         <a href="/changePassword"><span class="dropdown-item click_cursor">Change Password</span></a>
                         <a href="/login"><span class="dropdown-item click_cursor">Logout</span></a>
                     </div>
@@ -66,17 +66,35 @@
         </div>
     </nav>
     <form id="semesterFormH" method="get" hidden>
-        <input type="text" name="semNum" id="semNumH" hidden>
+        <input type="text" name="sem" id="semNumH" hidden>
     </form>
     <!-- Navbar End -->
     <script>
+        academics_menu = document.getElementById("academics_menu");
+            fetch('/get-academics-sem-list', {
+                method: 'GET'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        const element = document.createElement("span");
+                        element.classList.add("dropdown-item");
+                        element.classList.add("click_cursor");
+                        element.setAttribute("onclick", `redirectToSemester('${item.name}')`)
+                        element.innerHTML = `${item.name}`;
+                        academics_menu.appendChild(element);
+                    });
+                })
+                .catch(error => console.error('Error fetching academics menu:', error));
         function redirectToSemester(semester) {
             $('#spinner').addClass('show');
-            document.getElementById("semNumH").value = semester
-            let form = document.getElementById("semesterFormH")
-            form.setAttribute("action", "/semester")
-            form.submit()
+            document.getElementById("semNumH").value = semester;
+            let form = document.getElementById("semesterFormH");
+            form.setAttribute("action", "/semester");
+            form.submit();
         }
+        
     </script>
 </body>
+
 </html>

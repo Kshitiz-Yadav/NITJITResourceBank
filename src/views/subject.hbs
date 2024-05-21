@@ -14,7 +14,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -34,6 +36,80 @@
 <body>
     {{>header}}
 
+    <div class="modal fade" id="showFileModal" tabindex="-1" aria-labelledby="showFileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="showFileModalLabel">Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-dismiss="modal"
+                        data-bs-target="#showFileModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <img class="img-fluid rounded-start" id="subjectThumbnail"
+                                    src="img/preview_thumbnail.png" alt="Thumbnail">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <h5 class="card-title" id="subjectTitle">Card title</h5>
+                                    <p class="card-text" id="subjectAuther"><b>Uploaded By:</b> </p>
+                                    <p class="card-text" id="subjectTopics"><b>Topics Covered:</b> </p>
+                                    <p class="card-text" id="subjectDesc"><b>Description:</b> </p>
+                                    <input hidden type="text" id="subjectID">
+                                    <input hidden type="text" id="subjectFullName">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="font-monospace fs-6 text-end" style="color: dodgerblue;" id="download_message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Upvote</button>
+                    <button type="button" class="btn btn-danger">Downvote</button>
+                    <button type="button" id="openFileBtn" class="btn btn-primary">Open File</button>
+                    <button type="button" id="downloadFileBtn" class="btn btn-primary">Download File</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-bs-target="#showFileModal" aria-label="Close" id="showFileModalClose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="showURLModal" tabindex="-1" aria-labelledby="showURLModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="showURLModalLabel">Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-dismiss="modal"
+                        data-bs-target="#showURLModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-12">
+                                <div class="card-body">
+                                    <h5 class="card-title" id="urlTitle">Card title</h5>
+                                    <p class="card-text" id="urlAuther"><b>Uploaded By:</b> </p>
+                                    <p class="card-text" id="urlTopics"><b>Topics Covered:</b> </p>
+                                    <p class="card-text" id="urlDesc"><b>Description:</b> </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Upvote</button>
+                    <button type="button" class="btn btn-danger">Downvote</button>
+                    <a id="visitURLBtn" target="_blank" class="btn btn-primary">Visit</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-bs-target="#showURLModal" aria-label="Close" id="showURLModalClose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Header Start -->
     <div class="container-fluid bg-primary py-5 mb-5 page-header">
         <div class="container py-5">
@@ -46,15 +122,10 @@
     </div>
     <!-- Header End -->
 
-    {{>preview}}
 
     <form id="subjectForm" hidden>
         <input id="subName" value="{{subName}}" hidden>
-        <input id="bookFiles" value="{{bookF}}" hidden>
-        <input id="notesFiles" value="{{notesF}}" hidden>
-        <input id="pptFiles" value="{{pptF}}" hidden>
-        <input id="otherFiles" value="{{otherF}}" hidden>
-        <input id="excelFiles" value="{{excelF}}" hidden>
+        <input id="subID" value="{{subID}}" hidden>
     </form>
 
     <!-- Service Start -->
@@ -64,7 +135,7 @@
                 <h6 class="section-title bg-white text-center text-primary px-3">Notes</h6>
                 <h1 class="mb-5">Notes By Students</h1>
             </div>
-            <div class="row g-4" id="notes">
+            <div class="row g-4" id="Notes">
             </div>
         </div>
         <br>
@@ -73,7 +144,7 @@
                 <h6 class="section-title bg-white text-center text-primary px-3">PPTs</h6>
                 <h1 class="mb-5">Power Point Presentation</h1>
             </div>
-            <div class="row g-4" id="ppts">
+            <div class="row g-4" id="PPT">
             </div>
         </div>
         <br>
@@ -82,7 +153,7 @@
                 <h6 class="section-title bg-white text-center text-primary px-3">Books</h6>
                 <h1 class="mb-5">Digital Books</h1>
             </div>
-            <div class="row g-4" id="books">
+            <div class="row g-4" id="BOOKS">
             </div>
         </div>
         <br>
@@ -95,15 +166,15 @@
             </div>
         </div>
         <br>
-        <div class="container">
+
+        <div id="others" class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Others</h6>
                 <h1 class="mb-5">Other Resources</h1>
             </div>
-            <div class="row g-4" id="others">
-            </div>
         </div>
-        <br>
+    </div>
+    <br>
     </div>
     <!-- Service End -->
 
@@ -121,7 +192,7 @@
     <script src="js/main.js"></script>
     <script src="js/subject.js"></script>
     <script>
-        window.onload = function(){
+        window.onload = function () {
             document.getElementById("home_menu").classList.remove("active");
             document.getElementById("curriculam_dropdown").classList.add("active");
             document.getElementById("placements_dropdown").classList.remove("active");
@@ -130,4 +201,5 @@
         }
     </script>
 </body>
+
 </html>

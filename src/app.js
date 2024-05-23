@@ -68,8 +68,7 @@ app.get("/changePassword", (req, res) => {
 })
 app.get("/home", auth, async (req, res) => {
     (async function () {
-        const { facultyFiles, facultyExcelData } = await fileManager.getFacultyData()
-        res.status(201).render("index", { username: req.body.username, facultyFiles: JSON.stringify(facultyFiles), facultyExcelData: JSON.stringify(facultyExcelData) })
+        res.status(201).render("index")
     })()
 })
 
@@ -103,7 +102,26 @@ app.get("/admin/academic_schema", authAdmin, async (req, res) => {
         console.error(error);
         res.status(500).render("500");
     }
+})
 
+app.get("/admin/fetch-schedule", authAdmin, async (req, res) => {
+    try {
+        const schedule = await fileManager.listSchedule();
+        res.json(schedule);
+    } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+    }
+})
+
+app.get("/admin/fetch-faculty", authAdmin, async (req, res) => {
+    try {
+        const faculty = await fileManager.listFaculty();
+        res.json(faculty);
+    } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+    }
 })
 
 app.get("/faculty/academic_schema", authFaculty, async (req, res) => {
@@ -120,6 +138,26 @@ app.get("/get-academics-sem-list", auth, async (req, res) => {
     try {
         const acadmicsSemList = await fileManager.getSemList();
         res.json(acadmicsSemList);
+    } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+    }
+})
+
+app.get("/get-faculty-list", auth, async (req, res) => {
+    try {
+        const facultyList = await fileManager.getScheduleOrFaculty("faculty");
+        res.json(facultyList);
+    } catch (error) {
+        console.error(error);
+        res.status(500).render("500");
+    }
+})
+
+app.get("/get-schedule-list", auth, async (req, res) => {
+    try {
+        const scheduleList = await fileManager.getScheduleOrFaculty("schedule");
+        res.json(scheduleList);
     } catch (error) {
         console.error(error);
         res.status(500).render("500");
@@ -299,7 +337,7 @@ app.post("/home", async (req, res) => {
             });
             (async function () {
                 const { facultyF, faculty_xl } = await fileManager.getFacultyData()
-                return res.status(201).render("index", { username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin })
+                return res.status(201).render("index")
             })()
         }
     }
@@ -313,7 +351,7 @@ app.post("/home", async (req, res) => {
             });
             (async function () {
                 const { facultyF, faculty_xl } = await fileManager.getFacultyData()
-                return res.status(201).render("index", { username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin })
+                return res.status(201).render("index")
             })()
         }
         else if (!await bcrypt.compare(userOTP, otpGen)) {
@@ -337,7 +375,7 @@ app.post("/home", async (req, res) => {
                     .catch((err) => console.error(err));
                 (async function () {
                     const { facultyF, faculty_xl } = await fileManager.getFacultyData()
-                    return res.status(201).render("index", { username: user, facultyF: JSON.stringify(facultyF), faculty_xl: JSON.stringify(faculty_xl), isAdmin: isAdmin })
+                    return res.status(201).render("index")
                 })()
             }
             catch (err) {
@@ -366,6 +404,28 @@ app.post("/admin/add-subjects", authAdmin, async (req, res) => {
         res.sendStatus(200);
     } catch (err) {
         console.error(err);
+        res.sendStatus(504);
+    }
+})
+
+app.post("/admin/upload-timetable", authFaculty, upload.single('fileInput'), async (req, res) => {
+    try {
+        const { body, file } = req;
+        await fileManager.uploadTimetable(body, file);
+        res.sendStatus(200);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(504);
+    }
+})
+
+app.post("/admin/upload-faculty", authFaculty, upload.single('photoInput'), async (req, res) => {
+    try {
+        const { body, file } = req;
+        await fileManager.uploadFaculty(body, file);
+        res.sendStatus(200);
+    } catch (error) {
+        console.error(error);
         res.sendStatus(504);
     }
 })

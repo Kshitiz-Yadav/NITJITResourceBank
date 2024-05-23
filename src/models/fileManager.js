@@ -17,6 +17,7 @@ class FileManager {
     this.expiryTime = null;
     this.authorized = false;
     this.PARENT = process.env.PARENT;
+    this.SCHEDULE = process.env.SCHEDULE;
     this.ACADEMICS = process.env.ACADEMICS;
     this.FACULTYID = process.env.FACULTY;
   }
@@ -74,6 +75,7 @@ class FileManager {
       throw err;
     }
   }
+  
 
   async getSubList(semName) {
     try {
@@ -392,6 +394,72 @@ class FileManager {
     }
   }
 
+  async uploadTimetable(body, file) {
+    try {
+      if(!file.mimetype.startsWith('image/')){
+        throw new TypeError("Upload Image File Only.")
+      }
+      await this.authorize();
+      const service = google.drive("v3");
+      const fileMetadata = {
+        name: body.fileName,
+        parents: [this.SCHEDULE],
+        mimeType: file.mimetype
+      };
+      const media = {
+        mimeType: file.mimetype,
+        body: Readable.from(file.buffer)
+      };
+      const res = await service.files.create({
+        auth: this.jwtClient,
+        resource: fileMetadata,
+        media: media,
+        fields: 'id',
+        uploadType: 'resumable',
+      });
+      return res.data.id;
+    } catch (error) {
+      console.error('Error uploading file to Google Drive:', error);
+      throw(error);
+    }
+  }
+
+  async uploadFaculty(body, file) {
+    try {
+      if(!file.mimetype.startsWith('image/')){
+        throw new TypeError("Upload Image File Only.")
+      }
+      await this.authorize();
+      const service = google.drive("v3");
+      const fileMetadata = {
+        name: body.facultyEmail,
+        parents: [this.FACULTYID],
+        properties: {
+          facultyProfile: body.facultyProfile,
+          facultyRole: body.facultyRole,
+          facultyName: body.facultyName,
+          facultyContact: body.facultyContact,
+        },
+        mimeType: file.mimetype
+      };
+      const media = {
+        mimeType: file.mimetype,
+        body: Readable.from(file.buffer)
+      };
+      const res = await service.files.create({
+        auth: this.jwtClient,
+        resource: fileMetadata,
+        media: media,
+        fields: 'id',
+        uploadType: 'resumable',
+      });
+      return res.data.id;
+    } catch (error) {
+      console.error('Error uploading file to Google Drive:', error);
+      throw(error);
+    }
+  }
+
   async uploadToDrive(body, file) {
     try {
       if (body.typeSelect == 'BOOKS' || body.typeSelect == 'Notes' || body.typeSelect == 'PPT') {
@@ -430,6 +498,75 @@ class FileManager {
       throw err;
     }
   }
+
+  async listSchedule() {
+    try {
+      await this.authorize();
+      const service = google.drive("v3");
+      const response = await service.files.list({
+        auth: this.jwtClient,
+        pageSize: 900,
+        q: `'${this.SCHEDULE}' in parents`,
+        fields: 'files(id, name, properties)'
+      });
+      return response.data.files;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async listFaculty() {
+    try {
+      await this.authorize();
+      const service = google.drive("v3");
+      const response = await service.files.list({
+        auth: this.jwtClient,
+        pageSize: 900,
+        q: `'${this.FACULTYID}' in parents`,
+        fields: 'files(id, name, properties)'
+      });
+      return response.data.files;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getScheduleOrFaculty(type) {
+    try {
+      await this.authorize();
+      const service = google.drive('v3');
+      let parentID = '';
+      if (type == 'schedule') {
+        parentID = this.SCHEDULE;
+      } else if (type == 'faculty') {
+        parentID = this.FACULTYID;
+      }
+  
+      const response = await service.files.list({
+        auth: this.jwtClient,
+        pageSize: 900,
+        q: `'${parentID}' in parents`,
+        fields: 'files(id, name, mimeType,properties, thumbnailLink)'
+      });
+  
+      for (let file of response.data.files) {
+        if (file.mimeType.startsWith('image/')) {
+          const imageResponse = await service.files.get(
+            { fileId: file.id, alt: 'media', auth: this.jwtClient },
+            { responseType: 'arraybuffer' }
+          );
+          const buffer = imageResponse.data;
+          const base64String = Buffer.from(new Uint8Array(buffer)).toString('base64');
+          file.thumbnailLink = `data:${file.mimeType};base64,${base64String}`;
+        }
+      }
+  
+      return response.data.files;
+    } catch (err) {
+      throw err;
+    }
+  }
+  
 
 }
 

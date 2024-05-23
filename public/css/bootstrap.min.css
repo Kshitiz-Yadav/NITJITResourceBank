@@ -615,6 +615,12 @@ progress {
     height: auto
 }
 
+.img-fluid-faculty {
+    width: 278px;
+    height: 278px;
+    object-fit: cover;
+}
+
 .img-thumbnail {
     padding: .25rem;
     background-color: #fff;

@@ -62,90 +62,14 @@
                 <h6 class="section-title bg-white text-center text-primary px-3">Semesters</h6>
                 <h1 class="mb-5">All Semesters</h1>
             </div>
-            <div class="row g-4 ">
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 3')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Semester 3</h5>
-                            {{!-- <p>OOPS / DS / DCN /</p>
-                            <p>DBMS / CSA / NM</p> --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 5')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Semester 5</h5>
-                            {{!-- <p>SE / CG / DM /</p>
-                            <p>WebD / Crypto</p> --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.7s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 7')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Semester 7</h5>
-                            {{!-- <p>Software Testing /</p>
-                            <p>Cloud Computing</p> --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.7s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Departmental Electives')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Departmental Electives</h5>
-                            {{!-- <p>Data Analytics /</p>
-                            <p>Advanced OS</p> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="row g-4">
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s" >
-                    {{!-- <a href="/curriculum/semester?semester=semester-4" style=""> --}}
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 4')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Semester 4</h5>
-                            {{!-- <p>IDAA / OS / JAVA /</p>
-                            <p>DMDWC / FLAT / ECO</p> --}}
-                        </div>
-                    </div>
-                    {{!-- </a> --}}
-                </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.3s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 6')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Semester 6</h5>
-                            {{!-- <p>ML / Mobile App Dev /</p>
-                            <p>Soft Computing / OOMD</p> --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Semester 8')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Semester 8</h5>
-                            {{!-- <p>System Programming</p>
-                            <p>E-Com / DSSM</p> --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 wow fadeInUp " data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3 click_cursor" onclick="redirectToSemester('Open Electives')">
-                        <div class="p-4">
-                            <h5 class="mb-3">Open Electives</h5>
-                            {{!-- <p>BT / ME / IPE / ICE / ME / EE</p>
-                            <p>CE / TT / CE / PH / CH / HM / MA</p> --}}
-                        </div>
-                    </div>
-                </div>
+            <div class="row g-4 " id="semester-list">
+               
             </div>
         </div>
     </div>
     <!-- Service End -->
-    <form id="semesterForm" method="post" hidden>
-        <input type="text" name="semNum" id="semNum" hidden>
+    <form id="semesterForm" method="get" hidden>
+        <input type="text" name="sem" id="semNum" hidden>
     </form>
 
     {{>footer}}
@@ -160,6 +84,7 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script src="js/curriculum.js"></script>
     <script>
         window.onload = function(){
             document.getElementById("home_menu").classList.remove("active");

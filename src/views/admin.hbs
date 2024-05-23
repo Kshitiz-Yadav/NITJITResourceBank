@@ -41,7 +41,8 @@
         <input id="privilegedUsersList" value="{{privilegedUsersList}}" hidden>
     </form>
 
-    <form id="deleteDirectoryForm" action="/admin/delete-directory?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to delete the directory?');" hidden>
+    <form id="deleteDirectoryForm" action="/admin/delete-directory?_method=DELETE" method="POST"
+        onsubmit="return confirm('Are you sure you want to delete?');" hidden>
         <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" name="directoryToBeDeleted" id="directoryToBeDeleted" value="">
     </form>
@@ -82,6 +83,121 @@
         </div>
     </div>
 
+    <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadFileModalLabel">Upload File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-dismiss="modal"
+                        data-bs-target="#uploadFileModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="fileUploadForm" action="/admin/upload-timetable?_method=POST" method="POST">
+                        <input type="hidden" name="_method" id="fileUploadFormMethod" value="POST">
+                        <div id="fileNameDiv" class="mb-3 row">
+                            <label for="fileName" id="fileNameLabel" class="col-sm-3 col-form-label">Semester
+                                Name:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="fileName" name="fileName" aria-label="File Name">
+                            </div>
+                        </div>
+                        <div id="fileInputDiv" class="mb-3 row">
+                            <label for="fileInput" class="col-sm-3 col-form-label">Select File(Image Files Only):</label>
+                            <div class="col-sm-9">
+                                <input required class="form-control border border-secondary" type="file" id="fileInput"
+                                    name="fileInput" aria-label="File Input">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="d-grid gap-2 col-9 mx-auto position-absolute end-0">
+                                <button type="button" onclick="submitUploadForm()"
+                                    class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-bs-target="#uploadFileModal" aria-label="Close" id="uploadFileModalClose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="uploadFacultyModal" tabindex="-1" aria-labelledby="uploadFacultyModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadFacultyModalLabel">Upload File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-dismiss="modal"
+                        data-bs-target="#uploadFacultyModal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="facultyUploadForm" action="/admin/upload-faculty?_method=POST" method="POST">
+                        <input type="hidden" name="_method" id="facultyUploadFormMethod" value="POST">
+                        <div id="facultyNameDiv" class="mb-3 row">
+                            <label for="facultyName" id="facultyNameLabel" class="col-sm-3 col-form-label">Faculty
+                                Name:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="facultyName" name="facultyName" aria-label="Faculty Name">
+                            </div>
+                        </div>
+                        <div id="facultyRoleDiv" class="mb-3 row">
+                            <label for="facultyRole" id="facultyRoleLabel" class="col-sm-3 col-form-label">Faculty
+                                Designation:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="facultyRole" name="facultyRole" aria-label="Faculty Role">
+                            </div>
+                        </div>
+                        <div id="facultyProfileDiv" class="mb-3 row">
+                            <label for="facultyProfile" id="facultyProfileLabel" class="col-sm-3 col-form-label">Profile Link:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="facultyProfile" name="facultyProfile" aria-label="Faculty Profile">
+                            </div>
+                        </div>
+                        <div id="facultyEmailDiv" class="mb-3 row">
+                            <label for="facultyEmail" id="facultyEmailLabel" class="col-sm-3 col-form-label">Email:</label>
+                            <div class="col-sm-9">
+                                <input type="text" required class="form-control-plaintext border border-secondary"
+                                    id="facultyEmail" name="facultyEmail" aria-label="Faculty Email">
+                            </div>
+                        </div>
+                        <div id="facultyContactDiv" class="mb-3 row">
+                            <label for="facultyContact" id="facultyContactLabel" class="col-sm-3 col-form-label">Contact No.:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control-plaintext border border-secondary" required
+                                    id="facultyContact" name="facultyContact" aria-label="Faculty Contact" value="+91xxxxxxxxxx" placeholder="+91xxxxxxxxxx">
+                            </div>
+                        </div>
+                        <div id="fileInputDiv" class="mb-3 row">
+                            <label for="photoInput" class="col-sm-3 col-form-label">Select Photo(Image Files Only):</label>
+                            <div class="col-sm-9">
+                                <input required class="form-control border border-secondary" type="file" id="photoInput"
+                                    name="photoInput" aria-label="Photo Input">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="d-grid gap-2 col-9 mx-auto position-absolute end-0">
+                                <button type="button" onclick="submitFacultyUploadForm()"
+                                    class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-bs-target="#uploadFacultyModal" aria-label="Close" id="uploadFacultyModalClose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="schemaManagementModal" tabindex="-1" aria-labelledby="schemaManagementModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -97,7 +213,8 @@
                         <input type="hidden" name="directoryToBeModified" id="directoryToBeModified">
                         <div class="mb-3">
                             <label for="newName" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="newName" placeholder="HMCI-201: Economics for Engineers" name="newName" required>
+                            <input type="text" class="form-control" id="newName"
+                                placeholder="HMCI-201: Economics for Engineers" name="newName" required>
                         </div>
                         <div id="subDiv" class="mb-3">
                             <label for="subType" class="form-label">Subject Type</label>
@@ -256,28 +373,119 @@
                 </div>
             </div>
         </div>
-        <!-- Contact End -->
+    </div>
 
-        {{>footer}}
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Academics</h6>
+            <h1 class="mb-5">Manage Schedule and Faculty</h1>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-6 col-sm-12 col-md-12 wow fadeInUp" data-wow-delay="0.1s">
+                <h5>Upload TimeTable</h5>
+                <div class="d-grid gap-2 col-6">
+                    <button id="upload-timetable-btn" type="button" class="btn btn-primary timetable-upload" data-bs-toggle="modal"
+                        data-bs-target="#uploadFileModal">Upload Timetable</button>
+                </div>
+                <br>
+                <h5>Delete TimeTable</h5>
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="lib/wow/wow.min.js"></script>
-        <script src="lib/easing/easing.min.js"></script>
-        <script src="lib/waypoints/waypoints.min.js"></script>
-        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+                <div id="tableForDelete">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 20%; text-align: center;">Semester Name</th>
+                                <th scope="col" style="width: 10%; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleListForDelete">
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-grow text-primary" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-grow text-primary" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        <script src="js/main.js"></script>
-        <script src="js/admin.js"></script>
-        <script>
-            window.onload = function () {
-                document.getElementById("home_menu").classList.remove("active");
-                document.getElementById("curriculam_dropdown").classList.remove("active");
-                document.getElementById("placements_dropdown").classList.remove("active");
-                document.getElementById("feedback_menu").classList.remove("active");
-                document.getElementById("me_dropdown").classList.add("active");
-            }
-        </script>
+            <div class="col-lg-6 col-sm-12 col-md-12 wow fadeInUp" data-wow-delay="0.1s">
+                <h5>Upload Faculty</h5>
+                <div class="d-grid gap-2 col-6">
+                    <button id="upload-faculty-btn" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#uploadFacultyModal">Upload Faculty</button>
+                </div>
+                <br>
+                <h5>Delete Faculty</h5>
+
+                <div id="tableForDeleteFaculty">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 20%; text-align: center;">Faculty Email</th>
+                                <th scope="col" style="width: 10%; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="facultyListForDelete">
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-grow text-primary" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-grow text-primary" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row g-4">
+
+        </div>
+    </div>
+    <!-- Contact End -->
+
+    {{>footer}}
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        window.onload = function () {
+            document.getElementById("home_menu").classList.remove("active");
+            document.getElementById("curriculam_dropdown").classList.remove("active");
+            document.getElementById("placements_dropdown").classList.remove("active");
+            document.getElementById("feedback_menu").classList.remove("active");
+            document.getElementById("me_dropdown").classList.add("active");
+        }
+    </script>
 </body>
 
 </html>

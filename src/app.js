@@ -9,6 +9,7 @@ const register = require("./models/register")
 const FileManager = require("./models/fileManager");
 const { getUsersWithNoPrivileges, getUsersWithPrivileges, removeUserById, updateUserModeById } = require("./models/manageUserAccess");
 const { auth, authAdmin, authFaculty } = require("./middleware/auth")
+const { createFileInfo, deleteFileInfo, upvoteFile, downvoteFile, removeUpvote, removeDownvote, getFileVotesStatus } = require("./models/rating");
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
 require('dotenv').config();
@@ -171,7 +172,10 @@ app.get("/curriculum", auth, (req, res) => {
 app.get("/get-pyqs", auth, (req, res) => {
     try {
         (async function () {
-            const PYQs = await fileManager.getPYQs(req.query.sem);
+            const token = req.cookies.itrbauth;
+            const verifyUser = jwt.verify(token, process.env.SECRET);
+            const userId = verifyUser.username;
+            const PYQs = await fileManager.getPYQs(req.query.sem, userId);
             return res.status(201).json(PYQs);
         })();
     }
@@ -183,7 +187,10 @@ app.get("/get-pyqs", auth, (req, res) => {
 app.get("/get-subFiles", auth, (req, res) => {
     try {
         (async function () {
-            const Files = await fileManager.getSubjectFiles(req.query.subject, req.query.type);
+            const token = req.cookies.itrbauth;
+            const verifyUser = jwt.verify(token, process.env.SECRET);
+            const userId = verifyUser.username;
+            const Files = await fileManager.getSubjectFiles(req.query.subject, req.query.type, userId);
             return res.status(201).json(Files);
         })();
     }
@@ -208,14 +215,14 @@ app.get("/semester", auth, async (req, res) => {
         await fileManager.getPYQs(req.query.sem);
         return res.status(201).render("semester", { subjects: JSON.stringify(subjects), semName: req.query.sem });
     }
-    catch {
+    catch (error) {
         console.error(error)
     }
 })
 
 app.get("/subject", auth, async (req, res) => {
     try {
-        return res.status(201).render("subject", {subName: req.query.subjectName , subID: req.query.subjectID});
+        return res.status(201).render("subject", { subName: req.query.subjectName, subID: req.query.subjectID });
     }
     catch (err) {
         console.error(err);
@@ -336,7 +343,6 @@ app.post("/home", async (req, res) => {
                 httpOnly: true
             });
             (async function () {
-                const { facultyF, faculty_xl } = await fileManager.getFacultyData()
                 return res.status(201).render("index")
             })()
         }
@@ -350,7 +356,6 @@ app.post("/home", async (req, res) => {
                 httpOnly: true
             });
             (async function () {
-                const { facultyF, faculty_xl } = await fileManager.getFacultyData()
                 return res.status(201).render("index")
             })()
         }
@@ -374,7 +379,6 @@ app.post("/home", async (req, res) => {
                     .then(() => console.log("Saved successfully"))
                     .catch((err) => console.error(err));
                 (async function () {
-                    const { facultyF, faculty_xl } = await fileManager.getFacultyData()
                     return res.status(201).render("index")
                 })()
             }
@@ -395,6 +399,61 @@ app.post("/support", auth, async (req, res) => {
     }
     res.status(201).render("feedback")
 })
+
+app.post('/file/upvote', auth, async (req, res) => {
+    const { fileId } = req.body;
+    const token = req.cookies.itrbauth;
+    const verifyUser = jwt.verify(token, process.env.SECRET);
+    const userId = verifyUser.username;
+    try {
+        await upvoteFile(fileId, userId);
+        res.status(200).send('Upvoted successfully');
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.post('/file/downvote', auth, async (req, res) => {
+    const { fileId } = req.body;
+    const token = req.cookies.itrbauth;
+    const verifyUser = jwt.verify(token, process.env.SECRET);
+    const userId = verifyUser.username;
+
+    try {
+        await downvoteFile(fileId, userId);
+        res.status(200).send('Downvoted successfully');
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.post('/file/remove-upvote', auth, async (req, res) => {
+    const { fileId } = req.body;
+    const token = req.cookies.itrbauth;
+    const verifyUser = jwt.verify(token, process.env.SECRET);
+    const userId = verifyUser.username;
+
+    try {
+        await removeUpvote(fileId, userId);
+        res.status(200).send('Upvote removed successfully');
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.post('/file/remove-downvote', auth, async (req, res) => {
+    const { fileId } = req.body;
+    const token = req.cookies.itrbauth;
+    const verifyUser = jwt.verify(token, process.env.SECRET);
+    const userId = verifyUser.username;
+
+    try {
+        await removeDownvote(fileId, userId);
+        res.status(200).send('Downvote removed successfully');
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
 app.post("/admin/add-subjects", authAdmin, async (req, res) => {
     const fileId = req.body.directoryToBeModified;

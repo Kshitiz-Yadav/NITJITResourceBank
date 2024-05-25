@@ -65,12 +65,15 @@
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-2">
-                                <img class="img-fluid rounded-start" id="PYQsThumbnail" src="img/preview_thumbnail.png" alt="Thumbnail">
+                                <img class="img-fluid rounded-start" id="PYQsThumbnail" src="img/preview_thumbnail.png"
+                                    alt="Thumbnail">
                             </div>
                             <div class="col-md-10">
                                 <div class="card-body">
                                     <h5 class="card-title" id="PYQsTitle">Card title</h5>
-                                    <p class="card-text" id="PYQsAuther"><b>Uploaded By:</b> </p>
+                                    <p class="card-text" id="PYQsUpvotes"><b>Close and Reopen...</b> </p>
+                                    <p class="card-text" id="PYQsDownvotes"><b>Close and Reopen...</b> </p>
+                                    <p class="card-text" id="PYQsAuther"><b>Close and Reopen...</b> </p>
                                     <p class="card-text" id="PYQsTopics"><b>Topics Covered:</b> </p>
                                     <p class="card-text" id="PYQsDesc"><b>Description:</b> </p>
                                     <input hidden type="text" id="PYQsID">
@@ -81,9 +84,7 @@
                     </div>
                     <p class="font-monospace fs-6 text-end" style="color: dodgerblue;" id="download_message"></p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success">Upvote</button>
-                    <button type="button" class="btn btn-danger">Downvote</button>
+                <div class="modal-footer" id="modal-buttons">
                     <button type="button" id="openFileBtn" class="btn btn-primary">Open File</button>
                     <button type="button" id="downloadFileBtn" class="btn btn-primary">Download File</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
@@ -115,6 +116,7 @@
                 <h1 class="mb-5">Previous Year Question Papers</h1>
             </div>
             <div class="row g-4" id="pyqs">
+
             </div>
         </div>
     </div>

@@ -4,6 +4,7 @@ const fetch = require('node-fetch'); // Import fetch for making HTTP requests
 require('dotenv').config();
 const { Readable } = require('stream');
 const key = require("../../private_key.json");
+const {createFileInfo, deleteFileInfo, upvoteFile, downvoteFile, removeUpvote, removeDownvote, getFileVotesStatus} = require("./rating")
 
 class FileManager {
   constructor() {
@@ -94,7 +95,7 @@ class FileManager {
     }
   }
 
-  async getFiles(parentID) {
+  async getFiles(parentID, userId) {
     try {
       await this.authorize();
       const service = google.drive("v3");
@@ -112,27 +113,43 @@ class FileManager {
         const bytes = new Uint8Array(buffer);
         const base64String = Buffer.from(bytes).toString('base64');
         response.data.files[index].thumbnailLink = `data:image/png;base64,${base64String}`;}
+        const { upvotesCount, downvotesCount, userStatus } = await getFileVotesStatus(response.data.files[index].id, userId);
+        response.data.files[index].upvotesCount = upvotesCount;
+        response.data.files[index].downvotesCount = downvotesCount;
+        response.data.files[index].userStatus = userStatus;
       }
+
+      response.data.files.sort((a, b) => {
+        const diffA = a.upvotesCount - a.downvotesCount;
+        const diffB = b.upvotesCount - b.downvotesCount;
+        if (diffA === diffB) {
+            // If the difference is the same, sort alphabetically by title
+            return a.name.localeCompare(b.name);
+        }
+        // Otherwise, sort by the difference
+        return diffB - diffA;
+    });
+
       return response.data.files;
     } catch (err) {
       throw err;
     }
   }
 
-  async getPYQs(semName) {
+  async getPYQs(semName, userId) {
     try {
       const semID = await this.getIDByName(this.ACADEMICS, semName);
       const directoryId = await this.getIDByName(semID, 'Previous Year Exams')
-      return await this.getFiles(directoryId);
+      return await this.getFiles(directoryId, userId);
     } catch (error) {
       throw (error)
     }
   }
 
-  async getSubjectFiles(subID, type) {
+  async getSubjectFiles(subID, type, userId) {
     try {
       const directoryId = await this.getIDByName(subID, type)
-      return await this.getFiles(directoryId);
+      return await this.getFiles(directoryId, userId);
     } catch (error) {
       throw (error)
     }
@@ -174,51 +191,6 @@ class FileManager {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       return XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async getSubData(semID, subName) {
-    try {
-      const semfiles = await this.loadChild(semID);
-      const subFolder = semfiles.find(file => file.name.substring(0, 8) == (subName).substring(0, 8) && file.mimeType === 'application/vnd.google-apps.folder');
-      if (!subFolder) {
-        throw new Error(`Subfolder '${subName}' not found in the semester folder.`);
-      }
-      const innerFiles = await this.loadChild(subFolder.id);
-      const youtubePlaylist = semfiles.find(file => file.name === 'Youtube Playlist' && file.mimeType === 'application/vnd.google-apps.folder');
-      if (!youtubePlaylist) {
-        throw new Error(`'Youtube Playlist' folder not found for '${subName}' folder.`);
-      }
-      const excelFl = await this.loadChild(youtubePlaylist.id);
-      const excelF = await this.downloadFile(excelFl[0].id);
-      for (let i = 1; i < excelF.length; i++) {
-        excelF[i][1] = await this.convertYoutubeUrlToEmbed(excelF[i][1]);
-      }
-      const bookFolder = innerFiles.find(file => file.name === 'BOOKS' && file.mimeType === 'application/vnd.google-apps.folder');
-      const notesFolder = innerFiles.find(file => file.name === 'Notes' && file.mimeType === 'application/vnd.google-apps.folder');
-      const otherFolder = innerFiles.find(file => file.name === 'Others' && file.mimeType === 'application/vnd.google-apps.folder');
-      const pptFolder = innerFiles.find(file => file.name === 'PPT' && file.mimeType === 'application/vnd.google-apps.folder');
-      const bookF = bookFolder ? await this.loadChild(bookFolder.id) : [];
-      const notesF = notesFolder ? await this.loadChild(notesFolder.id) : [];
-      const otherF = otherFolder ? await this.loadChild(otherFolder.id) : [];
-      const pptF = pptFolder ? await this.loadChild(pptFolder.id) : [];
-      return { bookF, notesF, pptF, otherF, excelF };
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async getFacultyData() {
-    try {
-      const facultyFiles = await this.loadChild(this.FACULTYID);
-      const facultyExcelFile = facultyFiles.find(file => file.name === 'faculty_list.xlsx');
-      if (!facultyExcelFile) {
-        throw new Error(`'faculty_list.xlsx' file not found in faculty folder.`);
-      }
-      const facultyExcelData = await this.downloadFile(facultyExcelFile.id);
-      return { facultyFiles, facultyExcelData };
     } catch (err) {
       throw err;
     }
@@ -278,6 +250,7 @@ class FileManager {
         auth: this.jwtClient,
         fileId: fileId
       });
+      await deleteFileInfo(fileId);
       return "File deleted successfully";
     } catch (err) {
       throw err;
@@ -346,7 +319,7 @@ class FileManager {
         mimeType: file.mimetype,
         description: body.fileDesc,
         properties: {
-          Title: fileName,
+          Title: body.fileName,
           fileAuthor: body.fileAuthor,
           fileTopics: body.fileTopics,
         }
@@ -464,13 +437,16 @@ class FileManager {
     try {
       if (body.typeSelect == 'BOOKS' || body.typeSelect == 'Notes' || body.typeSelect == 'PPT') {
         const directoryId = await this.getIDByName(body.subjectSelect, body.typeSelect);
-        return await this.createFile(directoryId, body, file);
+        const fileId = await this.createFile(directoryId, body, file);
+        await createFileInfo(fileId);
       } else if (body.typeSelect == 'PYQs') {
-        return await this.createFile(body.subjectSelect, body, file);
+        const fileId = await this.createFile(body.subjectSelect, body, file);
+        await createFileInfo(fileId);
       }
       else {
         const directoryId = await this.getIDByName(body.subjectSelect, body.typeSelect);
-        return await this.createEmptyFile(directoryId, body);
+        const fileId = await this.createEmptyFile(directoryId, body);
+        await createFileInfo(fileId);
       }
     } catch (err) {
       console.error('Error uploading file to Google Drive:', err);
@@ -560,7 +536,10 @@ class FileManager {
           file.thumbnailLink = `data:${file.mimeType};base64,${base64String}`;
         }
       }
-  
+      response.data.files.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+    });
+
       return response.data.files;
     } catch (err) {
       throw err;

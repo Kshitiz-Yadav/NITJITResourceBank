@@ -27,15 +27,172 @@ function openBlobInNewTab(fileID) {
 	window.open(`/downloadFile?fileId=${fileID}`, '_blank');
 }
 
-document.addEventListener('click', function (event) {
+async function removeUpvote(fileID){
+	fetch('/file/remove-upvote',{
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ fileId: fileID }),
+	})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+async function removeDownvote(fileID){
+	fetch('/file/remove-downvote',{
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ fileId: fileID }),
+	})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+async function upvoteFile(fileID){
+	fetch('/file/upvote',{
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ fileId: fileID }),
+	})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+async function downvoteFile(fileID){
+	fetch('/file/downvote',{
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ fileId: fileID }),
+	})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+document.addEventListener('click', async function (event) {
 	if (event.target.classList.contains('show-file-details')) {
 		document.getElementById("PYQsTitle").innerHTML = event.target.getAttribute('data-title');
 		document.getElementById("PYQsAuther").innerHTML = `<b>Uploaded By: </b>${event.target.getAttribute('data-author')}`;
 		document.getElementById("PYQsTopics").innerHTML = `<b>Topics Covered: </b>${event.target.getAttribute('data-topics')}`;
 		document.getElementById("PYQsThumbnail").setAttribute("src", event.target.getAttribute('data-thumbnail'));
 		document.getElementById("PYQsDesc").innerHTML = `<b>Description: </b>${event.target.getAttribute('data-description')}`;
-		document.getElementById("PYQsID").setAttribute("value", event.target.getAttribute('data-id'));
+		document.getElementById("PYQsID").setAttribute("value", event.target.getAttribute('data-fileId'));
 		document.getElementById("PYQsExtension").setAttribute("value", event.target.getAttribute('data-extension'));
+		document.getElementById("PYQsUpvotes").innerHTML = `<b>Upvotes: </b>${event.target.getAttribute('data-upvotesCount')}`;
+		document.getElementById("PYQsDownvotes").innerHTML = `<b>Downvotes: </b>${event.target.getAttribute('data-downvotesCount')}`;
+		document.getElementById("modal-buttons").innerHTML=`
+		<button type="button" id='up_${event.target.getAttribute('data-index')}' class="btn btn-sm-square btn-primary mx-1 upvote-file-btn"
+                        data-userStatus="${event.target.getAttribute('data-userStatus')}" data-fileId="${event.target.getAttribute('data-fileId')}"
+                        style="color: ${event.target.getAttribute('data-colorUp')};"><i class="fa fa-thumbs-up upvote-file-btn" style="color: ${event.target.getAttribute('data-colorUp')};"
+                            id='upv${event.target.getAttribute('data-index')}' data-fileId="${event.target.getAttribute('data-fileId')}"
+                            data-userStatus="${event.target.getAttribute('data-userStatus')}"></i></button>
+                    <button id='down_${event.target.getAttribute('data-index')}' class="btn btn-sm-square btn-primary mx-1 downvote-file-btn"
+                        data-fileId="${event.target.getAttribute('data-fileId')}" data-userStatus="${event.target.getAttribute('data-userStatus')}"
+                        style="color: ${event.target.getAttribute('data-colorDown')};"><i class="fa fa-thumbs-down downvote-file-btn" id='downv${event.target.getAttribute('data-index')}'
+                            style="color: ${event.target.getAttribute('data-colorDown')};" data-fileId="${event.target.getAttribute('data-fileId')}"
+                            data-userStatus="${event.target.getAttribute('data-userStatus')}"></i></button>
+                    <button type="button" id="openFileBtn" class="btn btn-primary">Open File</button>
+                    <button type="button" id="downloadFileBtn" class="btn btn-primary">Download File</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        data-bs-target="#showFileModal" aria-label="Close" id="showFileModalClose">Close</button>`
+	}
+	else if(event.target.classList.contains('upvote-file-btn')){
+		if(event.target.getAttribute('data-userStatus')=='upvoted'){
+			document.getElementById(`up-${event.target.id.substring(3)}`).setAttribute("style", "color:#ffffff;");
+			document.getElementById(`upi${event.target.id.substring(3)}`).setAttribute("style", "color:#ffffff;");
+			if(document.getElementById(`up_${event.target.id.substring(3)}`)){
+				document.getElementById(`up_${event.target.id.substring(3)}`).setAttribute("style", "color:#ffffff;");
+			document.getElementById(`upv${event.target.id.substring(3)}`).setAttribute("style", "color:#ffffff;");
+			document.getElementById(`up_${event.target.id.substring(3)}`).setAttribute('data-userStatus', "none");
+			document.getElementById(`upv${event.target.id.substring(3)}`).setAttribute('data-userStatus', "none");
+			}
+			document.getElementById(`up-${event.target.id.substring(3)}`).setAttribute('data-userStatus', "none");
+			document.getElementById(`upi${event.target.id.substring(3)}`).setAttribute('data-userStatus', "none");
+			await removeUpvote(event.target.getAttribute('data-fileId'));
+			DynamicCreatePYQs();
+		}
+		else {
+			document.getElementById(`up-${event.target.id.substring(3)}`).setAttribute("style", "color:#673AB7;");
+			document.getElementById(`upi${event.target.id.substring(3)}`).setAttribute("style", "color:#673AB7;");
+			if(document.getElementById(`up_${event.target.id.substring(3)}`)){
+				document.getElementById(`up_${event.target.id.substring(3)}`).setAttribute("style", "color:#673AB7;");
+			document.getElementById(`upv${event.target.id.substring(3)}`).setAttribute("style", "color:#673AB7;");
+			document.getElementById(`up_${event.target.id.substring(3)}`).setAttribute('data-userStatus', "upvoted");
+			document.getElementById(`upv${event.target.id.substring(3)}`).setAttribute('data-userStatus', "upvoted");
+			document.getElementById(`down_${event.target.id.substring(3)}`).setAttribute("style", "color:#ffffff;");
+			document.getElementById(`downv${event.target.id.substring(3)}`).setAttribute("style", "color:#ffffff;");
+			}
+			document.getElementById(`up-${event.target.id.substring(3)}`).setAttribute('data-userStatus', "upvoted");
+			document.getElementById(`upi${event.target.id.substring(3)}`).setAttribute('data-userStatus', "upvoted");
+			document.getElementById(`down-${event.target.id.substring(3)}`).setAttribute("style", "color:#ffffff;");
+			document.getElementById(`downi${event.target.id.substring(3)}`).setAttribute("style", "color:#ffffff;");
+			await upvoteFile(event.target.getAttribute('data-fileId'));
+			DynamicCreatePYQs();
+		}
+	}
+	else if(event.target.classList.contains('downvote-file-btn')){
+		if(event.target.getAttribute('data-userStatus')=='downvoted'){
+			if(document.getElementById(`down_${event.target.id.substring(5)}`)){
+				document.getElementById(`down_${event.target.id.substring(5)}`).setAttribute("style", "color:#ffffff;");
+				document.getElementById(`downv${event.target.id.substring(5)}`).setAttribute("style", "color:#ffffff;");
+				document.getElementById(`down_${event.target.id.substring(5)}`).setAttribute('data-userStatus', "none");
+				document.getElementById(`downv${event.target.id.substring(5)}`).setAttribute('data-userStatus', "none");
+			}
+			document.getElementById(`down-${event.target.id.substring(5)}`).setAttribute("style", "color:#ffffff;");
+			document.getElementById(`downi${event.target.id.substring(5)}`).setAttribute("style", "color:#ffffff;");
+			document.getElementById(`down-${event.target.id.substring(5)}`).setAttribute('data-userStatus', "none");
+			document.getElementById(`downi${event.target.id.substring(5)}`).setAttribute('data-userStatus', "none");
+			await removeDownvote(event.target.getAttribute('data-fileId'));
+			DynamicCreatePYQs();
+		}
+		else {
+			if(document.getElementById(`down_${event.target.id.substring(5)}`)){
+				document.getElementById(`down_${event.target.id.substring(5)}`).setAttribute("style", "color:#673AB7;");
+				document.getElementById(`downv${event.target.id.substring(5)}`).setAttribute("style", "color:#673AB7;");
+				document.getElementById(`down_${event.target.id.substring(5)}`).setAttribute('data-userStatus', "downvoted");
+				document.getElementById(`downv${event.target.id.substring(5)}`).setAttribute('data-userStatus', "downvoted");
+				document.getElementById(`up_${event.target.id.substring(5)}`).setAttribute("style", "color:#ffffff;");
+				document.getElementById(`upv${event.target.id.substring(5)}`).setAttribute("style", "color:#ffffff;");
+			}
+			document.getElementById(`down-${event.target.id.substring(5)}`).setAttribute("style", "color:#673AB7;");
+			document.getElementById(`downi${event.target.id.substring(5)}`).setAttribute("style", "color:#673AB7;");
+			document.getElementById(`down-${event.target.id.substring(5)}`).setAttribute('data-userStatus', "downvoted");
+			document.getElementById(`downi${event.target.id.substring(5)}`).setAttribute('data-userStatus', "downvoted");
+			document.getElementById(`up-${event.target.id.substring(5)}`).setAttribute("style", "color:#ffffff;");
+			document.getElementById(`upi${event.target.id.substring(5)}`).setAttribute("style", "color:#ffffff;");
+			await downvoteFile(event.target.getAttribute('data-fileId'));
+			DynamicCreatePYQs();
+		}
 	}
 })
 
@@ -92,22 +249,55 @@ function pyqsCreate(pyqFiles) {
 		let fullName = `${name}${pyqFiles[i].fileExtension ? pyqFiles[i].fileExtension : ''}`
 		let thumbnail = pyqFiles[i].thumbnailLink?pyqFiles[i].thumbnailLink:'img/preview_thumbnail.png';
 		var pyqDiv = document.createElement("div");
+		var colorUp="#ffffff", colorDown="#ffffff";
+		if(pyqFiles[i].userStatus=='upvoted') colorUp='#673AB7';
+		if(pyqFiles[i].userStatus=='downvoted') colorDown='#673AB7';
 		pyqDiv.className = "col-lg-2_5 col-md-6 wow fadeInUp";
 		pyqDiv.setAttribute("data-wow-delay", "0.1s");
-		pyqDiv.innerHTML = `<div class="team-item bg-light"><div class="overflow-hidden text-center"><img class="img-fluid click_cursor show-file-details" data-bs-toggle="modal" data-bs-target="#showFileModal" data-title="${name}" data-thumbnail="${thumbnail}" data-id="${pyqFiles[i].id}" data-author="${pyqFiles[i].properties.fileAuthor}" data-description="${pyqFiles[i].description}" data-topics="${pyqFiles[i].properties.fileTopics}" data-extension="${pyqFiles[i].fileExtension ? pyqFiles[i].fileExtension : ''}" src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail" ></div><div class="position-relative d-flex justify-content-center" style="margin-top: -23px;"><div class="bg-light d-flex justify-content-center pt-2 px-1"><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-up "></i></a><a class="btn btn-sm-square btn-primary mx-1"><i class="fa fa-thumbs-down "></i></a><button class="btn btn-sm-square btn-primary mx-1" onclick="downloadBlob('${id}', '${fullName}')" target="_blank"><i class="fa fa-download "></i></button></div></div><div class="text-center p-4"><hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small></div></div>`;
+		pyqDiv.innerHTML = `<div class="team-item bg-light">
+		<div class="overflow-hidden text-center"><img class="img-fluid click_cursor show-file-details"
+				id="pyq_${i}"
+				data-bs-toggle="modal" data-bs-target="#showFileModal" data-title="${name}"
+				data-thumbnail="${thumbnail}" data-userStatus="${pyqFiles[i].userStatus}" 
+				data-fileId="${pyqFiles[i].id}"
+				data-author="${pyqFiles[i].properties.fileAuthor}"
+				data-description="${pyqFiles[i].description}"
+				data-topics="${pyqFiles[i].properties.fileTopics}"
+				data-upvotesCount="${pyqFiles[i].upvotesCount}"
+				data-downvotesCount="${pyqFiles[i].downvotesCount}"
+				data-colorUp="${colorUp}"
+				data-colorDown="${colorDown}"
+				data-index="${i}"
+				data-extension="${pyqFiles[i].fileExtension ? pyqFiles[i].fileExtension : ''}"
+				src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail"></div>
+		<div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+			<div class="bg-light d-flex justify-content-center pt-2 px-1"><button id='up-${i}'
+					class="btn btn-sm-square btn-primary mx-1 upvote-file-btn" data-userStatus="${pyqFiles[i].userStatus}" data-fileId="${pyqFiles[i].id}" style="color: ${colorUp};"><i class="fa fa-thumbs-up upvote-file-btn" style="color: ${colorUp};" id='upi${i}' data-fileId="${pyqFiles[i].id}" data-userStatus="${pyqFiles[i].userStatus}"></i></button><button id='down-${i}'
+					class="btn btn-sm-square btn-primary mx-1 downvote-file-btn" data-fileId="${pyqFiles[i].id}" data-userStatus="${pyqFiles[i].userStatus}" style="color: ${colorDown};"><i class="fa fa-thumbs-down downvote-file-btn" id='downi${i}' style="color: ${colorDown};" data-fileId="${pyqFiles[i].id}" data-userStatus="${pyqFiles[i].userStatus}"></i></button><button
+					class="btn btn-sm-square btn-primary mx-1"
+					onclick="downloadBlob('${id}', '${fullName}')" target="_blank"><i
+						class="fa fa-download "></i></button></div>
+		</div>
+		<div class="text-center p-4">
+			<hr style="margin: 0em"><small class="mb-0"><b>${name}</b></small>
+		</div>
+	</div>`;
 		document.getElementById("pyqs").appendChild(pyqDiv);
 		document.getElementById("pyqs").appendChild(document.createElement("br"));
 	}
 }
 
-fetch(`/get-pyqs?sem=${semester_no}`, {
-	method: 'GET'
-})
-	.then(response => response.json())
-	.then(data => {
-		pyqsCreate(data);
+function DynamicCreatePYQs(){
+	fetch(`/get-pyqs?sem=${semester_no}`, {
+		method: 'GET'
 	})
-	.catch(error => console.error('Error fetching academics menu:', error));
+		.then(response => response.json())
+		.then(data => {
+			document.getElementById("pyqs").innerHTML=``;
+			pyqsCreate(data);
+		})
+		.catch(error => console.error('Error fetching academics menu:', error));
+}
 
 function redirectToSubject(subject, subID) {
 	$('#spinner').addClass('show');
@@ -117,3 +307,5 @@ function redirectToSubject(subject, subID) {
 	form.setAttribute("action", "/subject")
 	form.submit()
 };
+
+DynamicCreatePYQs();

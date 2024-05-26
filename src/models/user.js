@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
+const logger = require("./logger")
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -31,7 +32,7 @@ userSchema.methods.generateAuthToken = async function(){
         return token;
     }
     catch(error){
-        console.log(error)
+        logger.error(error);
     }
 }
 

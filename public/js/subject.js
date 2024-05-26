@@ -105,7 +105,7 @@ document.addEventListener('click', async function (event) {
 		document.getElementById("subjectTopics").innerHTML = `<b>Topics Covered: </b>${event.target.getAttribute('data-topics')}`;
 		document.getElementById("subjectThumbnail").setAttribute("src", event.target.getAttribute('data-thumbnail'));
 		document.getElementById("subjectDesc").innerHTML = `<b>Description: </b>${event.target.getAttribute('data-description')}`;
-		document.getElementById("subjectID").setAttribute("value", event.target.getAttribute('data-id'));
+		document.getElementById("subjectID").setAttribute("value", event.target.getAttribute('data-fileId'));
 		document.getElementById("subjectFullName").setAttribute("value", event.target.getAttribute('data-fullName'));
 		document.getElementById("subjectUpvotes").innerHTML = `<b>Upvotes: </b>${event.target.getAttribute('data-upvotesCount')}`;
 		document.getElementById("subjectDownvotes").innerHTML = `<b>Downvotes: </b>${event.target.getAttribute('data-downvotesCount')}`;
@@ -120,8 +120,8 @@ document.addEventListener('click', async function (event) {
                         style="color: ${event.target.getAttribute('data-colorDown')};"><i data-type="${event.target.getAttribute('data-type')}" class="fa fa-thumbs-down downvote-file-btn" id='downv${event.target.getAttribute('data-type')}${event.target.getAttribute('data-index')}'
                             style="color: ${event.target.getAttribute('data-colorDown')};" data-fileId="${event.target.getAttribute('data-fileId')}"
                             data-userStatus="${event.target.getAttribute('data-userStatus')}"></i></button>
-                    <button type="button" id="openFileBtn" class="btn btn-primary">Open File</button>
-                    <button type="button" id="downloadFileBtn" class="btn btn-primary">Download File</button>
+                    <button type="button" id="openFileBtn" onclick="openBlobInNewTab('${event.target.getAttribute('data-fileId')}')" class="btn btn-primary">Open File</button>
+                    <button type="button" id="downloadFileBtn" onclick="downloadBlob('${event.target.getAttribute('data-fileId')}', '${event.target.getAttribute('data-fullName')}')" class="btn btn-primary">Download File</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                         data-bs-target="#showFileModal" aria-label="Close" id="showFileModalClose">Close</button>`
 	}
@@ -132,7 +132,6 @@ document.addEventListener('click', async function (event) {
 		document.getElementById("urlUpvotes").innerHTML = `<b>Upvotes: </b>${event.target.getAttribute('data-upvotesCount')}`;
 		document.getElementById("urlDownvotes").innerHTML = `<b>Downvotes: </b>${event.target.getAttribute('data-downvotesCount')}`;
 		document.getElementById("urlDesc").innerHTML = `<b>Description: </b>${event.target.getAttribute('data-description')}`;
-		document.getElementById('visitURLBtn').setAttribute("href", `${event.target.getAttribute('data-url')}`);
 		document.getElementById("modal-buttons-url").innerHTML=`
 		<button type="button" data-type="${event.target.getAttribute('data-type')}" id='up_${event.target.getAttribute('data-type')}${event.target.getAttribute('data-index')}' class="btn btn-sm-square btn-primary mx-1 upvote-file-btn"
                         data-userStatus="${event.target.getAttribute('data-userStatus')}" data-fileId="${event.target.getAttribute('data-fileId')}"
@@ -146,7 +145,8 @@ document.addEventListener('click', async function (event) {
                             data-userStatus="${event.target.getAttribute('data-userStatus')}"></i></button>
 							<a id="visitURLBtn" target="_blank" class="btn btn-primary">Visit</a>
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-								data-bs-target="#showURLModal" aria-label="Close" id="showURLModalClose">Close</button>`
+								data-bs-target="#showURLModal" aria-label="Close" id="showURLModalClose">Close</button>`;
+		document.getElementById('visitURLBtn').setAttribute("href", `${event.target.getAttribute('data-url')}`);
 	}
 
 	else if(event.target.classList.contains('upvote-file-btn')){
@@ -294,6 +294,7 @@ function dynamicCreate(Files, type) {
 				data-index="${i}"
 				data-type="${type}"
 				data-extension="${Files[i].fileExtension ? Files[i].fileExtension : ''}"
+				data-fullName="${fullName}"
 				src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail"></div>
 		<div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
 			<div class="bg-light d-flex justify-content-center pt-2 px-1"><button id='up-${type}${i}'

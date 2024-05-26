@@ -121,8 +121,8 @@ document.addEventListener('click', async function (event) {
                         style="color: ${event.target.getAttribute('data-colorDown')};"><i class="fa fa-thumbs-down downvote-file-btn" id='downv${event.target.getAttribute('data-index')}'
                             style="color: ${event.target.getAttribute('data-colorDown')};" data-fileId="${event.target.getAttribute('data-fileId')}"
                             data-userStatus="${event.target.getAttribute('data-userStatus')}"></i></button>
-                    <button type="button" id="openFileBtn" class="btn btn-primary">Open File</button>
-                    <button type="button" id="downloadFileBtn" class="btn btn-primary">Download File</button>
+                    <button type="button" id="openFileBtn" onclick="openBlobInNewTab('${event.target.getAttribute('data-fileId')}')" class="btn btn-primary">Open File</button>
+                    <button type="button" id="downloadFileBtn" onclick="downloadBlob('${event.target.getAttribute('data-fileId')}', '${event.target.getAttribute('data-fullName')}')" class="btn btn-primary">Download File</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                         data-bs-target="#showFileModal" aria-label="Close" id="showFileModalClose">Close</button>`
 	}
@@ -268,6 +268,7 @@ function pyqsCreate(pyqFiles) {
 				data-colorUp="${colorUp}"
 				data-colorDown="${colorDown}"
 				data-index="${i}"
+				data-fullName="${fullName}"
 				data-extension="${pyqFiles[i].fileExtension ? pyqFiles[i].fileExtension : ''}"
 				src='${thumbnail}' style="margin-top: 5%;" alt="Thumbnail"></div>
 		<div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">

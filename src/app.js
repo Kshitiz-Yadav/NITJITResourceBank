@@ -232,6 +232,21 @@ app.get("/subject", auth, async (req, res) => {
 app.get("/dsa", auth, (req, res) => {
     res.render("dsa")
 })
+app.get("/os", auth, (req, res) => {
+    res.render("os")
+})
+app.get("/oops", auth, (req, res) => {
+    res.render("oops")
+})
+app.get("/webd", auth, (req, res) => {
+    res.render("webd")
+})
+app.get("/dbms", auth, (req, res) => {
+    res.render("dbms")
+})
+app.get("/cn", auth, (req, res) => {
+    res.render("cn")
+})
 app.get("/placement", auth, (req, res) => {
     res.render("placement")
 })

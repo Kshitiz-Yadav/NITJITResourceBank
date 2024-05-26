@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+   <head>
+      <meta charset="utf-8">
+      <title>DBMS</title>
+      <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <meta
+         content="NIT Jalandhar, Dr B R Ambedkar NITJ, NITJ, National Institute of Technology Jalandhar, NITJ Website, NitJ IT Resource Bank, NitJ IT Notes,NitJ IT,NitJ IT PPTs, DSA, Data Structures and Algorithms, "
+         name="keywords">
+      <meta content="" name="description">
+
+      <!-- Favicons -->
+      <link rel="apple-touch-icon-precomposed" sizes="144x144"
+         href="https://www.nitj.ac.in//images/ico/apple-touch-icon-144-precomposed.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="114x114"
+         href="https://www.nitj.ac.in//images/ico/apple-touch-icon-114-precomposed.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="72x72"
+         href="https://www.nitj.ac.in//images/ico/apple-touch-icon-72-precomposed.png" />
+      <link rel="apple-touch-icon-precomposed"
+         href="https://www.nitj.ac.in//images/ico/apple-touch-icon-57-precomposed.png" />
+      <link rel="shortcut icon" href="https://www.nitj.ac.in//images/ico/favicon.ico" />
+
+      <!-- Google Web Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link
+         href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+         rel="stylesheet">
+
+      <!-- Icon Font Stylesheet -->
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+      <!-- Libraries Stylesheet -->
+      <link href="lib/animate/animate.min.css" rel="stylesheet">
+      <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+      <!-- Customized Bootstrap Stylesheet -->
+      <link href="css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- Template Stylesheet -->
+      <link href="css/style.css" rel="stylesheet">
+   </head>
+
+   <body>
+      {{>header}}
+
+      <!-- About Start -->
+      <div class="container-xxl py-5">
+         <div class="container">
+            {{!-- <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                <div class="position-relative h-100">
+                    <img class="img-fluid position-absolute w-100 h-100" src="img/course-2.jpg" alt=""
+                        style="object-fit: cover;">
+                </div>
+            </div> --}}
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s" style="padding: 0px 100px 0px 100px;">
+               <h4 class="section-title bg-white text-center text-primary px-3">Introduction to DBMS</h4>
+               <h1 class="my-3">Database Management System</h1>
+               <p class="my-3">A Database Management System (DBMS) is a software system that is designed to manage and
+                  organize data in a structured manner. It allows users to create, modify, and query a database, as well
+                  as manage the security and access controls for that database.
+                  DBMS provides an environment to store and retrieve the data in coinvent and efficient manner.</p>
+            </div>
+         </div>
+      </div>
+      <!-- About End -->
+
+      <!-- Testimonial Start -->
+
+      <div class="container-xxl py-2" data-wow-delay="0.1s">
+         <div class="container">
+            <div class="text-center">
+               <h4 class="section-title bg-white text-center text-primary px-3">Theory</h4>
+               <h1 class="my-2">Learn DBMS</h1>
+               <br>
+            </div>
+            <div class="wow fadeInUp" data-wow-delay="0.1s" style="padding: 0px 100px 0px 100px;">
+               <h5 class="mb-0">Why do we need database management system?</h5><br>
+               <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i><b>Data Organization :</b> DBMS helps
+                  in organizing and structuring data efficiently. It provides a systematic way to store, manage, and
+                  retrieve data.</p>
+               <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i><b>Data Integrity :</b> DBMS ensures
+                  data integrity by enforcing constraints and rules on the data. This helps in maintaining the accuracy
+                  and consistency of the data stored in the database.</p>
+               <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i><b>Data Security :</b> DBMS provides
+                  features for controlling access to the data stored in the database. It allows administrators to define
+                  user roles and permissions, ensuring that only authorized users can access and modify the data.</p>
+               <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i><b>Data Concurrency :</b> In
+                  multi-user environments, multiple users may need to access and modify the same data simultaneously.
+                  DBMS manages concurrency control to ensure that transactions are executed in a controlled manner,
+                  preventing data corruption and inconsistency.</p>
+               <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i><b>Data Recovery :</b> DBMS provides
+                  mechanisms for data backup and recovery in case of system failures or errors. It allows administrators
+                  to restore the database to a previous consistent state, minimizing data loss.</p>
+               <br>
+               <p><b>Database Languages :</b></p><br>
+
+               <div class="row" onclick="show_answer('d1')">
+                  <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                     <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-3">
+                           <p class="mb-0">1. Data Definition Language</p>
+                           <p id="d1" class="interview_ans mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>DDL
+                              is the short name for Data Definition Language, which deals with database schemas and
+                              descriptions, of how the data should reside in the database.
+                              <br><b>-</b>Opertaions of DDL :
+                           <br><b>CREATE :</b> to create a database and its objects like (table, index, views, store
+                           procedure, function, and triggers)
+                           <br><b>ALTER :</b> alters the structure of the existing database
+                           <br><b>DROP :</b> delete objects from the database
+                           <br><b>TRUNCATE :</b> remove all records from a table, including all spaces allocated for the
+                           records are removed
+                           <br><b>COMMENT :</b> add comments to the data dictionary
+                           <br><b>RENAME :</b> rename an object
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <br>
+              
+               <div class="row" onclick="show_answer('d2')">
+                  <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                     <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-3">
+                           <p class="mb-0">2. Data Manipulation Language</p>
+                           <p id="d2" class="interview_ans mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>DML is the short name for Data Manipulation Language which deals with data manipulation and includes most common SQL statements such SELECT, INSERT, UPDATE, DELETE, etc., and it is used to store, modify, retrieve, delete and update data in a database.
+                              <br><b>-</b>Opertaions of DML :
+                           <br><b>SELECT :</b> retrieve data from a database
+                           <br><b>INSERT :</b>  insert data into a table
+                           <br><b>UPDATE :</b> updates existing data within a table
+                           <br><b>DELETE :</b> Delete all records from a database table
+                           <br><b>MERGE :</b> UPSERT operation (insert or update)
+                           <br><b>CALL :</b> call a PL/SQL or Java subprogram
+                           <br><b>EXPLAIN PLAN :</b> interpretation of the data access path
+                           <br><b>LOCK TABLE :</b> concurrency Control
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <br>
+            
+             <div class="row" onclick="show_answer('d3')">
+                  <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                     <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-3">
+                           <p class="mb-0">3. Data Control Language</p>
+                           <p id="d3" class="interview_ans mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>DCL is short for Data Control Language which acts as an access specifier to the database.(basically to grant and revoke permissions to users in the database)
+                              <br><b>-</b>Opertaions of DCL :
+                           <br><b>GRANT :</b> grant permissions to the user for running DML(SELECT, INSERT, DELETE,…) commands on the table
+                           <br><b>REVOKE :</b> revoke permissions to the user for running DML(SELECT, INSERT, DELETE,…) command on the specified table
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <br>
+
+               <div class="row" onclick="show_answer('d4')">
+                  <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                     <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-3">
+                           <p class="mb-0">4. Transactional Control Language</p>
+                           <p id="d4" class="interview_ans mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>TCL is short for Transactional Control Language which acts as an manager for all types of transactional data and all transactions. Some of the command of TCL are
+                              <br><b>-</b>Opertaions of TCL :
+                           <br><b>ROLLBACK :</b> Used to cancel  or Undo changes made in the database 
+                           <br><b>COMMIT :</b> It is used to apply or save changes in the database
+                           <br><b>SAVEPOINT :</b> It is used to save the data on the temporary basis in the database
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <br>
+
+                <div class="row" onclick="show_answer('d5')">
+                  <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                     <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-3">
+                           <p class="mb-0">5. Data retrieval language:</p>
+                           <p id="d5" class="interview_ans mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>TCL is short for Transactional Control Language which acts as an manager for all types of transactional data and all transactions. Some of the command of TCL are
+                              <br><b>-</b>Opertaions of DRL :
+                           <br><b>SELECT :</b> Used for extracting the required data
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <br>
+         
+          <div class="text-center">
+            <br>
+               <h4 class="my-2">SOURCES</h4>
+               <br>
+            </div>
+
+         <div class="row g-4 justify-content-lg-center">
+                <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                    <a  target="_blank">
+                    <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-1">
+                            <h5 class="mb-3 ms-5">Learn Theory(Go to "DBMS" in semester 3 in Academics section.)</h5>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <br>
+
+            <div class="row g-4 justify-content-lg-center">
+                <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                    <a href="https://www.geeksforgeeks.org/introduction-of-dbms-database-management-system-set-1/" target="_blank">
+                    <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-1">
+                            <h5 class="mb-3 ms-5">GFG – Introduction of Database Management System</h5>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+            <br>
+
+             <div class="row g-4 justify-content-lg-center">
+                <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                    <a href="https://whimsical.com/dbms-roadmap-by-love-babbar-FmUi8ffVop33t3MmpVxPCo" target="_blank">
+                    <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-1">
+                            <h5 class="mb-3 ms-5">By Love Babbar – Database Management System Roadmap</h5>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+  <br>
+
+      <div class="container-xxl py-5" data-wow-delay="0.1s">
+         <div class="container">
+            <div class="text-center">
+               <h4 class="section-title bg-white text-center text-primary px-3">Final Touch</h4>
+               <h1 class="my-3">Interview Questions</h1>
+            </div>
+            <br>
+            <div class="row g-4 justify-content-lg-center" onclick="show_answer('ans1')">
+               <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                  <div class="service-item text-left click_cursor pt-3">
+                     <div class="p-3">
+                        <p class="mb-0">1. What are the advantages of DBMS over traditional file-based systems? ?</p>
+                        <p id="ans1" class="interview_ans mb-0"><i
+                              class="fa fa-arrow-right text-primary me-2"></i>Database management systems were developed to handle the following difficulties of typical File-processing systems supported by conventional operating systems. 
+                              <br>1. Data redundancy and inconsistency 
+                              <br>2. Difficulty in accessing data 
+                              <br>3. Data isolation – multiple files and formats 
+                              <br>4. Integrity problems 
+                              <br>5. Atomicity of updates 
+                              <br>6. Concurrent access by multiple users 
+                              <br>7. Security problems </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br>
+
+            <div class="row g-4 justify-content-lg-center" onclick="show_answer('ans2')">
+               <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                  <div class="service-item text-left click_cursor pt-3">
+                     <div class="p-3">
+                        <p class="mb-0">2. What is the difference between primary key and unique constraints?  </p>
+                        <p id="ans2" class="interview_ans mb-0"><i
+                              class="fa fa-arrow-right text-primary me-2"></i>The primary key cannot have NULL value, the unique constraints can have NULL values. There is only one primary key in a table, but there can be multiple unique constrains. </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br>
+
+            <div class="row g-4 justify-content-lg-center" onclick="show_answer('ans3')">
+               <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                  <div class="service-item text-left click_cursor pt-3">
+                     <div class="p-3">
+                        <p class="mb-0">3.What is database normalization? </p>
+                        <p id="ans3" class="interview_ans mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>It is a process of analyzing the given relation schemas based on their functional dependencies and primary keys to achieve the following desirable properties : 
+                          <br>1. Minimizing Redundancy 
+                          <br>2. Minimizing the Insertion, Deletion, And Update Anomalies Relation schemas that do not meet the properties are decomposed into smaller relation schemas that could meet desirable properties. 
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br>
+
+            <div class="row justify-content-lg-center" onclick="show_answer('ans4')">
+               <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                  <div class="service-item text-left click_cursor pt-3">
+                     <div class="p-3">
+                        <p class="mb-0">4. What is Denormalization?</p>
+                        <p id="ans4" class="interview_ans mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Denormalization is a database optimization technique in which we add redundant data to one or more tables. </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br>
+
+            <div class="row g-4 justify-content-lg-center" onclick="show_answer('ans5')">
+               <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                  <div class="service-item text-left click_cursor pt-3">
+                     <div class="p-3">
+                        <p class="mb-0">5. What is a Live Lock?</p>
+                       <p id="ans5" class="interview_ans mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Livelock situation can be defined as when two or more processes continually repeat the same interaction in response to changes in the other processes without doing any useful work These processes are not in the waiting state, and they are running concurrently. This is different from a deadlock because in a deadlock all processes are in the waiting state.</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br>
+
+            <div class="row g-4 justify-content-lg-center">
+                <div class="col-lg-10 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                    <a href="https://www.geeksforgeeks.org/commonly-asked-dbms-interview-questions/" target="_blank">
+                    <div class="service-item text-left click_cursor pt-3">
+                        <div class="p-1">
+                            <h5 class="mb-3 ms-5">More Interview Quetions</h5>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+            <br>
+
+            </div>
+         </div>
+      </div>
+      <!-- model image -->
+      <!-- The Model -->
+      <div id="myModel" class="model">
+         <!-- The Close Button -->
+         <span class="close">&times;</span>
+         <!-- Model Content (The Image) -->
+         <img class="model-content" id="img01">
+         <!-- Model Caption (Image Text) -->
+         <div id="model_caption"></div>
+      </div>
+      <!-- Testimonial End -->
+
+      <!-- JavaScript Libraries -->
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="lib/wow/wow.min.js"></script>
+      <script src="lib/easing/easing.min.js"></script>
+      <script src="lib/waypoints/waypoints.min.js"></script>
+      <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+      {{>footer}}
+
+      <!-- Template Javascript -->
+      <script src="js/main.js"></script>
+      <script src="js/home.js"></script>
+      <script src="js/dsa.js"></script>
+   </body>
+
+</html>

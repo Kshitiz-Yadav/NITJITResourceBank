@@ -5,3 +5,5 @@
 /src/.env
 private_key.json
 /src/db
+
+/logs

@@ -4,7 +4,7 @@ const fetch = require('node-fetch'); // Import fetch for making HTTP requests
 require('dotenv').config();
 const { Readable } = require('stream');
 const key = require("../../private_key.json");
-const {createFileInfo, deleteFileInfo, upvoteFile, downvoteFile, removeUpvote, removeDownvote, getFileVotesStatus} = require("./rating")
+const {createFileInfo, deleteFileInfo, getFileVotesStatus} = require("./rating")
 
 class FileManager {
   constructor() {
@@ -40,22 +40,6 @@ class FileManager {
         this.expiryTime = Date.now() + 3600 * 1000; // Set expiry time to 1 hour from now
         this.authorized = true;
       }
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async loadChild(parentID) {
-    try {
-      await this.authorize();
-      const service = google.drive("v3");
-      const response = await service.files.list({
-        auth: this.jwtClient,
-        pageSize: 900,
-        q: `'${parentID}' in parents`,
-        fields: 'files(id, name, mimeType, thumbnailLink, webViewLink, webContentLink)'
-      });
-      return response.data.files;
     } catch (err) {
       throw err;
     }
@@ -439,14 +423,17 @@ class FileManager {
         const directoryId = await this.getIDByName(body.subjectSelect, body.typeSelect);
         const fileId = await this.createFile(directoryId, body, file);
         await createFileInfo(fileId);
+        return fileId;
       } else if (body.typeSelect == 'PYQs') {
         const fileId = await this.createFile(body.subjectSelect, body, file);
         await createFileInfo(fileId);
+        return fileId;
       }
       else {
         const directoryId = await this.getIDByName(body.subjectSelect, body.typeSelect);
         const fileId = await this.createEmptyFile(directoryId, body);
         await createFileInfo(fileId);
+        return fileId;
       }
     } catch (err) {
       console.error('Error uploading file to Google Drive:', err);

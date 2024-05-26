@@ -12,6 +12,7 @@ const { auth, authAdmin, authFaculty } = require("./middleware/auth")
 const { createFileInfo, deleteFileInfo, upvoteFile, downvoteFile, removeUpvote, removeDownvote, getFileVotesStatus } = require("./models/rating");
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
+const logger = require('./models/logger');
 require('dotenv').config();
 app.use(cookieParser())
 app.use(methodOverride('_method'));
@@ -42,11 +43,16 @@ const fileManager = FileManager.getInstance();
 
 // Making GET requests
 app.get("/login", (req, res) => {
-    res.clearCookie('itrbauth')
+    try {
+        res.clearCookie('itrbauth')
     res.render("login")
+    } catch (error) {
+        logger.error(error.message)
+    }
 })
 app.get("/changePassword", (req, res) => {
-    let token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
+    try {
+        let token = jwt.verify(req.cookies.itrbauth, process.env.SECRET)
     let email = token.username
     Users.findOne({ username: email })
         .then(async function (val, err) {
@@ -63,14 +69,23 @@ app.get("/changePassword", (req, res) => {
                     })
                     .catch(err => {
                         console.error('Failed to send email:\n' + err)
+                        throw new Error('Failed to send email:\n' + err);
                     })
             }
         })
+    } catch (error) {
+        logger.error(error.message);
+    }
+    
 })
 app.get("/home", auth, async (req, res) => {
-    (async function () {
-        res.status(201).render("index")
-    })()
+    try {
+        (async function () {
+            res.status(201).render("index")
+        })()
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 
 app.get("/admin", authAdmin, async (req, res) => {
@@ -79,7 +94,7 @@ app.get("/admin", authAdmin, async (req, res) => {
         const privilegedUsers = await getUsersWithPrivileges();
         res.status(201).render("admin", { allUsersList: JSON.stringify(allUsers), privilegedUsersList: JSON.stringify(privilegedUsers) });
     } catch (error) {
-        console.error(error);
+        logger.error(error.message)
         res.status(500).render("500");
     }
 
@@ -89,7 +104,7 @@ app.get("/faculty", authFaculty, async (req, res) => {
     try {
         res.status(201).render("faculty");
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
         res.status(500).render("500");
     }
 
@@ -100,7 +115,7 @@ app.get("/admin/academic_schema", authAdmin, async (req, res) => {
         const acadmicsSchema = await fileManager.listFolders();
         res.json(acadmicsSchema);
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
         res.status(500).render("500");
     }
 })
@@ -110,7 +125,7 @@ app.get("/admin/fetch-schedule", authAdmin, async (req, res) => {
         const schedule = await fileManager.listSchedule();
         res.json(schedule);
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
         res.status(500).render("500");
     }
 })
@@ -120,7 +135,7 @@ app.get("/admin/fetch-faculty", authAdmin, async (req, res) => {
         const faculty = await fileManager.listFaculty();
         res.json(faculty);
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
         res.status(500).render("500");
     }
 })
@@ -130,7 +145,7 @@ app.get("/faculty/academic_schema", authFaculty, async (req, res) => {
         const acadmicsSchema = await fileManager.listFolders();
         res.json(acadmicsSchema);
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
         res.status(500).render("500");
     }
 })
@@ -140,7 +155,7 @@ app.get("/get-academics-sem-list", auth, async (req, res) => {
         const acadmicsSemList = await fileManager.getSemList();
         res.json(acadmicsSemList);
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
         res.status(500).render("500");
     }
 })
@@ -150,7 +165,7 @@ app.get("/get-faculty-list", auth, async (req, res) => {
         const facultyList = await fileManager.getScheduleOrFaculty("faculty");
         res.json(facultyList);
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
         res.status(500).render("500");
     }
 })
@@ -160,13 +175,17 @@ app.get("/get-schedule-list", auth, async (req, res) => {
         const scheduleList = await fileManager.getScheduleOrFaculty("schedule");
         res.json(scheduleList);
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
         res.status(500).render("500");
     }
 })
 
 app.get("/curriculum", auth, (req, res) => {
-    res.render("curriculum")
+    try {
+        res.render("curriculum");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 
 app.get("/get-pyqs", auth, (req, res) => {
@@ -180,7 +199,7 @@ app.get("/get-pyqs", auth, (req, res) => {
         })();
     }
     catch {
-        console.error(error)
+        logger.error(error.message);
     }
 })
 
@@ -195,7 +214,7 @@ app.get("/get-subFiles", auth, (req, res) => {
         })();
     }
     catch {
-        console.error(error)
+        logger.error(error.message);
     }
 })
 
@@ -203,8 +222,8 @@ app.get('/downloadFile', async (req, res) => {
     try {
         const fileId = req.query.fileId;
         await fileManager.downloadFileStream(fileId, res);
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        logger.error(error.message);
         res.status(500).send('Error downloading file');
     }
 });
@@ -216,7 +235,7 @@ app.get("/semester", auth, async (req, res) => {
         return res.status(201).render("semester", { subjects: JSON.stringify(subjects), semName: req.query.sem });
     }
     catch (error) {
-        console.error(error)
+        logger.error(error.message);
     }
 })
 
@@ -224,40 +243,80 @@ app.get("/subject", auth, async (req, res) => {
     try {
         return res.status(201).render("subject", { subName: req.query.subjectName, subID: req.query.subjectID });
     }
-    catch (err) {
-        console.error(err);
+    catch (error) {
+        logger.error(error.message);
     }
 })
 
 app.get("/dsa", auth, (req, res) => {
-    res.render("dsa")
+    try {
+        res.render("dsa");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("/os", auth, (req, res) => {
-    res.render("os")
+    try {
+        res.render("os");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("/oops", auth, (req, res) => {
-    res.render("oops")
+    try {
+        res.render("oops");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("/webd", auth, (req, res) => {
-    res.render("webd")
+    try {
+        res.render("webd");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("/dbms", auth, (req, res) => {
-    res.render("dbms")
+    try {
+        res.render("dbms");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("/cn", auth, (req, res) => {
-    res.render("cn")
+    try {
+        res.render("cn");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("/placement", auth, (req, res) => {
-    res.render("placement")
+    try {
+        res.render("placement");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("/support", auth, (req, res) => {
-    res.render("feedback")
+    try {
+        res.render("feedback");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("/team", auth, (req, res) => {
-    res.render("team")
+    try {
+        res.render("team");
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 app.get("*", (req, res) => {
-    res.render("404")
+    try {
+        res.render("404")
+    } catch (error) {
+        logger.error(error.message);
+    }
 })
 
 //Making POST requests
@@ -302,41 +361,46 @@ app.post("/login", async (req, res) => {
                 })
         }
     }
-    catch (err) {
-        console.error(err)
+    catch (error) {
+        logger.error(error.message);
     }
 })
 
 app.post("/changePassword", async (req, res) => {
-    let email = (req.body.mail).toLowerCase();
-    if (!await register.isMailValid(email)) {
-        return res.status(201).render("login", { problem: "InvalidMail", username: "" })
-    }
-    else {
-        Users.findOne({ username: email })
-            .then(async function (val, err) {
-                if (val == null) {
-                    return res.status(201).render("login", { problem: "UserDNE", username: email })
-                }
-                else {
-                    var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
-                    var otpGenSafe = await bcrypt.hash(otpGen, 10);
-                    var userEncrypted = await bcrypt.hash(email, 10);
-                    await register.sendMail(email, SUPPORT_MAIL, "OTP for IT portal", "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
-                        .then(data => {
-                            console.log('Mail sent successfully')
-                            return res.status(201).render("forgot", { username: email, usernameEnc: userEncrypted, password: process.env.FORGOTPASS, otp: otpGenSafe })
-                        })
-                        .catch(err => {
-                            console.error('Failed to send email:\n' + err)
-                        })
-                }
-            })
+    try {
+        let email = (req.body.mail).toLowerCase();
+        if (!await register.isMailValid(email)) {
+            return res.status(201).render("login", { problem: "InvalidMail", username: "" })
+        }
+        else {
+            Users.findOne({ username: email })
+                .then(async function (val, err) {
+                    if (val == null) {
+                        return res.status(201).render("login", { problem: "UserDNE", username: email })
+                    }
+                    else {
+                        var otpGen = (Math.floor(100000 + (Math.random() * (1000000 - 100000)))).toString()
+                        var otpGenSafe = await bcrypt.hash(otpGen, 10);
+                        var userEncrypted = await bcrypt.hash(email, 10);
+                        await register.sendMail(email, SUPPORT_MAIL, "OTP for IT portal", "Your OTP to register at IT Portal is: " + otpGen + "\n\nHave a great time studying!!")
+                            .then(data => {
+                                console.log('Mail sent successfully')
+                                return res.status(201).render("forgot", { username: email, usernameEnc: userEncrypted, password: process.env.FORGOTPASS, otp: otpGenSafe })
+                            })
+                            .catch(err => {
+                                console.error('Failed to send email:\n' + err)
+                            })
+                    }
+                })
+        } 
+    } catch (error) {
+        logger.error(error.message);
     }
 })
 
 app.post("/home", async (req, res) => {
-    let userOTP = req.body.otp, otpGen = req.body.otpGen, pass = req.body.password, user = req.body.username, userEnc = req.body.usernameEnc;
+    try {
+        let userOTP = req.body.otp, otpGen = req.body.otpGen, pass = req.body.password, user = req.body.username, userEnc = req.body.usernameEnc;
     let isAdmin = await register.isAdmin(user)
     if (!await bcrypt.compare(user, userEnc)) {
         return res.status(201).render("login", { problem: "Invalid User", username: user })
@@ -398,9 +462,12 @@ app.post("/home", async (req, res) => {
                 })()
             }
             catch (err) {
-                console.error(err)
+                throw err;
             }
         }
+    }
+    } catch (error) {
+        logger.error(error.message);
     }
 })
 
@@ -408,76 +475,76 @@ app.post("/support", auth, async (req, res) => {
     try {
         await register.sendMail(SUPPORT_MAIL, SUPPORT_MAIL, req.body.subject, req.body.name + " says,\n" + req.body.message + "\n\nSender Mail: " + req.body.email);
         console.log("Feedback sent successfully")
+        res.status(201).render("feedback")
     }
-    catch (err) {
-        console.error(err)
+    catch (error) {
+        logger.error(error.message);
     }
-    res.status(201).render("feedback")
 })
 
 app.post('/file/upvote', auth, async (req, res) => {
-    const { fileId } = req.body;
+    try {
+        const { fileId } = req.body;
     const token = req.cookies.itrbauth;
     const verifyUser = jwt.verify(token, process.env.SECRET);
     const userId = verifyUser.username;
-    try {
         await upvoteFile(fileId, userId);
         res.status(200).send('Upvoted successfully');
     } catch (err) {
+        logger.error(err.message);
         res.status(500).send(err.message);
     }
 });
 
 app.post('/file/downvote', auth, async (req, res) => {
-    const { fileId } = req.body;
+    try {const { fileId } = req.body;
     const token = req.cookies.itrbauth;
     const verifyUser = jwt.verify(token, process.env.SECRET);
     const userId = verifyUser.username;
-
-    try {
         await downvoteFile(fileId, userId);
         res.status(200).send('Downvoted successfully');
     } catch (err) {
+        logger.error(err.message);
         res.status(500).send(err.message);
     }
 });
 
 app.post('/file/remove-upvote', auth, async (req, res) => {
-    const { fileId } = req.body;
+    try {
+        const { fileId } = req.body;
     const token = req.cookies.itrbauth;
     const verifyUser = jwt.verify(token, process.env.SECRET);
     const userId = verifyUser.username;
-
-    try {
         await removeUpvote(fileId, userId);
         res.status(200).send('Upvote removed successfully');
     } catch (err) {
+        logger.error(err.message);
         res.status(500).send(err.message);
     }
 });
 
 app.post('/file/remove-downvote', auth, async (req, res) => {
-    const { fileId } = req.body;
+    try {    
+        const { fileId } = req.body;
     const token = req.cookies.itrbauth;
     const verifyUser = jwt.verify(token, process.env.SECRET);
     const userId = verifyUser.username;
-
-    try {
         await removeDownvote(fileId, userId);
         res.status(200).send('Downvote removed successfully');
     } catch (err) {
+        logger.error(err.message);
         res.status(500).send(err.message);
     }
 });
 
 app.post("/admin/add-subjects", authAdmin, async (req, res) => {
-    const fileId = req.body.directoryToBeModified;
-    const newName = req.body.newName;
     try {
+        const fileId = req.body.directoryToBeModified;
+    const newName = req.body.newName;
         await fileManager.addSubject(fileId, newName);
         res.sendStatus(200);
     } catch (err) {
-        console.error(err);
+        logger.error(err.message);
         res.sendStatus(504);
     }
 })
@@ -488,7 +555,7 @@ app.post("/admin/upload-timetable", authFaculty, upload.single('fileInput'), asy
         await fileManager.uploadTimetable(body, file);
         res.sendStatus(200);
     } catch (error) {
-        console.error(error);
+        logger.error(err.message);
         res.sendStatus(504);
     }
 })
@@ -499,7 +566,7 @@ app.post("/admin/upload-faculty", authFaculty, upload.single('photoInput'), asyn
         await fileManager.uploadFaculty(body, file);
         res.sendStatus(200);
     } catch (error) {
-        console.error(error);
+        logger.error(err.message);
         res.sendStatus(504);
     }
 })
@@ -507,10 +574,14 @@ app.post("/admin/upload-faculty", authFaculty, upload.single('photoInput'), asyn
 app.post("/faculty/upload", authFaculty, upload.single('fileInput'), async (req, res) => {
     try {
         const { body, file } = req;
-        await fileManager.uploadToDrive(body, file);
+        const fileId = await fileManager.uploadToDrive(body, file);
+        const token = req.cookies.itrbauth;
+    const verifyUser = jwt.verify(token, process.env.SECRET);
+    const userId = verifyUser.username;
+        logger.info(`File '${req.body.fileName}' added by '${userId}' with ID = '${fileId}'`)
         res.sendStatus(200);
     } catch (err) {
-        console.error(err);
+        logger.error(err.message);
         res.sendStatus(504);
     }
 })
@@ -521,79 +592,78 @@ app.post("/get-files-metadata", auth, async (req, res) => {
         res.status(200).json(files);
     }
     catch (err) {
-        console.error(err);
+        logger.error(err.message);
         res.status(500).render("500");
     }
 })
 
 app.delete("/admin/remove-user", authAdmin, async (req, res) => {
-    const userId = req.body.userToBeRemoved;
     try {
+        const userId = req.body.userToBeRemoved;
         await removeUserById(userId);
         // Send the ID of the deleted user as a response
         res.redirect('/admin')
     } catch (err) {
-        console.error(err);
+        logger.error(err.message);
         res.status(500).render('500');
     }
 })
 
 
 app.delete("/admin/delete-directory", authAdmin, async (req, res) => {
-    const fileId = req.body.directoryToBeDeleted;
     try {
+        const fileId = req.body.directoryToBeDeleted;
         await fileManager.deleteFile(fileId);
         res.sendStatus(200);
     } catch (err) {
-        console.error(err);
+        logger.error(err.message);
         res.sendStatus(504);
     }
 })
 
 app.delete("/faculty/delete-file", authFaculty, async (req, res) => {
-    const fileId = req.body.fileToBeDeleted;
     try {
+        const fileId = req.body.fileToBeDeleted;
         await fileManager.deleteFile(fileId);
+        logger.info(`File deleted by '${userId}' having ID = '${fileId}'`)
         res.sendStatus(200);
     } catch (err) {
-        console.error(err);
+        logger.error(err.message);
         res.sendStatus(504);
     }
 })
 
 app.put("/admin/remove-privileged-access", authAdmin, async (req, res) => {
-    const userId = req.body.userToRemoveAccess;
     try {
+        const userId = req.body.userToRemoveAccess;
         await updateUserModeById(userId, false);
-        // Send the ID of the deleted user as a response
         res.redirect('/admin')
     } catch (err) {
-        console.error(err);
+        logger.error(err.message);
         res.status(500).render('500');
     }
 })
 
 app.put("/admin/provide-privileged-access", authAdmin, async (req, res) => {
-    const userId = req.body.userToProvideAccess;
     try {
+        const userId = req.body.userToProvideAccess;
         await updateUserModeById(userId, true);
-        // Send the ID of the deleted user as a response
         res.redirect('/admin')
     } catch (err) {
-        console.error(err);
+        logger.error(err.message);
         res.status(500).render('500');
     }
 })
 
 app.put("/admin/rename-directory", authAdmin, async (req, res) => {
-    const fileId = req.body.directoryToBeModified;
-    const newName = req.body.newName;
     try {
+        const fileId = req.body.directoryToBeModified;
+        const newName = req.body.newName;
         await fileManager.renameFile(fileId, newName);
         res.sendStatus(200);
     } catch (err) {
+        logger.error(err.message);
         res.sendStatus(504);
-        console.error(err);
     }
 })
 

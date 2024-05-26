@@ -1,17 +1,15 @@
 const { google } = require("googleapis");
-const XLSX = require('xlsx');
 const fetch = require('node-fetch'); // Import fetch for making HTTP requests
 require('dotenv').config();
 const { Readable } = require('stream');
-const key = require("../../private_key.json");
 const {createFileInfo, deleteFileInfo, getFileVotesStatus} = require("./rating")
 
 class FileManager {
   constructor() {
     this.jwtClient = new google.auth.JWT(
-      key.client_email,
+      process.env.CLIENT_EMAIL,
       null,
-      key.private_key,
+      process.env.PRIVATE_KEY,
       ['https://www.googleapis.com/auth/drive'],
       null
     );
@@ -163,22 +161,6 @@ class FileManager {
     }
   }
 
-
-  async downloadFile(fileId) {
-    try {
-      await this.authorize();
-      const service = google.drive("v3");
-      const response = await service.files.get(
-        { fileId: fileId, alt: 'media', auth: this.jwtClient },
-        { responseType: 'arraybuffer' });
-      const workbook = XLSX.read(response.data);
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      return XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    } catch (err) {
-      throw err;
-    }
-  }
 
   async listFolders(rootId = this.ACADEMICS, level = 0) {
     try {

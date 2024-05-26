@@ -313,7 +313,7 @@ app.get("/team", auth, (req, res) => {
 })
 app.get("*", (req, res) => {
     try {
-        res.render("404")
+        res.render("404.hbs")
     } catch (error) {
         logger.error(error.message);
     }

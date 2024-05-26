@@ -31,7 +31,7 @@ const partialPath = "../partials"
 hbs.registerPartials(partialPath);
 
 // Connecting to database
-require("./../conn")
+require("./conn")
 const Users = require("./models/user")
 app.use(express.urlencoded({ extended: false }));
 

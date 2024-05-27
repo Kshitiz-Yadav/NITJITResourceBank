@@ -29,13 +29,13 @@ async function isPassStrong(pass){
     }
     let a = 0, A = 0, n = 0;
     for(let i=0;i<pass.length;i++){
-        if(pass.charAt(i) >= 'a' && pass.chatAt(i) <= 'z'){
+        if(pass.charAt(i) >= 'a' && pass.charAt(i) <= 'z'){
             a++;
         }
-        if(pass.charAt(i) >= 'A' && pass.chatAt(i) <= 'Z'){
+        if(pass.charAt(i) >= 'A' && pass.charAt(i) <= 'Z'){
             A++;
         }
-        if(pass.charAt(i) >= '0' && pass.chatAt(i) <= '9'){
+        if(pass.charAt(i) >= '0' && pass.charAt(i) <= '9'){
             n++;
         }
     }

@@ -1,0 +1,7 @@
+{"level":"error","message":"","timestamp":"2024-05-26T14:50:01.977Z"}
+{"level":"error","message":"","timestamp":"2024-05-26T14:50:06.157Z"}
+{"level":"error","message":"hello","timestamp":"2024-05-26T14:50:08.617Z"}
+{"level":"error","timestamp":"2024-05-26T17:55:30.346Z"}
+{"level":"error","timestamp":"2024-05-26T17:55:48.727Z"}
+{"level":"error","message":"getUsersWithNoPrivilege is not defined","timestamp":"2024-05-26T17:56:15.213Z"}
+{"level":"error","message":"No key or keyFile set.","timestamp":"2024-05-26T18:55:00.907Z"}

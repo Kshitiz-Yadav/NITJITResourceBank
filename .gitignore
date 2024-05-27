@@ -5,3 +5,7 @@
 /src/.env
 private_key.json
 /src/db
+
+src/logs
+
+src/conn.js

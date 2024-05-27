@@ -78,6 +78,16 @@ app.get("/changePassword", (req, res) => {
     }
     
 })
+app.get("/", auth, async (req, res) => {
+    try {
+        (async function () {
+            res.status(201).render("index")
+        })()
+    } catch (error) {
+        logger.error(error.message);
+    }
+})
+
 app.get("/home", auth, async (req, res) => {
     try {
         (async function () {

@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs")
 const app = express()
 const methodOverride = require('method-override');
 const path = require("path")
@@ -149,6 +150,35 @@ app.get("/admin/fetch-faculty", authAdmin, async (req, res) => {
         res.status(500).render("500");
     }
 })
+
+app.get('/admin/download-log',authAdmin, (req, res) => {
+    try {
+        const logFilePath = "./logs/app.log"
+        // Check if the file exists
+        if (!fs.existsSync(logFilePath)) {
+            return res.status(404).send('File not found.');
+          }
+        
+          // Set response headers
+          res.setHeader('Content-Type', 'text/plain');
+          
+          // Get the file size and set 'Content-Length' header if possible
+          const stats = fs.statSync(logFilePath);
+          res.setHeader('Content-Length', stats.size);
+        
+          // Create a read stream and pipe it to the response
+          const readStream = fs.createReadStream(logFilePath);
+          readStream.pipe(res);
+        
+          // Handle errors
+          readStream.on('error', (err) => {
+            res.status(500).send('Error occurred while reading the file.');
+          });
+    } catch (error) {
+        logger.error(error.message);
+    }
+    
+  });
 
 app.get("/faculty/academic_schema", authFaculty, async (req, res) => {
     try {
@@ -579,7 +609,7 @@ app.post("/admin/upload-faculty", authFaculty, upload.single('photoInput'), asyn
         logger.error(err.message);
         res.sendStatus(504);
     }
-})
+});
 
 app.post("/faculty/upload", authFaculty, upload.single('fileInput'), async (req, res) => {
     try {

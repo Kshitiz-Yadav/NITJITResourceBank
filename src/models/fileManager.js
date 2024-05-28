@@ -48,6 +48,7 @@ class FileManager {
         q: `'${parentID}' in parents`,
         fields: 'files(id, name)'
       });
+      
       return response.data.files;
   }
   

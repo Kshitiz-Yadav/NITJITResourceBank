@@ -483,9 +483,25 @@ searchInputAllUsers.addEventListener("input", function () {
     renderAllUsers(filteredUsers);
 });
 
+function downloadLog() {
+	// Create an anchor element
+	var link = document.createElement('a');
+	link.href = "/admin/download-log";
+	link.download = "app.log";
+	link.style.display = 'none';
+	link.setAttribute("target", "_blank");
+	// Append the link to the document body
+	document.body.appendChild(link);
+	// Trigger the download
+	link.click();
+	// Clean up
+	document.body.removeChild(link);
+}
+
 // Initial rendering of the users
 renderAllUsers(allUsers);
 renderPrivilegedUsers(privilegedUsers);
 fetchShemaAndRender();
 fetchTimetableAndRender();
 fetchFacultyAndRender();
+
